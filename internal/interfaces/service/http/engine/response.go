@@ -14,6 +14,8 @@ type Response struct {
 
 func (e *HttpEngine) SendResponse(w http.ResponseWriter, reqID string, statusCode int, clientMessage string, data interface{}) {
 	w.WriteHeader(statusCode)
+	w.Header().Set("Content-Type", "application/json")
+
 	response := Response{
 		ReqID:         reqID,
 		StatusCode:    statusCode,
@@ -21,6 +23,5 @@ func (e *HttpEngine) SendResponse(w http.ResponseWriter, reqID string, statusCod
 		Data:          data,
 	}
 
-	responseInBytes, _ := json.Marshal(response)
-	w.Write(responseInBytes)
+	json.NewEncoder(w).Encode(response)
 }

@@ -1,9 +1,9 @@
-package service
+package authservice
 
 import (
-	"fmt"
 	"time"
 
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 	"golang.org/x/crypto/bcrypt"
@@ -16,7 +16,7 @@ func (s *AuthService) Register(name, email, password string) (*models.User, erro
 	}
 
 	if existing != nil {
-		return nil, fmt.Errorf("user already exist")
+		return nil, domain.ErrUserAlreadyExists
 	}
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)

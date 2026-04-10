@@ -1,4 +1,4 @@
-package service
+package authservice
 
 import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastrcture/config"

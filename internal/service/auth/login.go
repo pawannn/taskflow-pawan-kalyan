@@ -1,8 +1,7 @@
-package service
+package authservice
 
 import (
-	"errors"
-
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -13,13 +12,13 @@ func (s *AuthService) Login(email, password string) (string, *models.User, error
 		return "", nil, err
 	}
 	if user == nil {
-		return "", nil, errors.New("invalid credentials")
+		return "", nil, domain.ErrInvalidCredentials
 	}
 
 	// compare password
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return "", nil, errors.New("invalid credentials")
+		return "", nil, domain.ErrInvalidCredentials
 	}
 
 	// generate JWT
