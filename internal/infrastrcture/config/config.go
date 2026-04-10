@@ -7,6 +7,8 @@ import (
 )
 
 type Config struct {
+	Env       string `mapstructure:"ENV"`
+	AppName   string `mapstructure:"APP_NAME"`
 	AppPort   uint16 `mapstructure:"APP_PORT"`
 	DBUrl     string `mapstructure:"DB_URL"`
 	JWTSecret string `mapstructure:"JWT_SECRET"`
@@ -25,6 +27,8 @@ func Load() (*Config, error) {
 	viper.AutomaticEnv()
 
 	// sometimes viper doesn't map env vars automatically without binding.
+	viper.BindEnv("ENV")
+	viper.BindEnv("APP_NAME")
 	viper.BindEnv("APP_PORT")
 	viper.BindEnv("DB_URL")
 	viper.BindEnv("JWT_SECRET")
@@ -36,6 +40,14 @@ func Load() (*Config, error) {
 
 	if cfg.AppPort == 0 {
 		cfg.AppPort = 1337
+	}
+
+	if cfg.AppName == "" {
+		cfg.AppName = "taskflow"
+	}
+
+	if cfg.Env == "" {
+		cfg.Env = "PROD"
 	}
 
 	if cfg.DBUrl == "" {
