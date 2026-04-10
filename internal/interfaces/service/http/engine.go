@@ -17,12 +17,15 @@ func NewHttpEngine(cfg *config.Config) *HttpEngine {
 
 	return &HttpEngine{
 		mux: mux,
+		cfg: cfg,
 	}
 }
 
 func (e *HttpEngine) Start() error {
-	port := e.cfg.AppPort
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), e.mux)
+	port := fmt.Sprintf(":%d", e.cfg.AppPort)
+
+	fmt.Println("server started listening on port : ", port)
+	err := http.ListenAndServe(port, e.mux)
 	if err != nil {
 		return err
 	}

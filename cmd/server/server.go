@@ -1,11 +1,10 @@
 package main
 
 import (
-	"context"
 	"log"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastrcture/config"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastrcture/db"
+	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/service/http"
 )
 
 func main() {
@@ -14,12 +13,8 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	db, err := db.NewPostgresDB(cfg.DBUrl)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	engine := engine.NewHttpEngine(cfg)
 
-	if err := db.Ping(context.Background()); err != nil {
-		log.Fatal(err.Error())
-	}
+	engine.Start()
+
 }
