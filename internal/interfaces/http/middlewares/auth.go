@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/service/http/engine"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
 )
 
