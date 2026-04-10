@@ -2,8 +2,6 @@ package models
 
 import "time"
 
-// -------- STATUS --------
-
 type TaskStatus string
 
 const (
