@@ -13,8 +13,8 @@ type Response struct {
 }
 
 func (e *HttpEngine) SendResponse(w http.ResponseWriter, reqID string, statusCode int, clientMessage string, data interface{}) {
-	w.WriteHeader(statusCode)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
 
 	response := Response{
 		ReqID:         reqID,

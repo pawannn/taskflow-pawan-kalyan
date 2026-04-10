@@ -22,7 +22,7 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (string
 		return "", nil, domain.ErrInvalidCredentials
 	}
 
-	token, err := s.generateJWT(user)
+	token, err := s.tokenService.Generate(user)
 	if err != nil {
 		return "", nil, err
 	}

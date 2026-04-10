@@ -7,11 +7,13 @@ import (
 )
 
 type Config struct {
-	Env       string `mapstructure:"ENV"`
-	AppName   string `mapstructure:"APP_NAME"`
-	AppPort   uint16 `mapstructure:"APP_PORT"`
-	DBUrl     string `mapstructure:"DB_URL"`
-	JWTSecret string `mapstructure:"JWT_SECRET"`
+	Env        string `mapstructure:"ENV"`
+	AppName    string `mapstructure:"APP_NAME"`
+	AppPort    uint16 `mapstructure:"APP_PORT"`
+	DBUrl      string `mapstructure:"DB_URL"`
+	JWTSecret  string `mapstructure:"JWT_SECRET"`
+	JWTExpiry  int    `mapstructure:"JWT_EXPIRY"`
+	BCryptCost int    `mapstructure:"BCRYPT_COST"`
 }
 
 func Load() (*Config, error) {
@@ -36,6 +38,14 @@ func Load() (*Config, error) {
 	}
 	if cfg.Env == "" {
 		cfg.Env = "PROD"
+	}
+
+	if cfg.JWTExpiry < 24 {
+		cfg.JWTExpiry = 24
+	}
+
+	if cfg.BCryptCost < 12 {
+		cfg.BCryptCost = 12
 	}
 
 	// Required fields

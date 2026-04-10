@@ -15,19 +15,21 @@ type HttpEngine struct {
 	Log *logger.Logger
 }
 
-func NewHttpEngine(cfg *config.Config) *HttpEngine {
+func NewHttpEngine(cfg *config.Config, logger *logger.Logger) *HttpEngine {
 	mux := http.NewServeMux()
 
 	return &HttpEngine{
 		mux: mux,
 		cfg: cfg,
+		Log: logger,
 	}
 }
 
 func (e *HttpEngine) Start() error {
 	port := fmt.Sprintf(":%d", e.cfg.AppPort)
 
-	log.Printf("server started listening on port : %s \n", port)
+	fmt.Println()
+	log.Printf("server started listening on port :%s \n", port)
 	err := http.ListenAndServe(port, e.mux)
 	if err != nil {
 		return err

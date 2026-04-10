@@ -14,7 +14,7 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*models.
 	defer cancel()
 
 	query := `
-		SELECT id, name, email, password, created_at
+		SELECT id, name, email, password, created_at, updated_at
 		FROM users
 		WHERE email = $1
 	`

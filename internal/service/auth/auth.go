@@ -2,19 +2,19 @@ package authservice
 
 import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/repository"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
+	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 )
 
 type AuthService struct {
-	userRepo  repository.UserRepository
-	jwtSecret string
-	Issuer    string
+	userRepo     repository.UserRepository
+	tokenService *auth.TokenService
+	bCryptCost   int
 }
 
-func NewAuthService(config *config.Config, userRepo repository.UserRepository) *AuthService {
+func NewAuthService(bcryptCost int, userRepo repository.UserRepository, tokenService *auth.TokenService) *AuthService {
 	return &AuthService{
-		userRepo:  userRepo,
-		jwtSecret: config.JWTSecret,
-		Issuer:    config.AppName,
+		userRepo:     userRepo,
+		bCryptCost:   bcryptCost,
+		tokenService: tokenService,
 	}
 }

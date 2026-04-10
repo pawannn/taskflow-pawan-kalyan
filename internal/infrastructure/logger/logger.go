@@ -9,27 +9,48 @@ import (
 )
 
 type Logger struct {
-	base *slog.Logger
+	http  *slog.Logger
+	auth  *slog.Logger
+	event *slog.Logger
+	error *slog.Logger
 }
 
-func New() *Logger {
-	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+func newFileLogger(filename string) *slog.Logger {
+	_ = os.MkdirAll("logs", os.ModePerm)
+
+	file, err := os.OpenFile("logs/"+filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		panic(err)
+	}
+
+	handler := slog.NewJSONHandler(file, &slog.HandlerOptions{
 		Level: slog.LevelDebug,
 	})
 
+	return slog.New(handler)
+}
+
+func New() *Logger {
 	return &Logger{
-		base: slog.New(handler),
+		http:  newFileLogger("http.log"),
+		auth:  newFileLogger("auth.log"),
+		event: newFileLogger("event.log"),
+		error: newFileLogger("error.log"),
 	}
 }
 
-func (l *Logger) withContext(ctx context.Context) *slog.Logger {
+func (l *Logger) withContext(ctx context.Context, logger *slog.Logger) *slog.Logger {
+	if l == nil || logger == nil {
+		return slog.Default()
+	}
+
 	if ctx == nil {
-		return l.base
+		return logger
 	}
 
 	rc, ok := ctx.Value(requestContext.RequestKey).(requestContext.ReqContext)
 	if !ok {
-		return l.base
+		return logger
 	}
 
 	args := []any{
@@ -44,36 +65,36 @@ func (l *Logger) withContext(ctx context.Context) *slog.Logger {
 		args = append(args, "email", rc.UserEmail)
 	}
 
-	return l.base.With(args...)
-}
-
-func (l *Logger) Info(ctx context.Context, msg string, args ...any) {
-	l.withContext(ctx).Info(msg, args...)
-}
-
-func (l *Logger) Error(ctx context.Context, msg string, args ...any) {
-	l.withContext(ctx).Error(msg, args...)
-}
-
-func (l *Logger) Debug(ctx context.Context, msg string, args ...any) {
-	l.withContext(ctx).Debug(msg, args...)
-}
-
-func (l *Logger) Warn(ctx context.Context, msg string, args ...any) {
-	l.withContext(ctx).Warn(msg, args...)
+	return logger.With(args...)
 }
 
 func (l *Logger) HTTP(ctx context.Context, method string, path string) {
-	l.withContext(ctx).Info("http_request",
+	l.withContext(ctx, l.http).Info("http_request",
 		"method", method,
 		"path", path,
 	)
 }
 
 func (l *Logger) Auth(ctx context.Context, msg string, args ...any) {
-	l.withContext(ctx).Info("auth_"+msg, args...)
+	l.withContext(ctx, l.auth).Info("auth_"+msg, args...)
 }
 
 func (l *Logger) Event(ctx context.Context, msg string, args ...any) {
-	l.withContext(ctx).Info("event_"+msg, args...)
+	l.withContext(ctx, l.event).Info("event_"+msg, args...)
+}
+
+func (l *Logger) Error(ctx context.Context, msg string, args ...any) {
+	l.withContext(ctx, l.error).Error(msg, args...)
+}
+
+func (l *Logger) Debug(ctx context.Context, msg string, args ...any) {
+	l.withContext(ctx, l.event).Debug(msg, args...)
+}
+
+func (l *Logger) Warn(ctx context.Context, msg string, args ...any) {
+	l.withContext(ctx, l.event).Warn(msg, args...)
+}
+
+func (l *Logger) Info(ctx context.Context, msg string, args ...any) {
+	l.withContext(ctx, l.event).Info(msg, args...)
 }

@@ -17,13 +17,19 @@ func NewAuthHandler(engine *engine.HttpEngine, authService *authservice.AuthServ
 	}
 }
 
-func (e *AuthHandler) AddUserRoutes() {
+func (e *AuthHandler) AddAuthRoutes() {
 	e.engine.AddRoutes([]engine.Route{
 		{
 			Path:        "/auth/register",
 			Method:      "POST",
 			Description: "Register a user with name, email, password",
 			Controller:  e.Register,
+		},
+		{
+			Path:        "/auth/login",
+			Method:      "POST",
+			Description: "Authenticates a user using email and password, and returns a JWT access token on success.",
+			Controller:  e.Login,
 		},
 	})
 }

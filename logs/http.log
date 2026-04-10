@@ -1,0 +1,12 @@
+{"time":"2026-04-10T22:02:19.094712+05:30","level":"INFO","msg":"http_request","req_id":"4933cf53-9a6d-4af8-8ea2-3a72daabe60d","method":"POST","path":"/auth/register"}
+{"time":"2026-04-10T22:03:33.387059+05:30","level":"INFO","msg":"http_request","req_id":"95c3609a-0eec-45a9-903c-207b86a071c6","method":"POST","path":"/auth/register"}
+{"time":"2026-04-10T22:05:29.927929+05:30","level":"INFO","msg":"http_request","req_id":"0d17fa5a-ab57-4fe9-ab04-b48565defc36","method":"POST","path":"/auth/register"}
+{"time":"2026-04-10T22:08:01.413652+05:30","level":"INFO","msg":"http_request","req_id":"e96b784f-2955-4f3e-8e64-f51a1ad75bac","method":"POST","path":"/auth/login"}
+{"time":"2026-04-10T22:08:58.368669+05:30","level":"INFO","msg":"http_request","req_id":"b93d01f6-9d93-4eb0-bed3-917bc73172a2","method":"POST","path":"/auth/login"}
+{"time":"2026-04-10T22:09:48.615155+05:30","level":"INFO","msg":"http_request","req_id":"8c8c155d-d4a2-4b02-aa98-540f6fddd00b","method":"POST","path":"/auth/login"}
+{"time":"2026-04-10T22:10:00.877803+05:30","level":"INFO","msg":"http_request","req_id":"78b39b46-aa0c-454f-882c-b7e7f005ed29","method":"POST","path":"/auth/login"}
+{"time":"2026-04-10T22:40:44.760896+05:30","level":"INFO","msg":"http_request","req_id":"e177008f-2034-4391-b00b-87546bed6b5e","method":"POST","path":"/auth/register"}
+{"time":"2026-04-10T22:40:49.40485+05:30","level":"INFO","msg":"http_request","req_id":"939b22d7-55af-48ad-b0d9-f63b298a1761","method":"POST","path":"/auth/login"}
+{"time":"2026-04-10T22:41:21.897135+05:30","level":"INFO","msg":"http_request","req_id":"3148e5ee-0c11-47e5-91bc-cffa940e3102","method":"POST","path":"/auth/login"}
+{"time":"2026-04-10T22:41:29.256013+05:30","level":"INFO","msg":"http_request","req_id":"1520c7de-65d6-4963-a6ae-2f3c9fbaefdb","method":"POST","path":"/auth/login"}
+{"time":"2026-04-10T22:41:50.438052+05:30","level":"INFO","msg":"http_request","req_id":"cf933bda-3e72-4c85-87c9-3e371f20d9c8","method":"POST","path":"/auth/login"}

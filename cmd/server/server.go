@@ -3,8 +3,14 @@ package main
 import (
 	"log"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
+	config "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
+	database "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/db"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
+	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+	authhandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/auth"
+	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
+	userRepository "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/user"
 )
 
 func main() {
@@ -13,7 +19,29 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	engine := engine.NewHttpEngine(cfg)
+	logger := logger.New()
+
+	engine := engine.NewHttpEngine(cfg, logger)
+
+	// Init DB
+	db, err := database.NewPostgresDB(cfg.DBUrl)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	tokenService := auth.NewTokenService(cfg.AppName, cfg.JWTSecret, cfg.JWTExpiry)
+
+	// init user repository
+	userService := userRepository.NewUserRepository(db)
+
+	// init auth service
+	authService := authservice.NewAuthService(cfg.BCryptCost, userService, tokenService)
+
+	// init auth handler
+	authHandler := authhandler.NewAuthHandler(engine, authService)
+
+	// Add Auth routes
+	authHandler.AddAuthRoutes()
 
 	engine.Start()
 }

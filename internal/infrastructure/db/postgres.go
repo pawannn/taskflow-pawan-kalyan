@@ -32,7 +32,7 @@ func NewPostgresDB(dbURL string) (*pgxpool.Pool, error) {
 		return nil, fmt.Errorf("failed to ping DB: %s", err.Error())
 	}
 
-	log.Printf("\nTaskflow-backend Connected to PostgreSQL\n\n")
+	log.Printf("Taskflow-backend Connected to PostgreSQL\n\n")
 
 	return pool, nil
 }

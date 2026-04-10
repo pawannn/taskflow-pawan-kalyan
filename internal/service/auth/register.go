@@ -20,7 +20,7 @@ func (s *AuthService) Register(ctx context.Context, name, email, password string
 		return nil, domain.ErrUserAlreadyExists
 	}
 
-	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hashed, err := bcrypt.GenerateFromPassword([]byte(password), int(s.bCryptCost))
 	if err != nil {
 		return nil, err
 	}

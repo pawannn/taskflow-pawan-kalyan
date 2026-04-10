@@ -3,6 +3,7 @@ package authhandler
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
@@ -39,6 +40,7 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	token, user, err := aH.authService.Login(ctx, req.Email, req.Password)
 	if err != nil {
+		fmt.Println(err.Error())
 		errorMsg := "internal server error"
 		statusCode := http.StatusInternalServerError
 
@@ -57,13 +59,13 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	aH.engine.Log.Info(ctx, "user logged in", "user_id", user.ID, "email", user.Email)
 
 	response := AuthResponse{
-		Token: token,
 		User: UserResponse{
 			ID:        user.ID,
 			Name:      user.Name,
 			Email:     user.Email,
 			CreatedAt: user.CreatedAt,
 		},
+		Token: token,
 	}
 
 	aH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "login successful", response)

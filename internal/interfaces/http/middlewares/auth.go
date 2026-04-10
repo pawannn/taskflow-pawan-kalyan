@@ -4,19 +4,19 @@ import (
 	"net/http"
 	"strings"
 
+	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
-	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
 )
 
 type MiddlewareHandler struct {
-	engine      *engine.HttpEngine
-	authService *authservice.AuthService
+	engine       *engine.HttpEngine
+	tokenService auth.TokenService
 }
 
-func NewMiddlewareHadler(engine *engine.HttpEngine, authService *authservice.AuthService) *MiddlewareHandler {
+func NewMiddlewareHadler(engine *engine.HttpEngine, tokenService auth.TokenService) *MiddlewareHandler {
 	return &MiddlewareHandler{
-		engine:      engine,
-		authService: authService,
+		engine:       engine,
+		tokenService: tokenService,
 	}
 }
 
@@ -36,7 +36,7 @@ func (m *MiddlewareHandler) ValidateAuthToken(http.Handler) http.Handler {
 			return
 		}
 
-		claims, err := m.authService.ValidateJWT(token)
+		claims, err := m.tokenService.Validate(token)
 		if err != nil {
 			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid or expired token", nil)
 			return

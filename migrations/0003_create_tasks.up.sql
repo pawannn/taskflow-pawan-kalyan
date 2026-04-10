@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TYPE task_status AS ENUM ('todo', 'in_progress', 'done');
 CREATE TYPE task_priority AS ENUM ('low', 'medium', 'high');
 
