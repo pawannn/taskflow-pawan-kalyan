@@ -1,3 +1,0 @@
-{"time":"2026-04-10T22:08:01.41833+05:30","level":"ERROR","msg":"login failed","req_id":"e96b784f-2955-4f3e-8e64-f51a1ad75bac","error":"number of field descriptions must equal number of destinations, got 5 and 6"}
-{"time":"2026-04-10T22:08:58.373848+05:30","level":"ERROR","msg":"login failed","req_id":"b93d01f6-9d93-4eb0-bed3-917bc73172a2","error":"number of field descriptions must equal number of destinations, got 5 and 6"}
-{"time":"2026-04-10T22:40:44.765803+05:30","level":"ERROR","msg":"register failed","req_id":"e177008f-2034-4391-b00b-87546bed6b5e","error":"user already exists"}
