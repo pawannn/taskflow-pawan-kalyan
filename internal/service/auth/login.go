@@ -15,13 +15,11 @@ func (s *AuthService) Login(email, password string) (string, *models.User, error
 		return "", nil, domain.ErrInvalidCredentials
 	}
 
-	// compare password
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return "", nil, domain.ErrInvalidCredentials
 	}
 
-	// generate JWT
 	token, err := s.generateJWT(user)
 	if err != nil {
 		return "", nil, err

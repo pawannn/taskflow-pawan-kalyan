@@ -2,9 +2,10 @@ package engine
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastrcture/config"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
 )
 
 type HttpEngine struct {
@@ -24,7 +25,7 @@ func NewHttpEngine(cfg *config.Config) *HttpEngine {
 func (e *HttpEngine) Start() error {
 	port := fmt.Sprintf(":%d", e.cfg.AppPort)
 
-	fmt.Println("server started listening on port : ", port)
+	log.Printf("server started listening on port : %s \n", port)
 	err := http.ListenAndServe(port, e.mux)
 	if err != nil {
 		return err

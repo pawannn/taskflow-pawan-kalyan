@@ -1,4 +1,4 @@
-package client
+package repository
 
 import "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 

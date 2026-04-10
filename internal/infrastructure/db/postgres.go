@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"context"
@@ -32,7 +32,7 @@ func NewPostgresDB(dbURL string) (*pgxpool.Pool, error) {
 		return nil, fmt.Errorf("failed to ping DB: %s", err.Error())
 	}
 
-	log.Println("Taskflow-backend Connected to PostgreSQL")
+	log.Printf("\nTaskflow-backend Connected to PostgreSQL\n\n")
 
 	return pool, nil
 }

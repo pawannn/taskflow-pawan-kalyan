@@ -1,6 +1,9 @@
 package engine
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 type HandlerFunc func(http.ResponseWriter, *http.Request)
 
@@ -30,12 +33,13 @@ func (e *HttpEngine) AddRoutes(routes []Route) {
 				return
 			}
 
-			ctx := SetContext(r.Context())
+			ctx := e.SetContext(r.Context(), nil)
 			r = r.WithContext(ctx)
 
 			handler.ServeHTTP(w, r)
 		})
 
+		fmt.Printf("%s : %s - %s \n", route.Method, route.Path, route.Description)
 		e.mux.Handle(route.Path, finalHandler)
 	}
 }

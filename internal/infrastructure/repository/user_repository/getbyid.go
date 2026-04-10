@@ -1,4 +1,4 @@
-package userrepository
+package userRepository
 
 import (
 	"context"
@@ -9,17 +9,17 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
-func (r *userRepository) GetByEmail(email string) (*models.User, error) {
+func (r *userRepository) GetByID(id string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	query := `
 		SELECT id, name, email, password, created_at
 		FROM users
-		WHERE email = $1
+		WHERE id = $1
 	`
 
-	row := r.db.QueryRow(ctx, query, email)
+	row := r.db.QueryRow(ctx, query, id)
 
 	var user models.User
 
@@ -29,7 +29,6 @@ func (r *userRepository) GetByEmail(email string) (*models.User, error) {
 		&user.Email,
 		&user.Password,
 		&user.CreatedAt,
-		&user.UpdatedAt,
 	)
 
 	if err != nil {

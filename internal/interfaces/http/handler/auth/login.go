@@ -6,11 +6,10 @@ import (
 	"net/http"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/service/http/engine"
 )
 
 func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
-	meta := engine.ParseContext(r.Context())
+	meta := aH.engine.ParseContext(r.Context())
 
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

@@ -1,7 +1,7 @@
 package authhandler
 
 import (
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/service/http/engine"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
 )
 
@@ -10,8 +10,9 @@ type AuthHandler struct {
 	authService *authservice.AuthService
 }
 
-func NewAuthHandler(authService *authservice.AuthService) *AuthHandler {
+func NewAuthHandler(engine *engine.HttpEngine, authService *authservice.AuthService) *AuthHandler {
 	return &AuthHandler{
+		engine:      engine,
 		authService: authService,
 	}
 }
