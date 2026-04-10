@@ -10,11 +10,14 @@ import (
 )
 
 func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
-	meta := aH.engine.ParseContext(r.Context())
 	ctx := r.Context()
+
+	aH.engine.Log.HTTP(ctx, r.Method, r.Pattern)
+	meta := aH.engine.ParseContext(ctx)
 
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		aH.engine.Log.Warn(ctx, "invalid request body", "error", err)
 		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid register details", nil)
 		return
 	}
@@ -26,6 +29,7 @@ func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(fields) > 0 {
+		aH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
 		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]interface{}{
 			"fields": fields,
 		})
@@ -42,9 +46,12 @@ func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			statusCode = http.StatusConflict
 		}
 
+		aH.engine.Log.Error(ctx, "register failed", "error", err)
 		aH.engine.SendResponse(w, meta.ReqID, statusCode, errorMsg, nil)
 		return
 	}
+
+	aH.engine.Log.Info(ctx, "user registered", "user_id", user.ID, "email", user.Email)
 
 	response := UserResponse{
 		ID:        user.ID,

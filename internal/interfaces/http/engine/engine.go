@@ -6,11 +6,13 @@ import (
 	"net/http"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
 )
 
 type HttpEngine struct {
 	mux *http.ServeMux
 	cfg *config.Config
+	Log *logger.Logger
 }
 
 func NewHttpEngine(cfg *config.Config) *HttpEngine {
