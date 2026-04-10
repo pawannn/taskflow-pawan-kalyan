@@ -1,11 +1,15 @@
 package repository
 
-import "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+import (
+	"context"
+
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+)
 
 type ProjectRepository interface {
-	Create(project *models.Project) error
-	GetByID(id string) (*models.Project, error)
-	GetByUserID(userID string) ([]*models.Project, error)
-	Update(project *models.Project) error
-	Delete(id string) error
+	Create(ctx context.Context, project *models.Project) error
+	GetByID(ctx context.Context, id string) (*models.Project, error)
+	GetByUserID(ctx context.Context, userID string) ([]*models.Project, error)
+	Update(ctx context.Context, project *models.Project) error
+	Delete(ctx context.Context, id string) error
 }

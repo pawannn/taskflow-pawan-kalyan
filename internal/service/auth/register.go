@@ -1,6 +1,7 @@
 package authservice
 
 import (
+	"context"
 	"time"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
@@ -9,8 +10,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *AuthService) Register(name, email, password string) (*models.User, error) {
-	existing, err := s.userRepo.GetByEmail(email)
+func (s *AuthService) Register(ctx context.Context, name, email, password string) (*models.User, error) {
+	existing, err := s.userRepo.GetByEmail(ctx, email)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +36,7 @@ func (s *AuthService) Register(name, email, password string) (*models.User, erro
 		UpdatedAt: timestamp,
 	}
 
-	if err := s.userRepo.Create(user); err != nil {
+	if err := s.userRepo.Create(ctx, user); err != nil {
 		return nil, err
 	}
 

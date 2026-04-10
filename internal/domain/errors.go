@@ -1,6 +1,13 @@
 package domain
 
-import "fmt"
+import (
+	"errors"
+)
 
-var ErrUserAlreadyExists = fmt.Errorf("user already exists")
-var ErrInvalidCredentials = fmt.Errorf("invalid credentials")
+var (
+	ErrUserAlreadyExists  = errors.New("user already exists")
+	ErrInvalidCredentials = errors.New("invalid credentials")
+
+	ErrProjectNotFound = errors.New("project not found")
+	ErrTaskNotFound    = errors.New("task not found")
+)

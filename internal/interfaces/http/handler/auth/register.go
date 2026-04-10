@@ -6,10 +6,12 @@ import (
 	"net/http"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
 func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	meta := aH.engine.ParseContext(r.Context())
+	ctx := r.Context()
 
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -17,22 +19,20 @@ func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Name == "" {
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid user name", nil)
+	fields := utils.ValidateRequired(map[string]string{
+		"name":     req.Name,
+		"email":    req.Email,
+		"password": req.Password,
+	})
+
+	if len(fields) > 0 {
+		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]interface{}{
+			"fields": fields,
+		})
 		return
 	}
 
-	if req.Email == "" {
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid user email", nil)
-		return
-	}
-
-	if req.Password == "" {
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid user password", nil)
-		return
-	}
-
-	user, err := aH.authService.Register(req.Name, req.Email, req.Password)
+	user, err := aH.authService.Register(ctx, req.Name, req.Email, req.Password)
 	if err != nil {
 		errorMsg := "unable to register user"
 		statusCode := http.StatusInternalServerError

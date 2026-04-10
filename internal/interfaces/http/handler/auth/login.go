@@ -6,10 +6,12 @@ import (
 	"net/http"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
 func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
-	meta := aH.engine.ParseContext(r.Context())
+	ctx := r.Context()
+	meta := aH.engine.ParseContext(ctx)
 
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -17,17 +19,19 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Email == "" {
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "email is required", nil)
+	fields := utils.ValidateRequired(map[string]string{
+		"email":    req.Email,
+		"password": req.Password,
+	})
+
+	if len(fields) > 0 {
+		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]interface{}{
+			"fields": fields,
+		})
 		return
 	}
 
-	if req.Password == "" {
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "password is required", nil)
-		return
-	}
-
-	token, user, err := aH.authService.Login(req.Email, req.Password)
+	token, user, err := aH.authService.Login(ctx, req.Email, req.Password)
 	if err != nil {
 		errorMsg := "internal server error"
 		statusCode := http.StatusInternalServerError
@@ -41,16 +45,14 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userResponse := UserResponse{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		CreatedAt: user.CreatedAt,
-	}
-
 	response := AuthResponse{
 		Token: token,
-		User:  userResponse,
+		User: UserResponse{
+			ID:        user.ID,
+			Name:      user.Name,
+			Email:     user.Email,
+			CreatedAt: user.CreatedAt,
+		},
 	}
 
 	aH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "login successful", response)

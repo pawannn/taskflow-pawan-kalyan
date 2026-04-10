@@ -1,13 +1,15 @@
 package authservice
 
 import (
+	"context"
+
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *AuthService) Login(email, password string) (string, *models.User, error) {
-	user, err := s.userRepo.GetByEmail(email)
+func (s *AuthService) Login(ctx context.Context, email, password string) (string, *models.User, error) {
+	user, err := s.userRepo.GetByEmail(ctx, email)
 	if err != nil {
 		return "", nil, err
 	}

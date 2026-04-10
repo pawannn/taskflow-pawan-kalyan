@@ -8,8 +8,8 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
-func (r *userRepository) Create(user *models.User) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+func (r *userRepository) Create(ctx context.Context, user *models.User) error {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	query := `INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)`
