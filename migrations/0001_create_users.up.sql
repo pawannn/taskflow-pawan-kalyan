@@ -6,6 +6,7 @@ CREATE TABLE users (
     email VARCHAR UNIQUE NOT NULL,
     password VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_users_email ON users(email);
