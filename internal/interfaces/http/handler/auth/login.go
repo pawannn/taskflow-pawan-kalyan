@@ -1,12 +1,9 @@
-package authhandler
+package authHandler
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
@@ -39,20 +36,14 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	aH.engine.Log.Info(ctx, "login attempt", "email", req.Email)
 
 	token, user, err := aH.authService.Login(ctx, req.Email, req.Password)
-	if err != nil {
-		fmt.Println(err.Error())
-		errorMsg := "internal server error"
-		statusCode := http.StatusInternalServerError
-
-		if errors.Is(err, domain.ErrInvalidCredentials) {
-			errorMsg = "invalid credentials"
-			statusCode = http.StatusUnauthorized
-			aH.engine.Log.Warn(ctx, "invalid credentials", "email", req.Email)
+	if !err.IsEmpty() {
+		if err.Data == nil {
+			aH.engine.Log.Warn(ctx, "login failed", "email", req.Email, "error", err.Message)
 		} else {
-			aH.engine.Log.Error(ctx, "login failed", "error", err)
+			aH.engine.Log.Error(ctx, "login failed", "email", req.Email, "error", err.Data)
 		}
 
-		aH.engine.SendResponse(w, meta.ReqID, statusCode, errorMsg, nil)
+		aH.engine.SendResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 

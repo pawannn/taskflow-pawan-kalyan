@@ -5,12 +5,12 @@ import (
 
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 	config "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
-	database "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/db"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
+	database "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/database"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/database/userRepository"
+	logger "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
 	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
-	authhandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/auth"
+	authHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/auth"
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
-	userRepository "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/user"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 	authService := authservice.NewAuthService(cfg.BCryptCost, userService, tokenService)
 
 	// init auth handler
-	authHandler := authhandler.NewAuthHandler(engine, authService)
+	authHandler := authHandler.NewAuthHandler(engine, authService)
 
 	// Add Auth routes
 	authHandler.AddAuthRoutes()

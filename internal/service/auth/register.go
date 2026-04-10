@@ -1,28 +1,30 @@
-package authservice
+package authService
 
 import (
 	"context"
+	"net/http"
 	"time"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *AuthService) Register(ctx context.Context, name, email, password string) (*models.User, error) {
-	existing, err := s.userRepo.GetByEmail(ctx, email)
+func (aS *AuthService) Register(ctx context.Context, name, email, password string) (*models.User, TaskFlowErr.Err) {
+	existing, err := aS.userRepo.GetByEmail(ctx, email)
 	if err != nil {
-		return nil, err
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrRegister, nil)
 	}
 
 	if existing != nil {
-		return nil, domain.ErrUserAlreadyExists
+		return nil, TaskFlowErr.NewErr(http.StatusConflict, domain.ErrUserAlreadyExists, err)
 	}
 
-	hashed, err := bcrypt.GenerateFromPassword([]byte(password), int(s.bCryptCost))
+	hashed, err := bcrypt.GenerateFromPassword([]byte(password), int(aS.bCryptCost))
 	if err != nil {
-		return nil, err
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrRegister, err)
 	}
 
 	timestamp := time.Now()
@@ -36,9 +38,9 @@ func (s *AuthService) Register(ctx context.Context, name, email, password string
 		UpdatedAt: timestamp,
 	}
 
-	if err := s.userRepo.Create(ctx, user); err != nil {
-		return nil, err
+	if err := aS.userRepo.Create(ctx, user); err != nil {
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrRegister, err)
 	}
 
-	return user, err
+	return user, TaskFlowErr.NoErr
 }

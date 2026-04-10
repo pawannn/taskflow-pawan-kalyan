@@ -1,4 +1,5 @@
 **/go.sum
 **/.env
+**/logs/*
 
 ignore.txt

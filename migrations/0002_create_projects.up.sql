@@ -6,6 +6,7 @@ CREATE TABLE projects (
     description TEXT,
     owner_id UUID NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
 
     CONSTRAINT fk_owner
         FOREIGN KEY(owner_id)

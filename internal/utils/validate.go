@@ -9,17 +9,17 @@ func ValidateRequired(fields map[string]string) map[string]string {
 	errors := map[string]string{}
 
 	for field, value := range fields {
-		if field == "email" {
-			if !IsValidEmail(value) {
-				errors[field] = "is required"
-			}
-
+		if value == "" {
+			errors[field] = "is required"
 			continue
 		}
 
-		if value == "" {
-			errors[field] = "is required"
+		if field == "email" {
+			if !IsValidEmail(value) {
+				errors[field] = "is invalid"
+			}
 		}
+
 	}
 
 	return errors

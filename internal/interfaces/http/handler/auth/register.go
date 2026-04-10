@@ -1,11 +1,9 @@
-package authhandler
+package authHandler
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
@@ -37,17 +35,9 @@ func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err := aH.authService.Register(ctx, req.Name, req.Email, req.Password)
-	if err != nil {
-		errorMsg := "unable to register user"
-		statusCode := http.StatusInternalServerError
-
-		if errors.Is(err, domain.ErrUserAlreadyExists) {
-			errorMsg = err.Error()
-			statusCode = http.StatusConflict
-		}
-
+	if !err.IsEmpty() {
 		aH.engine.Log.Error(ctx, "register failed", "error", err)
-		aH.engine.SendResponse(w, meta.ReqID, statusCode, errorMsg, nil)
+		aH.engine.SendResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 

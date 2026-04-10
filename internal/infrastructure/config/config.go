@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/viper"
 )
@@ -56,5 +57,6 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("JWT_SECRET is required")
 	}
 
+	log.Println("Config loaded successfully")
 	return cfg, nil
 }

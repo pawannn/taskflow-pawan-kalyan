@@ -1,31 +1,34 @@
-package authservice
+package authService
 
 import (
 	"context"
+	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *AuthService) Login(ctx context.Context, email, password string) (string, *models.User, error) {
-	user, err := s.userRepo.GetByEmail(ctx, email)
+func (aS *AuthService) Login(ctx context.Context, email, password string) (string, *models.User, TaskFlowErr.Err) {
+	user, err := aS.userRepo.GetByEmail(ctx, email)
 	if err != nil {
-		return "", nil, err
+		return "", nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrLogin, err)
 	}
+
 	if user == nil {
-		return "", nil, domain.ErrInvalidCredentials
+		return "", nil, TaskFlowErr.NewErr(http.StatusUnauthorized, domain.ErrInvalidCredentials, nil)
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return "", nil, domain.ErrInvalidCredentials
+		return "", nil, TaskFlowErr.NewErr(http.StatusUnauthorized, domain.ErrIncorrectPassword, nil)
 	}
 
-	token, err := s.tokenService.Generate(user)
+	token, err := aS.tokenService.Generate(user)
 	if err != nil {
-		return "", nil, err
+		return "", nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrLogin, err)
 	}
 
-	return token, user, nil
+	return token, user, TaskFlowErr.NoErr
 }

@@ -1,4 +1,4 @@
-package authhandler
+package authHandler
 
 import "time"
 

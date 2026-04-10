@@ -1,4 +1,4 @@
-package authhandler
+package authHandler
 
 import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
