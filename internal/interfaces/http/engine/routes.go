@@ -11,7 +11,7 @@ type Middleware func(http.Handler) http.Handler
 
 type Route struct {
 	Method      string
-	Path        string
+	Endpoint    string
 	Description string
 	Controller  HandlerFunc
 	Middleware  []Middleware
@@ -19,27 +19,33 @@ type Route struct {
 
 func (e *HttpEngine) AddRoutes(routes []Route) {
 	for _, route := range routes {
+
 		var handler http.Handler = http.HandlerFunc(route.Controller)
 
-		// middlewares are executed in reverse order
 		for i := len(route.Middleware) - 1; i >= 0; i-- {
 			handler = route.Middleware[i](handler)
 		}
 
 		finalHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if r.Method != route.Method {
-				w.WriteHeader(http.StatusMethodNotAllowed)
-				w.Write([]byte("Method Not Allowed"))
-				return
-			}
-
 			ctx := e.SetContext(r.Context(), nil)
-			r = r.WithContext(ctx)
-
-			handler.ServeHTTP(w, r)
+			handler.ServeHTTP(w, r.WithContext(ctx))
 		})
 
-		fmt.Printf("%s : %s - %s \n", route.Method, route.Path, route.Description)
-		e.mux.Handle(route.Path, finalHandler)
+		switch route.Method {
+		case http.MethodGet:
+			e.router.Get(route.Endpoint, finalHandler)
+		case http.MethodPost:
+			e.router.Post(route.Endpoint, finalHandler)
+		case http.MethodPut:
+			e.router.Put(route.Endpoint, finalHandler)
+		case http.MethodPatch:
+			e.router.Patch(route.Endpoint, finalHandler)
+		case http.MethodDelete:
+			e.router.Delete(route.Endpoint, finalHandler)
+		default:
+			panic("unsupported method: " + route.Method)
+		}
+
+		fmt.Printf("%s : %s - %s \n", route.Method, route.Endpoint, route.Description)
 	}
 }

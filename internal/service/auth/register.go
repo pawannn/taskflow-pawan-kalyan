@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
+	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -1,4 +1,4 @@
-package TaskFlowErr
+package Error
 
 type Err struct {
 	Code    int

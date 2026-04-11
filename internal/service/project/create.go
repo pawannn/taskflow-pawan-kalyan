@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
+	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	Error "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (pS *ProjectService) Create(ctx context.Context, name, description, ownerID string) (*models.Project, TaskFlowErr.Err) {
+func (pS *ProjectService) Create(ctx context.Context, name, description, ownerID string) (*models.Project, Error.Err) {
 	project := &models.Project{
 		ID:          utils.GenerateUUID(),
 		Name:        name,
@@ -21,8 +21,8 @@ func (pS *ProjectService) Create(ctx context.Context, name, description, ownerID
 	}
 
 	if err := pS.projectRepo.Create(ctx, project); err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrCreateProject, err)
+		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrCreateProject, err)
 	}
 
-	return project, TaskFlowErr.NoErr
+	return project, Error.NoErr
 }

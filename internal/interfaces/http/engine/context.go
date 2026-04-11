@@ -3,26 +3,18 @@ package engine
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/requestContext"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
 func (e *HttpEngine) SetContext(ctx context.Context, reqContext *requestContext.ReqContext) context.Context {
-	var request requestContext.ReqContext
-
 	if reqContext == nil {
-		reqID := uuid.New().String()
-		request = requestContext.ReqContext{
-			ReqID:     reqID,
-			UserID:    nil,
-			UserEmail: nil,
+		reqContext = &requestContext.ReqContext{
+			ReqID: utils.GenerateUUID(),
 		}
-	} else {
-		request = *reqContext
 	}
 
-	c := context.WithValue(ctx, requestContext.RequestKey, request)
-	return c
+	return context.WithValue(ctx, requestContext.RequestKey, reqContext)
 }
 
 func (e *HttpEngine) ParseContext(ctx context.Context) *requestContext.ReqContext {
@@ -31,10 +23,10 @@ func (e *HttpEngine) ParseContext(ctx context.Context) *requestContext.ReqContex
 		return &requestContext.ReqContext{}
 	}
 
-	meta, ok := val.(requestContext.ReqContext)
+	meta, ok := val.(*requestContext.ReqContext)
 	if !ok {
 		return &requestContext.ReqContext{}
 	}
 
-	return &meta
+	return meta
 }

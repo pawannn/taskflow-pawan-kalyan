@@ -13,8 +13,17 @@ const (
 	ErrUpdateProject   = "unable to update project at the moment"
 	ErrDeleteProject   = "unable to delete project at the moment"
 
-	ErrTaskNotFound = "task not found"
-	ErrFetchTask    = "unable to fetch tasks at the moment"
+	ErrTaskNotFound        = "task not found"
+	ErrFetchTask           = "unable to fetch tasks at the moment"
+	ErrCreateTask          = "unable to create tasks at the moment"
+	ErrRequiredTaskTitle   = "task title is required"
+	ErrInvalidTaskPriority = "invalid task priority"
+	ErrInvalidTaskStatus   = "invalid task status"
+	ErrUpdateTask          = "unable to update task at the moment"
+	ErrDeleteTask          = "unable to delete task at the moment"
 
-	ErrForbidded = "You are not allowed to perform this operation"
+	ErrForbidded        = "You are not allowed to perform this operation"
+	ErrNotFound         = "not found"
+	ErrValidationFailed = "validation failed"
+	ErrInvalidReqBody   = "invalid request body"
 )

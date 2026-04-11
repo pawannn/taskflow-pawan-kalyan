@@ -57,11 +57,11 @@ func (l *Logger) withContext(ctx context.Context, logger *slog.Logger) *slog.Log
 		"req_id", rc.ReqID,
 	}
 
-	if rc.UserID != nil {
+	if rc.UserID != "" {
 		args = append(args, "user_id", rc.UserID)
 	}
 
-	if rc.UserEmail != nil {
+	if rc.UserEmail != "" {
 		args = append(args, "email", rc.UserEmail)
 	}
 

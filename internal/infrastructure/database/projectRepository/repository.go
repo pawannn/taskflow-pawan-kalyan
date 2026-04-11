@@ -5,10 +5,10 @@ import (
 	domainRepo "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/repository"
 )
 
-type ProjectRepository struct {
+type projectRepository struct {
 	db *pgxpool.Pool
 }
 
 func NewProjectRepository(db *pgxpool.Pool) domainRepo.ProjectRepository {
-	return &ProjectRepository{db: db}
+	return &projectRepository{db}
 }

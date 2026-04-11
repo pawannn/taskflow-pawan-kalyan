@@ -9,8 +9,8 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
-func (pR *ProjectRepository) GetByID(ctx context.Context, id string) (*models.Project, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+func (pR *projectRepository) GetByID(ctx context.Context, id string) (*models.Project, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `SELECT id, name, description, owner_id, created_at, updated_at FROM projects WHERE id = $1`
@@ -38,7 +38,7 @@ func (pR *ProjectRepository) GetByID(ctx context.Context, id string) (*models.Pr
 	return &project, nil
 }
 
-func (pR *ProjectRepository) GetByUserID(ctx context.Context, userID string) ([]*models.Project, error) {
+func (pR *projectRepository) GetByUserID(ctx context.Context, userID string) ([]*models.Project, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 

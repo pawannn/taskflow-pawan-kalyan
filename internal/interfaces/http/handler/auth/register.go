@@ -7,7 +7,7 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
+func (aH *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	aH.engine.Log.HTTP(ctx, r.Method, r.Pattern)
@@ -16,7 +16,7 @@ func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		aH.engine.Log.Warn(ctx, "invalid request body", "error", err)
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid register details", nil)
+		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid register details", nil)
 		return
 	}
 
@@ -28,16 +28,14 @@ func (aH *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	if len(fields) > 0 {
 		aH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]interface{}{
-			"fields": fields,
-		})
+		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", fields)
 		return
 	}
 
 	user, err := aH.authService.Register(ctx, req.Name, req.Email, req.Password)
 	if !err.IsEmpty() {
 		aH.engine.Log.Error(ctx, "register failed", "error", err)
-		aH.engine.SendResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		aH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 

@@ -20,18 +20,18 @@ func NewMiddlewareHadler(engine *engine.HttpEngine, tokenService auth.TokenServi
 	}
 }
 
-func (m *MiddlewareHandler) ValidateAuthToken(http.Handler) http.Handler {
+func (m *MiddlewareHandler) ValidateAuthToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		meta := m.engine.ParseContext(r.Context())
 
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
-			m.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "authorization token not found", nil)
+			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "missing authorization token", nil)
 			return
 		}
 
-		Bearer, token, ok := strings.Cut(authHeader, " ")
-		if !ok || Bearer != "Bearer" || token == "" {
+		bearer, token, ok := strings.Cut(authHeader, " ")
+		if !ok || bearer != "Bearer" || token == "" {
 			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid authorization format", nil)
 			return
 		}
@@ -42,9 +42,21 @@ func (m *MiddlewareHandler) ValidateAuthToken(http.Handler) http.Handler {
 			return
 		}
 
-		meta.UserEmail = &claims.UserID
-		meta.UserEmail = &claims.UserEmail
+		if claims.UserID == "" {
+			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid token: missing user_id", nil)
+			return
+		}
+
+		if claims.UserEmail == "" {
+			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid token: missing user_email", nil)
+			return
+		}
+
+		meta.UserID = claims.UserID
+		meta.UserEmail = claims.UserEmail
 
 		m.engine.SetContext(r.Context(), meta)
+
+		next.ServeHTTP(w, r)
 	})
 }

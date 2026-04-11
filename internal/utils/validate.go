@@ -2,7 +2,15 @@ package utils
 
 import (
 	"net/mail"
+	"regexp"
 	"strings"
+)
+
+var (
+	upperRegex   = regexp.MustCompile(`[A-Z]`)
+	lowerRegex   = regexp.MustCompile(`[a-z]`)
+	numberRegex  = regexp.MustCompile(`[0-9]`)
+	specialRegex = regexp.MustCompile(`[!@#$%^&*(),.?":{}|<>]`)
 )
 
 func ValidateRequired(fields map[string]string) map[string]string {
@@ -15,8 +23,14 @@ func ValidateRequired(fields map[string]string) map[string]string {
 		}
 
 		if field == "email" {
-			if !IsValidEmail(value) {
+			if !isValidEmail(value) {
 				errors[field] = "is invalid"
+			}
+		}
+
+		if field == "password" {
+			if err := validatePassword(value); err != "" {
+				errors[field] = err
 			}
 		}
 
@@ -25,7 +39,7 @@ func ValidateRequired(fields map[string]string) map[string]string {
 	return errors
 }
 
-func IsValidEmail(email string) bool {
+func isValidEmail(email string) bool {
 	email = strings.TrimSpace(email)
 
 	if email == "" {
@@ -34,4 +48,36 @@ func IsValidEmail(email string) bool {
 
 	_, err := mail.ParseAddress(email)
 	return err == nil
+}
+
+func validatePassword(password string) string {
+	if len(password) < 8 {
+		return "must be at least 8 characters"
+	}
+
+	if len(password) > 64 {
+		return "must not exceed 64 characters"
+	}
+
+	if !upperRegex.MatchString(password) {
+		return "must contain at least one uppercase letter"
+	}
+
+	if !lowerRegex.MatchString(password) {
+		return "must contain at least one lowercase letter"
+	}
+
+	if !numberRegex.MatchString(password) {
+		return "must contain at least one number"
+	}
+
+	if !specialRegex.MatchString(password) {
+		return "must contain at least one special character"
+	}
+
+	if regexp.MustCompile(`\s`).MatchString(password) {
+		return "must not contain spaces"
+	}
+
+	return ""
 }

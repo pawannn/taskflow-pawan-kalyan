@@ -10,7 +10,7 @@ import (
 )
 
 func (uR *userRepository) GetByID(ctx context.Context, id string) (*models.User, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	query := `

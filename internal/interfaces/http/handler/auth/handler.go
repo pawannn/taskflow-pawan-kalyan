@@ -1,33 +1,35 @@
 package authHandler
 
 import (
+	"net/http"
+
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
 )
 
-type AuthHandler struct {
+type authHandler struct {
 	engine      *engine.HttpEngine
 	authService *authservice.AuthService
 }
 
-func NewAuthHandler(engine *engine.HttpEngine, authService *authservice.AuthService) *AuthHandler {
-	return &AuthHandler{
+func NewAuthHandler(engine *engine.HttpEngine, authService *authservice.AuthService) *authHandler {
+	return &authHandler{
 		engine:      engine,
 		authService: authService,
 	}
 }
 
-func (e *AuthHandler) AddAuthRoutes() {
+func (e *authHandler) AddRoutes() {
 	e.engine.AddRoutes([]engine.Route{
 		{
-			Path:        "/auth/register",
-			Method:      "POST",
+			Method:      http.MethodPost,
+			Endpoint:    "/auth/register",
 			Description: "Register a user with name, email, password",
 			Controller:  e.Register,
 		},
 		{
-			Path:        "/auth/login",
-			Method:      "POST",
+			Method:      http.MethodPost,
+			Endpoint:    "/auth/login",
 			Description: "Authenticates a user using email and password, and returns a JWT access token on success.",
 			Controller:  e.Login,
 		},

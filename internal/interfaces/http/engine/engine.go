@@ -10,23 +10,23 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
 )
 
 type HttpEngine struct {
-	mux *http.ServeMux
-	cfg *config.Config
-	Log *logger.Logger
+	router *chi.Mux
+	cfg    *config.Config
+	Log    *logger.Logger
 }
 
 func NewHttpEngine(cfg *config.Config, logger *logger.Logger) *HttpEngine {
-	mux := http.NewServeMux()
 
 	return &HttpEngine{
-		mux: mux,
-		cfg: cfg,
-		Log: logger,
+		router: chi.NewRouter(),
+		cfg:    cfg,
+		Log:    logger,
 	}
 }
 
@@ -35,7 +35,7 @@ func (e *HttpEngine) Start() error {
 
 	server := &http.Server{
 		Addr:    port,
-		Handler: e.mux,
+		Handler: e.router,
 	}
 
 	go func() {
@@ -47,10 +47,10 @@ func (e *HttpEngine) Start() error {
 		}
 	}()
 
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
-	<-stop
+	<-sigChan
 
 	log.Println("shutdown signal received")
 

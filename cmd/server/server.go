@@ -6,11 +6,16 @@ import (
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 	config "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
 	database "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/database"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/database/userRepository"
+	projectRepository "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/database/projectRepository"
+	taskRepository "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/database/taskRepository"
+	userRepository "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/database/userRepository"
 	logger "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
 	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	authHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/auth"
+	projectHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/project"
+	middlewares "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/middlewares"
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
+	projectService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/project"
 )
 
 func main() {
@@ -30,18 +35,24 @@ func main() {
 	}
 
 	tokenService := auth.NewTokenService(cfg.AppName, cfg.JWTSecret, cfg.JWTExpiry)
+	middlewares := middlewares.NewMiddlewareHadler(engine, *tokenService)
 
-	// init user repository
-	userService := userRepository.NewUserRepository(db)
+	// init repositories
+	userRepository := userRepository.NewUserRepository(db)
+	projectRepository := projectRepository.NewProjectRepository(db)
+	taskRepository := taskRepository.NewTaskRepository(db)
 
-	// init auth service
-	authService := authservice.NewAuthService(cfg.BCryptCost, userService, tokenService)
+	// init services
+	authService := authservice.NewAuthService(cfg.BCryptCost, userRepository, tokenService)
+	projectService := projectService.NewProjectRepository(projectRepository, taskRepository)
 
-	// init auth handler
+	// init handlers
 	authHandler := authHandler.NewAuthHandler(engine, authService)
+	projectHandler := projectHandler.NewProjectHandler(engine, projectService, middlewares)
 
-	// Add Auth routes
-	authHandler.AddAuthRoutes()
+	// Add routes
+	authHandler.AddRoutes()
+	projectHandler.AddRoutes()
 
 	engine.Start()
 }

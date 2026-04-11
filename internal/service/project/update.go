@@ -3,6 +3,7 @@ package projectService
 import (
 	"context"
 	"net/http"
+	"time"
 
 	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
@@ -16,7 +17,7 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, projectID, userID, 
 	}
 
 	if project == nil {
-		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
+		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
 	if project.OwnerID != userID {
@@ -30,6 +31,8 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, projectID, userID, 
 	if description != "" {
 		project.Description = &description
 	}
+
+	project.UpdatedAt = time.Now()
 
 	if err := pS.projectRepo.Update(ctx, project); err != nil {
 		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrUpdateProject, err)

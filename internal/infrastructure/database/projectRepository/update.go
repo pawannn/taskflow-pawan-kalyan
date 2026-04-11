@@ -7,8 +7,8 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
-func (pR *ProjectRepository) Update(ctx context.Context, project *models.Project) error {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+func (pR *projectRepository) Update(ctx context.Context, project *models.Project) error {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	project.UpdatedAt = time.Now()

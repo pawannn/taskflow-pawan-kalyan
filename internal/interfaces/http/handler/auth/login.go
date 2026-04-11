@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	aH.engine.Log.HTTP(ctx, r.Method, r.Pattern)
@@ -15,8 +16,8 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		aH.engine.Log.Warn(ctx, "invalid request body", "error", err)
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
+		aH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
+		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrInvalidReqBody, nil)
 		return
 	}
 
@@ -27,9 +28,7 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	if len(fields) > 0 {
 		aH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
-		aH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]interface{}{
-			"fields": fields,
-		})
+		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
 		return
 	}
 
@@ -37,13 +36,11 @@ func (aH *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	token, user, err := aH.authService.Login(ctx, req.Email, req.Password)
 	if !err.IsEmpty() {
-		if err.Data == nil {
-			aH.engine.Log.Warn(ctx, "login failed", "email", req.Email, "error", err.Message)
-		} else {
+		if err.Data != nil {
 			aH.engine.Log.Error(ctx, "login failed", "email", req.Email, "error", err.Data)
 		}
 
-		aH.engine.SendResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		aH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 

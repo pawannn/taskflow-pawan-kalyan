@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
 )
 
@@ -25,7 +25,7 @@ func (s *ProjectService) GetProjectByID(ctx context.Context, projectID string) (
 	}
 
 	if project == nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
+		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
 	tasks, err := s.taskRepo.GetByProjectID(ctx, projectID, nil, nil)

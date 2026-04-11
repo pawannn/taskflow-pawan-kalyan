@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
 )
 
@@ -14,7 +14,7 @@ func (s *ProjectService) DeleteProject(ctx context.Context, projectID, userID st
 		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
 	}
 	if project == nil {
-		return TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
+		return TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
 	if project.OwnerID != userID {
