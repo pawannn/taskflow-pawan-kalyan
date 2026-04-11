@@ -31,6 +31,7 @@ func (pH *projectHandler) update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	updatedProject := models.Project{
+		ID:          projectID,
 		Name:        req.Name,
 		Description: &req.Description,
 	}

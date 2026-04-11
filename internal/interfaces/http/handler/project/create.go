@@ -32,7 +32,7 @@ func (pH *projectHandler) create(w http.ResponseWriter, r *http.Request) {
 	project, err := pH.projectService.Create(ctx, req.Name, req.Description, meta.UserID)
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			pH.engine.Log.Error(ctx, "project creation", "error", err.Data)
+			pH.engine.Log.Error(ctx, "create project", "error", err.Data)
 		}
 		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return

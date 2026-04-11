@@ -13,8 +13,9 @@ func (s *ProjectService) DeleteProject(ctx context.Context, projectID, userID st
 	if err != nil {
 		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
 	}
+
 	if project == nil {
-		return TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
 	}
 
 	if project.OwnerID != userID {

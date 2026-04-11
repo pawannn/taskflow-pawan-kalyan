@@ -19,7 +19,7 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, upd
 	}
 
 	if project == nil {
-		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
 	}
 
 	if project.OwnerID != ownerID {
@@ -36,12 +36,11 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, upd
 		needToUpdate = true
 	}
 
-	project.UpdatedAt = time.Now()
-
 	if !needToUpdate {
 		return project, TaskFlowErr.NoErr
 	}
 
+	project.UpdatedAt = time.Now()
 	if err := pS.projectRepo.Update(ctx, project); err != nil {
 		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrUpdateProject, err)
 	}

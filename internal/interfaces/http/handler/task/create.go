@@ -14,14 +14,10 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	meta := tH.engine.ParseContext(ctx)
 
-	if meta.UserID == "" {
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusForbidden, domain.ErrForbidded, nil)
-		return
-	}
-
 	query := r.URL.Query()
 	projectID := query.Get("id")
 	if projectID == "" {
+		tH.engine.Log.Warn(ctx, "validation failed", "fields", "id")
 		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]string{
 			"id": "is required",
 		})
@@ -30,6 +26,7 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	var req CreateTaskRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		tH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
 		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
 		return
 	}
@@ -48,9 +45,15 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 	err := tH.taskService.CreateTask(ctx, &task, meta.UserID)
 
 	if !err.IsEmpty() {
+		if err.Data != nil {
+			tH.engine.Log.Error(ctx, "create task", "error", err)
+		}
+
 		tH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
+
+	tH.engine.Log.Info(ctx, "task created", "task_id", task.ID, "project_id", projectID)
 
 	tH.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "task created", task)
 }

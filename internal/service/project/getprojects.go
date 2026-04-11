@@ -32,7 +32,7 @@ func (s *ProjectService) GetProjectByID(ctx context.Context, projectID string) (
 	}
 
 	if project == nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
 	}
 
 	tasks, err := s.taskRepo.GetByProjectID(ctx, projectID, nil, nil)
