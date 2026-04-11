@@ -10,16 +10,11 @@ import (
 
 func (pH *projectHandler) create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
 	meta := pH.engine.ParseContext(ctx)
-
-	if meta.UserID == "" {
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusForbidden, domain.ErrForbidded, nil)
-		return
-	}
 
 	var req CreateProjectRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		pH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
 		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
 		return
 	}
@@ -29,23 +24,21 @@ func (pH *projectHandler) create(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(fields) > 0 {
+		pH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
 		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", fields)
 		return
 	}
 
 	project, err := pH.projectService.Create(ctx, req.Name, req.Description, meta.UserID)
 	if !err.IsEmpty() {
+		if err.Data != nil {
+			pH.engine.Log.Error(ctx, "project creation", "error", err.Data)
+		}
 		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
-	resp := ProjectResponse{
-		ID:          project.ID,
-		Name:        project.Name,
-		Description: project.Description,
-		OwnerID:     project.OwnerID,
-		CreatedAt:   project.CreatedAt,
-	}
+	pH.engine.Log.Info(ctx, "project created", "project_id", project.ID)
 
-	pH.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "project created", resp)
+	pH.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "project created", project)
 }

@@ -9,8 +9,6 @@ import (
 
 func (aH *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
-	aH.engine.Log.HTTP(ctx, r.Method, r.Pattern)
 	meta := aH.engine.ParseContext(ctx)
 
 	var req RegisterRequest
@@ -34,7 +32,10 @@ func (aH *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	user, err := aH.authService.Register(ctx, req.Name, req.Email, req.Password)
 	if !err.IsEmpty() {
-		aH.engine.Log.Error(ctx, "register failed", "error", err)
+		if err.Data != nil {
+			aH.engine.Log.Error(ctx, "register failed", "error", err.Data)
+		}
+
 		aH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}

@@ -3,12 +3,15 @@ package engine
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 )
 
 type ErrorResponse struct {
 	ReqID      string            `json:"req_id"`
 	StatusCode int               `json:"status_code"`
 	Error      string            `json:"error"`
+	Message    string            `json:"message,omitempty"`
 	Fields     map[string]string `json:"fields,omitempty"`
 }
 
@@ -37,10 +40,24 @@ func (e *HttpEngine) SendErrorResponse(w http.ResponseWriter, reqID string, stat
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 
+	status := ""
+
+	switch statusCode {
+	case http.StatusForbidden:
+		status = domain.ErrForbidded
+	case http.StatusUnauthorized:
+		status = domain.ErrUnAuthorized
+	case http.StatusNotFound:
+		status = domain.ErrNotFound
+	case http.StatusInternalServerError:
+		status = domain.ErrInternalError
+	}
+
 	response := ErrorResponse{
 		ReqID:      reqID,
 		StatusCode: statusCode,
-		Error:      errorMessage,
+		Error:      status,
+		Message:    errorMessage,
 		Fields:     fields,
 	}
 

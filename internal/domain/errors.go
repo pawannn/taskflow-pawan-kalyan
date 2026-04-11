@@ -1,11 +1,11 @@
 package domain
 
 const (
-	ErrUserAlreadyExists  = "user already exists"
-	ErrInvalidCredentials = "invalid credentials"
-	ErrIncorrectPassword  = "incorrect password"
-	ErrLogin              = "Unable to login at the moment"
-	ErrRegister           = "Unable to register at the moment"
+	ErrUserAlreadyExists = "user already exists"
+	ErrUserNotFound      = "User not found"
+	ErrIncorrectPassword = "incorrect password"
+	ErrLogin             = "Unable to login at the moment"
+	ErrRegister          = "Unable to register at the moment"
 
 	ErrProjectNotFound = "project not found"
 	ErrCreateProject   = "unable to create project at the moment"
@@ -22,8 +22,10 @@ const (
 	ErrUpdateTask          = "unable to update task at the moment"
 	ErrDeleteTask          = "unable to delete task at the moment"
 
-	ErrForbidded        = "You are not allowed to perform this operation"
+	ErrForbidded        = "Unauthorized action"
+	ErrUnAuthorized     = "Unauthenticated"
 	ErrNotFound         = "not found"
 	ErrValidationFailed = "validation failed"
 	ErrInvalidReqBody   = "invalid request body"
+	ErrInternalError    = "internal server error"
 )

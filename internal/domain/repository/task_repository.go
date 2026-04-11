@@ -11,11 +11,6 @@ type TaskFilter struct {
 	AssigneeID *string
 }
 
-type Pagination struct {
-	Limit  int
-	Offset int
-}
-
 type TaskRepository interface {
 	Create(ctx context.Context, task *models.Task) error
 	GetByID(ctx context.Context, id string) (*models.Task, error)

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 )
 
 type MiddlewareHandler struct {
@@ -25,7 +25,7 @@ func (m *MiddlewareHandler) ValidateAuthToken(next http.Handler) http.Handler {
 		meta := m.engine.ParseContext(r.Context())
 
 		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
+		if strings.TrimSpace(authHeader) == "" {
 			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "missing authorization token", nil)
 			return
 		}
@@ -42,12 +42,12 @@ func (m *MiddlewareHandler) ValidateAuthToken(next http.Handler) http.Handler {
 			return
 		}
 
-		if claims.UserID == "" {
+		if strings.TrimSpace(claims.UserID) == "" {
 			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid token: missing user_id", nil)
 			return
 		}
 
-		if claims.UserEmail == "" {
+		if strings.TrimSpace(claims.UserEmail) == "" {
 			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid token: missing user_email", nil)
 			return
 		}

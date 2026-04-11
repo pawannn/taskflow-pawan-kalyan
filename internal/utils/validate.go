@@ -17,7 +17,7 @@ func ValidateRequired(fields map[string]string) map[string]string {
 	errors := map[string]string{}
 
 	for field, value := range fields {
-		if value == "" {
+		if strings.TrimSpace(value) == "" {
 			errors[field] = "is required"
 			continue
 		}

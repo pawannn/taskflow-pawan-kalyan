@@ -2,19 +2,21 @@ package projectHandler
 
 import (
 	"net/http"
+	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (pH *projectHandler) getByID(w http.ResponseWriter, r *http.Request) {
+func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	meta := pH.engine.ParseContext(r.Context())
 
-	query := r.URL.Query()
-
-	projectID := query.Get("id")
-	if projectID == "" {
+	projectID := chi.URLParam(r, "id")
+	if strings.TrimSpace(projectID) == "" {
+		pH.engine.Log.Warn(ctx, "validation failed", "fields", "id")
 		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]string{
 			"id": "is required",
 		})
@@ -23,6 +25,10 @@ func (pH *projectHandler) getByID(w http.ResponseWriter, r *http.Request) {
 
 	project, tasks, err := pH.projectService.GetProjectByID(ctx, projectID)
 	if !err.IsEmpty() {
+		if err.Data != nil {
+			pH.engine.Log.Error(ctx, "fetch project", "error", err.Data)
+		}
+
 		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusNotFound, domain.ErrNotFound, nil)
 		return
 	}
@@ -35,18 +41,30 @@ func (pH *projectHandler) getByID(w http.ResponseWriter, r *http.Request) {
 	pH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "project fetched", resp)
 }
 
-func (pH *projectHandler) getAll(w http.ResponseWriter, r *http.Request) {
+func (pH *projectHandler) userProjects(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	meta := pH.engine.ParseContext(ctx)
 
-	if meta.UserID == "" {
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusForbidden, domain.ErrForbidded, nil)
-		return
+	query := r.URL.Query()
+	pageStr := query.Get("page")
+	limitStr := query.Get("limit")
+
+	page := utils.ParseIntDefault(pageStr, 1)
+	limit := utils.ParseIntDefault(limitStr, 20)
+
+	limit = min(20, limit)
+
+	if page < 1 {
+		page = 1
 	}
 
-	projects, err := pH.projectService.GetProjects(ctx, meta.UserID)
+	projects, err := pH.projectService.GetProjects(ctx, meta.UserID, page, limit)
 	if !err.IsEmpty() {
+		if err.Data != nil {
+			pH.engine.Log.Error(ctx, "fetch user project", "error", err.Data)
+		}
+
 		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}

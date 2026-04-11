@@ -6,11 +6,18 @@ import (
 
 	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	domainRepo "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/repository"
 	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
 )
 
-func (pS *ProjectService) GetProjects(ctx context.Context, userID string) ([]*models.Project, TaskFlowErr.Err) {
-	projects, err := pS.projectRepo.GetByUserID(ctx, userID)
+func (pS *ProjectService) GetProjects(ctx context.Context, userID string, page int, limit int) ([]*models.Project, TaskFlowErr.Err) {
+	offset := (page - 1) * limit
+	pagination := domainRepo.Pagination{
+		Offset: offset,
+		Limit:  limit,
+	}
+
+	projects, err := pS.projectRepo.GetByUserID(ctx, userID, pagination)
 	if err != nil {
 		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
 	}

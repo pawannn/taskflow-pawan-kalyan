@@ -10,8 +10,10 @@ import (
 	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
 )
 
-func (pS *ProjectService) UpdateProject(ctx context.Context, projectID, userID, name, description string) (*models.Project, TaskFlowErr.Err) {
-	project, err := pS.projectRepo.GetByID(ctx, projectID)
+func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, updatedProject models.Project) (*models.Project, TaskFlowErr.Err) {
+	needToUpdate := false
+
+	project, err := pS.projectRepo.GetByID(ctx, updatedProject.ID)
 	if err != nil {
 		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
 	}
@@ -20,19 +22,25 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, projectID, userID, 
 		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
-	if project.OwnerID != userID {
+	if project.OwnerID != ownerID {
 		return nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
 	}
 
-	if name != "" {
-		project.Name = name
+	if project.Name != updatedProject.Name {
+		project.Name = updatedProject.Name
+		needToUpdate = true
 	}
 
-	if description != "" {
-		project.Description = &description
+	if *project.Description != *updatedProject.Description {
+		project.Description = updatedProject.Description
+		needToUpdate = true
 	}
 
 	project.UpdatedAt = time.Now()
+
+	if !needToUpdate {
+		return project, TaskFlowErr.NoErr
+	}
 
 	if err := pS.projectRepo.Update(ctx, project); err != nil {
 		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrUpdateProject, err)

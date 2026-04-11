@@ -10,8 +10,6 @@ import (
 
 func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
-	aH.engine.Log.HTTP(ctx, r.Method, r.Pattern)
 	meta := aH.engine.ParseContext(ctx)
 
 	var req LoginRequest
@@ -22,8 +20,7 @@ func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fields := utils.ValidateRequired(map[string]string{
-		"email":    req.Email,
-		"password": req.Password,
+		"email": req.Email,
 	})
 
 	if len(fields) > 0 {

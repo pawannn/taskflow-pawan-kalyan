@@ -3,23 +3,20 @@ package projectHandler
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
 func (pH *projectHandler) update(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
 	meta := pH.engine.ParseContext(ctx)
-	if meta.UserID == "" {
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusForbidden, domain.ErrForbidded, nil)
-		return
-	}
 
-	query := r.URL.Query()
-
-	projectID := query.Get("id")
-	if projectID == "" {
+	projectID := chi.URLParam(r, "id")
+	if strings.TrimSpace(projectID) == "" {
+		pH.engine.Log.Warn(ctx, "validation failed", "fields", "id")
 		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]string{
 			"id": "is required",
 		})
@@ -28,15 +25,27 @@ func (pH *projectHandler) update(w http.ResponseWriter, r *http.Request) {
 
 	var req UpdateProjectRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		pH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
 		pH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
 		return
 	}
 
-	project, err := pH.projectService.UpdateProject(ctx, projectID, meta.UserID, req.Name, req.Description)
+	updatedProject := models.Project{
+		Name:        req.Name,
+		Description: &req.Description,
+	}
+
+	project, err := pH.projectService.UpdateProject(ctx, meta.UserID, updatedProject)
 	if !err.IsEmpty() {
+		if err.Data != nil {
+			pH.engine.Log.Error(ctx, "update project", "error", err.Data)
+		}
+
 		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
+
+	pH.engine.Log.Info(ctx, "update project", "project_id", projectID)
 
 	pH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "project updated", project)
 }

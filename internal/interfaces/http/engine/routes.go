@@ -19,16 +19,18 @@ type Route struct {
 
 func (e *HttpEngine) AddRoutes(routes []Route) {
 	for _, route := range routes {
-
 		var handler http.Handler = http.HandlerFunc(route.Controller)
 
 		for i := len(route.Middleware) - 1; i >= 0; i-- {
 			handler = route.Middleware[i](handler)
 		}
 
+		handlerCopy := handler
+
 		finalHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := e.SetContext(r.Context(), nil)
-			handler.ServeHTTP(w, r.WithContext(ctx))
+			e.Log.HTTP(ctx, r.Method, r.Pattern)
+			handlerCopy.ServeHTTP(w, r.WithContext(ctx))
 		})
 
 		switch route.Method {

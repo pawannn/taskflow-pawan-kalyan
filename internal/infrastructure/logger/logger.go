@@ -48,7 +48,7 @@ func (l *Logger) withContext(ctx context.Context, logger *slog.Logger) *slog.Log
 		return logger
 	}
 
-	rc, ok := ctx.Value(requestContext.RequestKey).(requestContext.ReqContext)
+	rc, ok := ctx.Value(requestContext.RequestKey).(*requestContext.ReqContext)
 	if !ok {
 		return logger
 	}

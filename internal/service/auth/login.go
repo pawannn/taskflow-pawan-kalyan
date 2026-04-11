@@ -17,7 +17,7 @@ func (aS *AuthService) Login(ctx context.Context, email, password string) (strin
 	}
 
 	if user == nil {
-		return "", nil, TaskFlowErr.NewErr(http.StatusUnauthorized, domain.ErrInvalidCredentials, nil)
+		return "", nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrUserNotFound, nil)
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
