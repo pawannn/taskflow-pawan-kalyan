@@ -21,6 +21,12 @@ type Config struct {
 	RateLimitBurst      int    `mapstructure:"RATE_LIMIT_BURST"`
 }
 
+var envs = []string{
+	"DB_URL", "JWT_SECRET", "JWT_EXPIRY",
+	"APP_NAME", "APP_PORT", "ENV",
+	"BCRYPT_COST", "RATE_LIMIT_INTERVAL_MS", "RATE_LIMIT_BURST",
+}
+
 // Load reads configuration from environment and .env file, applies defaults, and validates required fields.
 func Load() (*Config, error) {
 	viper.SetConfigType("env")
@@ -45,6 +51,10 @@ func Load() (*Config, error) {
 	_ = viper.ReadInConfig()
 
 	viper.AutomaticEnv()
+
+	for _, key := range envs {
+		_ = viper.BindEnv(key)
+	}
 
 	cfg := new(Config)
 	if err := viper.Unmarshal(cfg); err != nil {
