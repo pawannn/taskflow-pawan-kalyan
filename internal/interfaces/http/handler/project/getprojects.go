@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+	taskHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/task"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
@@ -29,7 +30,7 @@ func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 
 	limit, offset := utils.ParsePagination(pageStr, limitStr)
 
-	project, tasks, err := pH.projectService.GetProjectByID(ctx, projectID, meta.UserID, limit, offset)
+	project, tasks, hasNext, err := pH.projectService.GetProjectByID(ctx, projectID, meta.UserID, limit, offset)
 	if !err.IsEmpty() {
 		if err.Data != nil {
 			pH.engine.Log.Error(ctx, "fetch project", "error", err.Data)
@@ -41,7 +42,14 @@ func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 
 	resp := ProjectTasksResponse{
 		Project: project,
-		Tasks:   tasks,
+		Tasks: taskHandler.TasksResponse{
+			Tasks: tasks,
+			PaginationInfo: engine.PaginationInfo{
+				Limit:   limit,
+				Offset:  offset,
+				HasNext: hasNext,
+			},
+		},
 	}
 
 	pH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "project fetched", resp)

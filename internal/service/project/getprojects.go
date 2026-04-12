@@ -29,7 +29,7 @@ func (pS *ProjectService) GetProjectByID(
 	projectID string,
 	userID string,
 	limit, offset int,
-) (*models.Project, []*models.Task, TaskFlowErr.Err) {
+) (*models.Project, []*models.Task, bool, TaskFlowErr.Err) {
 	pagination := domainRepo.Pagination{
 		Limit:  limit,
 		Offset: offset,
@@ -37,22 +37,22 @@ func (pS *ProjectService) GetProjectByID(
 
 	isAuthorized, err := pS.projectRepo.IsPartOfProject(ctx, projectID, userID)
 	if !isAuthorized {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+		return nil, nil, false, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
 	}
 
 	project, err := pS.projectRepo.GetByID(ctx, projectID)
 	if err != nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, nil, false, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	if project == nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return nil, nil, false, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
-	tasks, _, err := pS.taskRepo.GetByProjectID(ctx, projectID, nil, &pagination)
+	tasks, hasNext, err := pS.taskRepo.GetByProjectID(ctx, projectID, nil, &pagination)
 	if err != nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, nil, false, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
-	return project, tasks, TaskFlowErr.NoErr
+	return project, tasks, hasNext, TaskFlowErr.NoErr
 }
