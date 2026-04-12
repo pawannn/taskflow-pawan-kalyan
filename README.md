@@ -158,7 +158,7 @@ All protected endpoints require `Authorization: Bearer <token>`.
 | 200 | OK |
 | 201 | Created |
 | 204 | No content (deletes) |
-| 400 | Validation error — includes `fields` map |
+| 400 | Validation error - includes `fields` map |
 | 401 | Missing or invalid token |
 | 403 | Valid token, but you don't own this resource |
 | 404 | Not found |
