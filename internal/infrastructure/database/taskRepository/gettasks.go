@@ -140,3 +140,30 @@ func (r *taskRepository) GetByProjectID(
 
 	return tasks, hasNext, nil
 }
+
+func (r *taskRepository) CanUpdateTask(ctx context.Context, taskID, userID string) (bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT EXISTS (
+			SELECT 1
+			FROM tasks t
+			JOIN projects p ON p.id = t.project_id
+			WHERE t.id = $1
+			AND (
+				p.owner_id = $2
+				OR t.assignee_id = $2
+			)
+		)
+	`
+
+	var allowed bool
+
+	err := r.db.QueryRow(ctx, query, taskID, userID).Scan(&allowed)
+	if err != nil {
+		return false, err
+	}
+
+	return allowed, nil
+}

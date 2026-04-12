@@ -27,7 +27,7 @@ func (pH *projectHandler) delete(w http.ResponseWriter, r *http.Request) {
 			pH.engine.Log.Error(ctx, "delete project", "error", err.Data)
 		}
 
-		pH.engine.SendResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 

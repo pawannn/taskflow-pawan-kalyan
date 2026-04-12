@@ -34,7 +34,6 @@ func (pS *ProjectService) GetProjectByID(
 		Limit:  limit,
 		Offset: offset,
 	}
-
 	isAuthorized, err := pS.projectRepo.IsPartOfProject(ctx, projectID, userID)
 	if !isAuthorized {
 		return nil, nil, false, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)

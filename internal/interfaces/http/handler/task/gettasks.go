@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	Error "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
@@ -16,6 +17,13 @@ func (tH *taskHandler) getByProject(w http.ResponseWriter, r *http.Request) {
 	meta := tH.engine.ParseContext(ctx)
 
 	projectID := chi.URLParam(r, "id")
+	if !utils.IsValidUUID(projectID) {
+		tH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", "id")
+		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, map[string]string{
+			"id": "is invalid",
+		})
+		return
+	}
 
 	status := r.URL.Query().Get("status")
 	assignee := r.URL.Query().Get("assignee")
@@ -46,7 +54,11 @@ func (tH *taskHandler) getByProject(w http.ResponseWriter, r *http.Request) {
 
 	tasks, hasNext, err := tH.taskService.GetByProjectID(ctx, projectID, taskStatus, assigneePtr, meta.UserID, limit, offset)
 	if err != Error.NoErr {
-		tH.engine.SendResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		if err.Data != nil {
+			tH.engine.Log.Error(ctx, "Fetch Task failed", "error", err.Data)
+		}
+
+		tH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 

@@ -35,9 +35,14 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 		"title": req.Title,
 	})
 
-	priority := models.TaskPriority(req.Priority)
-	if !priority.IsValid() {
-		fields["priority"] = "is invalid"
+	var priority *models.TaskPriority
+	if req.Priority != "" {
+		p := models.TaskPriority(req.Priority)
+		if !p.IsValid() {
+			fields["priority"] = "is invalid"
+		} else {
+			priority = &p
+		}
 	}
 
 	if len(fields) > 0 {
@@ -59,7 +64,7 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			tH.engine.Log.Error(ctx, "create task", "error", err)
+			tH.engine.Log.Error(ctx, "create task failed", "error", err.Data)
 		}
 
 		tH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)

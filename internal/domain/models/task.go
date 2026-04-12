@@ -41,7 +41,7 @@ type Task struct {
 	Title       string
 	Description *string
 	Status      TaskStatus
-	Priority    TaskPriority
+	Priority    *TaskPriority
 	ProjectID   string
 	AssigneeID  *string
 	DueDate     *time.Time

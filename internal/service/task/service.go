@@ -7,14 +7,17 @@ import (
 type TaskService struct {
 	taskRepo    domainRepo.TaskRepository
 	projectRepo domainRepo.ProjectRepository
+	userRepo    domainRepo.UserRepository
 }
 
 func NewTaskService(
 	taskRepo domainRepo.TaskRepository,
 	projectRepo domainRepo.ProjectRepository,
+	userRepo domainRepo.UserRepository,
 ) *TaskService {
 	return &TaskService{
 		taskRepo:    taskRepo,
 		projectRepo: projectRepo,
+		userRepo:    userRepo,
 	}
 }

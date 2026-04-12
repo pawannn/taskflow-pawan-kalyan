@@ -16,5 +16,6 @@ type TaskRepository interface {
 	GetByID(ctx context.Context, id string) (*models.Task, error)
 	Update(ctx context.Context, task *models.Task) error
 	Delete(ctx context.Context, id string) error
+	CanUpdateTask(ctx context.Context, taskID string, userID string) (bool, error)
 	GetByProjectID(ctx context.Context, projectID string, filter *TaskFilter, pagination *Pagination) ([]*models.Task, bool, error)
 }

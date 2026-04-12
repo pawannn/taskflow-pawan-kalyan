@@ -26,7 +26,7 @@ func (pH *projectHandler) update(w http.ResponseWriter, r *http.Request) {
 	var req UpdateProjectRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		pH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
-		pH.engine.SendResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
+		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrBadRequest, nil)
 		return
 	}
 

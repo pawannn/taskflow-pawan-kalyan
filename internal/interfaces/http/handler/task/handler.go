@@ -46,5 +46,23 @@ func (tH *taskHandler) AddRoutes() {
 				tH.middleware.ValidateAuthToken,
 			},
 		},
+		{
+			Method:      http.MethodPatch,
+			Endpoint:    "/tasks/{id}",
+			Description: "Update title, description, status, priority, assignee, due_date",
+			Controller:  tH.Update,
+			Middleware: []engine.Middleware{
+				tH.middleware.ValidateAuthToken,
+			},
+		},
+		{
+			Method:      http.MethodDelete,
+			Endpoint:    "/tasks/{id}",
+			Description: "Delete task (project owner or task creator only)",
+			Controller:  tH.Delete,
+			Middleware: []engine.Middleware{
+				tH.middleware.ValidateAuthToken,
+			},
+		},
 	})
 }

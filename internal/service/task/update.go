@@ -3,7 +3,6 @@ package taskService
 import (
 	"context"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
@@ -16,71 +15,72 @@ func (s *TaskService) UpdateTask(
 	updatedTask *models.Task,
 	userID string,
 ) (*models.Task, Error.Err) {
-	isTaskUpdated := false
-
-	taskID := updatedTask.ID
-
-	task, err := s.taskRepo.GetByID(ctx, taskID)
+	task, err := s.taskRepo.GetByID(ctx, updatedTask.ID)
 	if err != nil {
 		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
-
 	if task == nil {
-		return nil, Error.NewErr(http.StatusNotFound, domain.ErrNotFound, err)
+		return nil, Error.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
-	project, err := s.projectRepo.GetByID(ctx, task.ProjectID)
+	canUpdate, err := s.taskRepo.CanUpdateTask(ctx, updatedTask.ID, userID)
 	if err != nil {
 		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
-
-	if project.OwnerID != userID {
-		return nil, Error.NewErr(http.StatusForbidden, domain.ErrForbidded, err)
+	if !canUpdate {
+		return nil, Error.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
 	}
 
-	if strings.TrimSpace(updatedTask.Title) != "" &&
-		updatedTask.Title != task.Title {
+	isUpdated := false
+
+	if updatedTask.Title != "" && updatedTask.Title != task.Title {
 		task.Title = updatedTask.Title
-		isTaskUpdated = true
+		isUpdated = true
 	}
 
-	if strings.TrimSpace(*updatedTask.Description) != "" &&
-		updatedTask.Description != task.Description {
-		task.Description = updatedTask.Description
-		isTaskUpdated = true
-	}
-
-	if updatedTask.Status != "" &&
-		updatedTask.Status != task.Status {
-		if !updatedTask.Status.IsValid() {
-			return nil, Error.NewErr(http.StatusBadRequest, domain.ErrBadRequest, err)
+	if updatedTask.Description != nil {
+		if task.Description == nil || *updatedTask.Description != *task.Description {
+			task.Description = updatedTask.Description
+			isUpdated = true
 		}
+	}
+
+	if updatedTask.Status != "" && updatedTask.Status != task.Status {
 		task.Status = updatedTask.Status
-		isTaskUpdated = true
+		isUpdated = true
 	}
 
-	if updatedTask.Priority != "" &&
-		updatedTask.Priority != task.Priority {
-		if !updatedTask.Priority.IsValid() {
-			return nil, Error.NewErr(http.StatusBadRequest, domain.ErrBadRequest, err)
+	if updatedTask.Priority != nil {
+		if task.Priority == nil || *updatedTask.Priority != *task.Priority {
+			task.Priority = updatedTask.Priority
+			isUpdated = true
 		}
-		task.Priority = updatedTask.Priority
-		isTaskUpdated = true
 	}
 
-	if updatedTask.AssigneeID != nil &&
-		updatedTask.AssigneeID != task.AssigneeID {
-		task.AssigneeID = updatedTask.AssigneeID
-		isTaskUpdated = true
+	if updatedTask.AssigneeID != nil {
+		if task.AssigneeID == nil || *updatedTask.AssigneeID != *task.AssigneeID {
+			user, err := s.userRepo.GetByID(ctx, *updatedTask.AssigneeID)
+			if err != nil {
+				return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+			}
+
+			if user == nil {
+				return nil, Error.NewErr(http.StatusBadRequest, domain.ErrBadRequest, err)
+			}
+
+			task.AssigneeID = updatedTask.AssigneeID
+			isUpdated = true
+		}
 	}
 
-	if !updatedTask.DueDate.IsZero() &&
-		updatedTask.DueDate != task.DueDate {
-		task.DueDate = updatedTask.DueDate
-		isTaskUpdated = true
+	if updatedTask.DueDate != nil {
+		if task.DueDate == nil || !updatedTask.DueDate.Equal(*task.DueDate) {
+			task.DueDate = updatedTask.DueDate
+			isUpdated = true
+		}
 	}
 
-	if !isTaskUpdated {
+	if !isUpdated {
 		return task, Error.NoErr
 	}
 
