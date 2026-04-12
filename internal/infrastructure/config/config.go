@@ -20,13 +20,21 @@ type Config struct {
 func Load() (*Config, error) {
 	viper.SetConfigType("env")
 
+	viper.SetDefault("ENV", "")
+	viper.SetDefault("APP_NAME", "")
+	viper.SetDefault("APP_PORT", 0)
+	viper.SetDefault("DB_URL", "")
+	viper.SetDefault("JWT_SECRET", "")
+	viper.SetDefault("JWT_EXPIRY", 0)
+	viper.SetDefault("BCRYPT_COST", 0)
+
 	viper.SetConfigFile(".env")
 	_ = viper.ReadInConfig()
 
 	viper.AutomaticEnv()
 
 	cfg := new(Config)
-	if err := viper.Unmarshal(&cfg); err != nil {
+	if err := viper.Unmarshal(cfg); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 

@@ -22,9 +22,10 @@ type HttpEngine struct {
 }
 
 func NewHttpEngine(cfg *config.Config, logger *logger.Logger) *HttpEngine {
+	r := chi.NewRouter()
 
 	return &HttpEngine{
-		router: chi.NewRouter(),
+		router: r,
 		cfg:    cfg,
 		Log:    logger,
 	}
@@ -33,6 +34,11 @@ func NewHttpEngine(cfg *config.Config, logger *logger.Logger) *HttpEngine {
 // Handler returns the underlying http.Handler — used in tests.
 func (e *HttpEngine) Handler() http.Handler {
 	return e.router
+}
+
+// Use registers global middlewares on the router.
+func (e *HttpEngine) Use(middlewares ...func(http.Handler) http.Handler) {
+	e.router.Use(middlewares...)
 }
 
 func (e *HttpEngine) Start() error {

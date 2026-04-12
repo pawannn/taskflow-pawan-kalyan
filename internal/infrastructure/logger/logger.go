@@ -4,9 +4,18 @@ import (
 	"context"
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/requestContext"
 )
+
+// noopHandler discards all log records.
+type noopHandler struct{}
+
+func (noopHandler) Enabled(_ context.Context, _ slog.Level) bool  { return false }
+func (noopHandler) Handle(_ context.Context, _ slog.Record) error  { return nil }
+func (h noopHandler) WithAttrs(_ []slog.Attr) slog.Handler         { return h }
+func (h noopHandler) WithGroup(_ string) slog.Handler              { return h }
 
 type Logger struct {
 	http  *slog.Logger
@@ -34,7 +43,17 @@ func newFileLogger(filename string) *slog.Logger {
 	return slog.New(slog.NewMultiHandler(fileHandler, consoleHandler))
 }
 
-func New() *Logger {
+func New(env string) *Logger {
+	if strings.ToUpper(env) != "PROD" {
+		noop := slog.New(noopHandler{})
+		return &Logger{
+			http:  noop,
+			auth:  noop,
+			event: noop,
+			error: noop,
+		}
+	}
+
 	return &Logger{
 		http:  newFileLogger("http.log"),
 		auth:  newFileLogger("auth.log"),

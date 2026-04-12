@@ -49,7 +49,7 @@ VALUES
 )
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO tasks (id, title, description, status, priority, project_id, assignee_id, created_at, updated_at)
+INSERT INTO tasks (id, title, description, status, priority, project_id, assignee_id, creator_id, created_at, updated_at)
 VALUES
 (
     '84a38fb2-8992-4c1e-a287-83c6abcdffe9',
@@ -58,6 +58,7 @@ VALUES
     'todo',
     'high',
     '7970a8a7-eda7-4a26-91e3-6f5609a4de74',
+    'df6fbabd-96a5-4988-a8e6-161f44d5160e',
     'df6fbabd-96a5-4988-a8e6-161f44d5160e',
     NOW(),
     NOW()
@@ -70,6 +71,7 @@ VALUES
     'medium',
     '7970a8a7-eda7-4a26-91e3-6f5609a4de74',
     '9daa73c5-3853-414e-b02e-e1500d62b5b3',
+    'df6fbabd-96a5-4988-a8e6-161f44d5160e',
     NOW(),
     NOW()
 ),
@@ -81,6 +83,7 @@ VALUES
     'low',
     '7970a8a7-eda7-4a26-91e3-6f5609a4de74',
     NULL,
+    'df6fbabd-96a5-4988-a8e6-161f44d5160e',
     NOW(),
     NOW()
 )

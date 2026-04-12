@@ -53,6 +53,7 @@ func newAuthTestServer(t *testing.T) (*httptest.Server, *mockUserRepo) {
 	t.Helper()
 
 	cfg := &config.Config{
+		Env:        "TEST",
 		AppName:    "taskflow-test",
 		AppPort:    0,
 		JWTSecret:  "test-secret-key-for-integration-tests",
@@ -60,7 +61,7 @@ func newAuthTestServer(t *testing.T) (*httptest.Server, *mockUserRepo) {
 		BCryptCost: 4, // low cost for fast tests
 	}
 
-	log := logger.New()
+	log := logger.New(cfg.Env)
 	eng := engine.NewHttpEngine(cfg, log)
 
 	tokenService := auth.NewTokenService(cfg.AppName, cfg.JWTSecret, cfg.JWTExpiry)

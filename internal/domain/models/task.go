@@ -37,14 +37,15 @@ func (p TaskPriority) IsValid() bool {
 }
 
 type Task struct {
-	ID          string
-	Title       string
-	Description *string
-	Status      TaskStatus
-	Priority    *TaskPriority
-	ProjectID   string
-	AssigneeID  *string
-	DueDate     *time.Time
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	ID          string        `json:"id"`
+	Title       string        `json:"title"`
+	Description *string       `json:"description"`
+	Status      TaskStatus    `json:"status"`
+	Priority    *TaskPriority `json:"priority"`
+	ProjectID   string        `json:"project_id"`
+	AssigneeID  *string       `json:"assignee_id"`
+	CreatorID   string        `json:"creator_id"`
+	DueDate     *time.Time    `json:"due_date"`
+	CreatedAt   time.Time     `json:"created_at"`
+	UpdatedAt   time.Time     `json:"updated_at"`
 }

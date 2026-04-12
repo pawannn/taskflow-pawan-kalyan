@@ -30,6 +30,7 @@ func (tS *TaskService) CreateTask(
 	}
 
 	task.ID = utils.GenerateUUID()
+	task.CreatorID = userID
 	task.Status = models.StatusTodo
 
 	timeStamp := time.Now()

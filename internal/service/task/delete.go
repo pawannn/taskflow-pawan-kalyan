@@ -23,7 +23,7 @@ func (tS *TaskService) DeleteTask(ctx context.Context, taskID, userID string) Er
 		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
-	if project.OwnerID != userID {
+	if project.OwnerID != userID && task.CreatorID != userID {
 		return Error.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
 	}
 

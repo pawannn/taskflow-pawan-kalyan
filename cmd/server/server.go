@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 	config "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
@@ -18,6 +19,7 @@ import (
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
 	projectService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/project"
 	taskService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/task"
+	"golang.org/x/time/rate"
 )
 
 func main() {
@@ -26,9 +28,7 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	logger := logger.New()
-
-	engine := engine.NewHttpEngine(cfg, logger)
+	logger := logger.New(cfg.Env)
 
 	// Init DB
 	db, err := database.NewPostgresDB(cfg.DBUrl)
@@ -36,8 +36,12 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
+	engine := engine.NewHttpEngine(cfg, logger)
+	rateLimiter := middlewares.NewRateLimiter(rate.Every(100*time.Millisecond), 20)
+	engine.Use(rateLimiter.Limit)
+
 	tokenService := auth.NewTokenService(cfg.AppName, cfg.JWTSecret, cfg.JWTExpiry)
-	middlewares := middlewares.NewMiddlewareHadler(engine, *tokenService)
+	middlwareHandler := middlewares.NewMiddlewareHadler(engine, *tokenService)
 
 	// init repositories
 	userRepository := userRepository.NewUserRepository(db)
@@ -51,8 +55,8 @@ func main() {
 
 	// init handlers
 	authHandler := authHandler.NewAuthHandler(engine, authService)
-	projectHandler := projectHandler.NewProjectHandler(engine, projectService, middlewares)
-	taskHandler := taskHandler.NewTaskHandler(engine, middlewares, taskService)
+	projectHandler := projectHandler.NewProjectHandler(engine, projectService, middlwareHandler)
+	taskHandler := taskHandler.NewTaskHandler(engine, middlwareHandler, taskService)
 
 	// Add routes
 	authHandler.AddRoutes()

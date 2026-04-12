@@ -14,7 +14,7 @@ func (s *TokenService) Generate(user *models.User) (string, error) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    s.issuer,
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(s.expiry) * time.Hour)),
 		},
 	}
 

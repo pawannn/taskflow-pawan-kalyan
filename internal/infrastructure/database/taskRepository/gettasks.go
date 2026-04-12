@@ -17,7 +17,7 @@ func (r *taskRepository) GetByID(ctx context.Context, id string) (*models.Task, 
 
 	query := `
 		SELECT id, title, description, status, priority,
-		       project_id, assignee_id, due_date,
+		       project_id, assignee_id, creator_id, due_date,
 		       created_at, updated_at
 		FROM tasks
 		WHERE id = $1
@@ -35,6 +35,7 @@ func (r *taskRepository) GetByID(ctx context.Context, id string) (*models.Task, 
 		&t.Priority,
 		&t.ProjectID,
 		&t.AssigneeID,
+		&t.CreatorID,
 		&t.DueDate,
 		&t.CreatedAt,
 		&t.UpdatedAt,
@@ -62,7 +63,7 @@ func (r *taskRepository) GetByProjectID(
 
 	query := `
 		SELECT id, title, description, status, priority,
-		       project_id, assignee_id, due_date,
+		       project_id, assignee_id, creator_id, due_date,
 		       created_at, updated_at
 		FROM tasks
 		WHERE project_id = $1
@@ -121,6 +122,7 @@ func (r *taskRepository) GetByProjectID(
 			&t.Priority,
 			&t.ProjectID,
 			&t.AssigneeID,
+			&t.CreatorID,
 			&t.DueDate,
 			&t.CreatedAt,
 			&t.UpdatedAt,

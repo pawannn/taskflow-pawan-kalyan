@@ -3,6 +3,7 @@ package projectHandler
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
@@ -32,7 +33,7 @@ func (pH *projectHandler) update(w http.ResponseWriter, r *http.Request) {
 
 	updatedProject := models.Project{
 		ID:          projectID,
-		Name:        req.Name,
+		Name:        strings.TrimSpace(req.Name),
 		Description: &req.Description,
 	}
 

@@ -14,10 +14,10 @@ func (r *taskRepository) Create(ctx context.Context, task *models.Task) error {
 	query := `
 		INSERT INTO tasks (
 			id, title, description, status, priority,
-			project_id, assignee_id, due_date,
+			project_id, assignee_id, creator_id, due_date,
 			created_at, updated_at
 		)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
 	`
 
 	_, err := r.db.Exec(ctx, query,
@@ -28,6 +28,7 @@ func (r *taskRepository) Create(ctx context.Context, task *models.Task) error {
 		task.Priority,
 		task.ProjectID,
 		task.AssigneeID,
+		task.CreatorID,
 		task.DueDate,
 		task.CreatedAt,
 		task.UpdatedAt,
