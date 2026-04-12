@@ -7,7 +7,7 @@ VALUES
     'df6fbabd-96a5-4988-a8e6-161f44d5160e',
     'test',
     'test@example.com',
-    '$2a$12$L/iYxRxjoxNYF0RN3s0NdOoDzcTUYgdV0YWCuYzFTzG8G/QPTXuH6',
+    '$2a$12$4jJoefZ0J4ub0vKZjlylcOvNY/6qsTwpqxRGHodC9McSeLzHsMdUe',
     NOW(),
     NOW()
 ),
@@ -15,7 +15,7 @@ VALUES
     '9daa73c5-3853-414e-b02e-e1500d62b5b3',
     'pawan kalyan',
     'pawan@gmail.com',
-    '$2a$12$L/iYxRxjoxNYF0RN3s0NdOoDzcTUYgdV0YWCuYzFTzG8G/QPTXuH6',
+    '$2a$12$4jJoefZ0J4ub0vKZjlylcOvNY/6qsTwpqxRGHodC9McSeLzHsMdUe',
     NOW(),
     NOW()
 ),
@@ -23,7 +23,7 @@ VALUES
     '1c27b4c9-be8f-4fac-ba93-d6439e0e050d',
     'jhon',
     'jhon@gmail.com',
-    '$2a$12$L/iYxRxjoxNYF0RN3s0NdOoDzcTUYgdV0YWCuYzFTzG8G/QPTXuH6',
+    '$2a$12$4jJoefZ0J4ub0vKZjlylcOvNY/6qsTwpqxRGHodC9McSeLzHsMdUe',
     NOW(),
     NOW()
 )
