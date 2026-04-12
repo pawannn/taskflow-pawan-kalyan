@@ -1,5 +1,10 @@
 package taskHandler
 
+import (
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+)
+
 type CreateTaskRequest struct {
 	Title       string  `json:"title"`
 	Description string  `json:"description"`
@@ -15,4 +20,9 @@ type UpdateTaskRequest struct {
 	Priority    *string `json:"priority"`
 	AssigneeID  *string `json:"assignee_id"`
 	DueDate     *string `json:"due_date"`
+}
+
+type TasksResponse struct {
+	Tasks          []*models.Task        `json:"tasks"`
+	PaginationInfo engine.PaginationInfo `json:"pagination"`
 }

@@ -29,7 +29,7 @@ func (e *HttpEngine) AddRoutes(routes []Route) {
 
 		finalHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := e.SetContext(r.Context(), nil)
-			e.Log.HTTP(ctx, r.Method, r.Pattern)
+			e.Log.HTTP(ctx, r.Method, r.URL.Path)
 			handlerCopy.ServeHTTP(w, r.WithContext(ctx))
 		})
 

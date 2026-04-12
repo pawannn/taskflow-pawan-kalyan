@@ -1,6 +1,8 @@
 package utils
 
-import "strconv"
+import (
+	"strconv"
+)
 
 func ParseIntDefault(value string, defaultValue int) int {
 	if value == "" {
@@ -17,4 +19,19 @@ func ParseIntDefault(value string, defaultValue int) int {
 	}
 
 	return parsed
+}
+
+func ParsePagination(pageStr string, limitStr string) (int, int) {
+	page := ParseIntDefault(pageStr, 1)
+	limit := ParseIntDefault(limitStr, 20)
+
+	limit = min(20, limit)
+
+	if page < 1 {
+		page = 1
+	}
+
+	offset := (page - 1) * limit
+
+	return limit, offset
 }

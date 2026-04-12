@@ -50,8 +50,14 @@ func (r *taskRepository) GetByID(ctx context.Context, id string) (*models.Task, 
 	return &t, nil
 }
 
-func (r *taskRepository) GetByProjectID(ctx context.Context, projectID string, filter *domainRepo.TaskFilter, pagination *domainRepo.Pagination) ([]*models.Task, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+func (r *taskRepository) GetByProjectID(
+	ctx context.Context,
+	projectID string,
+	filter *domainRepo.TaskFilter,
+	pagination *domainRepo.Pagination,
+) ([]*models.Task, bool, error) {
+
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	query := `
@@ -65,21 +71,40 @@ func (r *taskRepository) GetByProjectID(ctx context.Context, projectID string, f
 	args := []interface{}{projectID}
 	argIndex := 2
 
-	if filter != nil && filter.Status != nil {
-		query += " AND status = $" + fmt.Sprint(argIndex)
-		args = append(args, *filter.Status)
-		argIndex++
+	if filter != nil {
+		if filter.Status != nil {
+			query += " AND status = $" + fmt.Sprint(argIndex)
+			args = append(args, *filter.Status)
+			argIndex++
+		}
+
+		if filter.AssigneeID != nil {
+			query += " AND assignee_id = $" + fmt.Sprint(argIndex)
+			args = append(args, *filter.AssigneeID)
+			argIndex++
+		}
 	}
 
-	if filter != nil && filter.Status != nil {
-		query += " AND assignee_id = $" + fmt.Sprint(argIndex)
-		args = append(args, *filter.Status)
-		argIndex++
+	query += " ORDER BY created_at DESC"
+
+	limit := 10
+	offset := 0
+
+	if pagination != nil {
+		limit = pagination.Limit
+		offset = pagination.Offset
 	}
+
+	query += " LIMIT $" + fmt.Sprint(argIndex)
+	args = append(args, limit+1)
+	argIndex++
+
+	query += " OFFSET $" + fmt.Sprint(argIndex)
+	args = append(args, offset)
 
 	rows, err := r.db.Query(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	defer rows.Close()
 
@@ -100,11 +125,18 @@ func (r *taskRepository) GetByProjectID(ctx context.Context, projectID string, f
 			&t.CreatedAt,
 			&t.UpdatedAt,
 		); err != nil {
-			return nil, err
+			return nil, false, err
 		}
 
 		tasks = append(tasks, &t)
 	}
 
-	return tasks, nil
+	hasNext := false
+
+	if len(tasks) > limit {
+		hasNext = true
+		tasks = tasks[:limit]
+	}
+
+	return tasks, hasNext, nil
 }

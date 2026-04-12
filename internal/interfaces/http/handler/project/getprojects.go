@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
@@ -22,7 +23,13 @@ func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	project, tasks, err := pH.projectService.GetProjectByID(ctx, projectID, meta.UserID)
+	query := r.URL.Query()
+	pageStr := query.Get("page")
+	limitStr := query.Get("limit")
+
+	limit, offset := utils.ParsePagination(pageStr, limitStr)
+
+	project, tasks, err := pH.projectService.GetProjectByID(ctx, projectID, meta.UserID, limit, offset)
 	if !err.IsEmpty() {
 		if err.Data != nil {
 			pH.engine.Log.Error(ctx, "fetch project", "error", err.Data)
@@ -49,16 +56,9 @@ func (pH *projectHandler) userProjects(w http.ResponseWriter, r *http.Request) {
 	pageStr := query.Get("page")
 	limitStr := query.Get("limit")
 
-	page := utils.ParseIntDefault(pageStr, 1)
-	limit := utils.ParseIntDefault(limitStr, 20)
+	limit, offset := utils.ParsePagination(pageStr, limitStr)
 
-	limit = min(20, limit)
-
-	if page < 1 {
-		page = 1
-	}
-
-	projects, err := pH.projectService.GetProjects(ctx, meta.UserID, page, limit)
+	projects, hasNext, err := pH.projectService.GetProjects(ctx, meta.UserID, limit, offset)
 	if !err.IsEmpty() {
 		if err.Data != nil {
 			pH.engine.Log.Error(ctx, "fetch user project", "error", err.Data)
@@ -68,5 +68,14 @@ func (pH *projectHandler) userProjects(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "projects fetched successfully", projects)
+	response := userProjectsResponse{
+		Projects: projects,
+		PaginationInfo: engine.PaginationInfo{
+			Limit:   limit,
+			Offset:  offset,
+			HasNext: hasNext,
+		},
+	}
+
+	pH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "projects fetched successfully", response)
 }

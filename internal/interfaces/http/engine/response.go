@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+type PaginationInfo struct {
+	Limit   int  `json:"limit"`
+	Offset  int  `json:"offset"`
+	HasNext bool `json:"has_next"`
+}
+
 type ErrorResponse struct {
 	ReqID      string            `json:"req_id"`
 	StatusCode int               `json:"status_code"`

@@ -10,22 +10,31 @@ import (
 	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
 )
 
-func (pS *ProjectService) GetProjects(ctx context.Context, userID string, page int, limit int) ([]*models.Project, TaskFlowErr.Err) {
-	offset := (page - 1) * limit
+func (pS *ProjectService) GetProjects(ctx context.Context, userID string, limit int, offset int) ([]*models.Project, bool, TaskFlowErr.Err) {
 	pagination := domainRepo.Pagination{
 		Offset: offset,
 		Limit:  limit,
 	}
 
-	projects, err := pS.projectRepo.GetByUserID(ctx, userID, pagination)
+	projects, hasNext, err := pS.projectRepo.GetByUserID(ctx, userID, pagination)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, false, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
-	return projects, TaskFlowErr.NoErr
+	return projects, hasNext, TaskFlowErr.NoErr
 }
 
-func (pS *ProjectService) GetProjectByID(ctx context.Context, projectID string, userID string) (*models.Project, []*models.Task, TaskFlowErr.Err) {
+func (pS *ProjectService) GetProjectByID(
+	ctx context.Context,
+	projectID string,
+	userID string,
+	limit, offset int,
+) (*models.Project, []*models.Task, TaskFlowErr.Err) {
+	pagination := domainRepo.Pagination{
+		Limit:  limit,
+		Offset: offset,
+	}
+
 	isAuthorized, err := pS.projectRepo.IsPartOfProject(ctx, projectID, userID)
 	if !isAuthorized {
 		return nil, nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
@@ -40,7 +49,7 @@ func (pS *ProjectService) GetProjectByID(ctx context.Context, projectID string, 
 		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
-	tasks, err := pS.taskRepo.GetByProjectID(ctx, projectID, nil, nil)
+	tasks, _, err := pS.taskRepo.GetByProjectID(ctx, projectID, nil, &pagination)
 	if err != nil {
 		return nil, nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}

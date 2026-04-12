@@ -5,8 +5,10 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	Error "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
 func (tH *taskHandler) getByProject(w http.ResponseWriter, r *http.Request) {
@@ -36,11 +38,26 @@ func (tH *taskHandler) getByProject(w http.ResponseWriter, r *http.Request) {
 		assigneePtr = &assignee
 	}
 
-	tasks, err := tH.taskService.GetTasks(ctx, projectID, taskStatus, assigneePtr, meta.UserID)
+	query := r.URL.Query()
+	pageStr := query.Get("page")
+	limitStr := query.Get("limit")
+
+	limit, offset := utils.ParsePagination(pageStr, limitStr)
+
+	tasks, hasNext, err := tH.taskService.GetByProjectID(ctx, projectID, taskStatus, assigneePtr, meta.UserID, limit, offset)
 	if err != Error.NoErr {
 		tH.engine.SendResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
-	tH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "tasks fetched", tasks)
+	response := TasksResponse{
+		Tasks: tasks,
+		PaginationInfo: engine.PaginationInfo{
+			Limit:   limit,
+			Offset:  offset,
+			HasNext: hasNext,
+		},
+	}
+
+	tH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "tasks fetched", response)
 }

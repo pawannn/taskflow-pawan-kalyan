@@ -39,7 +39,12 @@ func (pR *projectRepository) GetByID(ctx context.Context, id string) (*models.Pr
 	return &project, nil
 }
 
-func (pR *projectRepository) GetByUserID(ctx context.Context, userID string, pagination domainRepo.Pagination) ([]*models.Project, error) {
+func (pR *projectRepository) GetByUserID(
+	ctx context.Context,
+	userID string,
+	pagination domainRepo.Pagination,
+) ([]*models.Project, bool, error) {
+
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
@@ -56,9 +61,12 @@ func (pR *projectRepository) GetByUserID(ctx context.Context, userID string, pag
 		LIMIT $2 OFFSET $3
 	`
 
-	rows, err := pR.db.Query(ctx, query, userID, pagination.Limit, pagination.Offset)
+	limit := pagination.Limit
+	offset := pagination.Offset
+
+	rows, err := pR.db.Query(ctx, query, userID, limit+1, offset)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	defer rows.Close()
 
@@ -75,16 +83,26 @@ func (pR *projectRepository) GetByUserID(ctx context.Context, userID string, pag
 			&p.CreatedAt,
 			&p.UpdatedAt,
 		); err != nil {
-			return nil, err
+			return nil, false, err
 		}
 
 		projects = append(projects, &p)
 	}
 
-	return projects, nil
+	hasNext := false
+	if len(projects) > limit {
+		hasNext = true
+		projects = projects[:limit]
+	}
+
+	return projects, hasNext, nil
 }
 
-func (r *projectRepository) IsPartOfProject(ctx context.Context, projectID, userID string) (bool, error) {
+func (r *projectRepository) IsPartOfProject(
+	ctx context.Context,
+	projectID, userID string,
+) (bool, error) {
+
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
@@ -96,7 +114,8 @@ func (r *projectRepository) IsPartOfProject(ctx context.Context, projectID, user
 			AND (
 				p.owner_id = $2
 				OR EXISTS (
-					SELECT 1 FROM tasks t
+					SELECT 1
+					FROM tasks t
 					WHERE t.project_id = p.id
 					AND t.assignee_id = $2
 				)

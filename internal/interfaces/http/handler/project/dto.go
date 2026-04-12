@@ -1,9 +1,8 @@
 package projectHandler
 
 import (
-	"time"
-
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 )
 
 type ProjectTasksResponse struct {
@@ -21,10 +20,7 @@ type UpdateProjectRequest struct {
 	Description string `json:"description"`
 }
 
-type ProjectResponse struct {
-	ID          string    `json:"id"`
-	Name        string    `json:"name"`
-	Description *string   `json:"description"`
-	OwnerID     string    `json:"owner_id"`
-	CreatedAt   time.Time `json:"created_at"`
+type userProjectsResponse struct {
+	Projects       []*models.Project     `json:"projects"`
+	PaginationInfo engine.PaginationInfo `json:"pagination"`
 }
