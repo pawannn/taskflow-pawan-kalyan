@@ -285,13 +285,7 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "let response = pm.response.json();",
-                  "",
-                  "let token = response.data.token;",
-                  "let userID = response.data.user.id;",
-                  "",
-                  "pm.environment.set(\"auth_token\", `Bearer ${token}`);",
-                  "pm.environment.set(\"id\", userID);"
+                  ""
                 ],
                 "type": "text/javascript",
                 "packages": {},

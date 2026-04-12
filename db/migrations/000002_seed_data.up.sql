@@ -1,5 +1,5 @@
 -- Seed data: 1 user with known credentials + extra users for testing
--- Password for all users: Test@Pass1!
+-- Password for all users: password123
 
 INSERT INTO users (id, name, email, password, created_at, updated_at)
 VALUES
@@ -7,7 +7,7 @@ VALUES
     'df6fbabd-96a5-4988-a8e6-161f44d5160e',
     'test',
     'test@example.com',
-    '$2a$12$HAz3392t0FUw11PsGSBIueuDcrTdZCdw2/Fox3ECmxADiCJKslD7W',
+    '$2a$12$L/iYxRxjoxNYF0RN3s0NdOoDzcTUYgdV0YWCuYzFTzG8G/QPTXuH6',
     NOW(),
     NOW()
 ),
@@ -15,7 +15,7 @@ VALUES
     '9daa73c5-3853-414e-b02e-e1500d62b5b3',
     'pawan kalyan',
     'pawan@gmail.com',
-    '$2a$12$HAz3392t0FUw11PsGSBIueuDcrTdZCdw2/Fox3ECmxADiCJKslD7W',
+    '$2a$12$L/iYxRxjoxNYF0RN3s0NdOoDzcTUYgdV0YWCuYzFTzG8G/QPTXuH6',
     NOW(),
     NOW()
 ),
@@ -23,7 +23,7 @@ VALUES
     '1c27b4c9-be8f-4fac-ba93-d6439e0e050d',
     'jhon',
     'jhon@gmail.com',
-    '$2a$12$HAz3392t0FUw11PsGSBIueuDcrTdZCdw2/Fox3ECmxADiCJKslD7W',
+    '$2a$12$L/iYxRxjoxNYF0RN3s0NdOoDzcTUYgdV0YWCuYzFTzG8G/QPTXuH6',
     NOW(),
     NOW()
 )
