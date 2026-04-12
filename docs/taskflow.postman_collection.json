@@ -1,0 +1,3774 @@
+{
+  "info": {
+    "_postman_id": "e8596948-298a-4e68-8f15-34c7da22ef0a",
+    "name": "taskflow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43528462",
+    "_collection_link": "https://go.postman.co/collection/43528462-e8596948-298a-4e68-8f15-34c7da22ef0a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "REGISTER",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{name}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:1337/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "user registers first time",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"{{name}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:22:11 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "257"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"f99020d3-2045-4371-908e-4758fb646c84\",\n    \"status_code\": 201,\n    \"client_message\": \"user registered successfully\",\n    \"data\": {\n        \"id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"name\": \"test\",\n        \"email\": \"test1@gmail.com\",\n        \"created_at\": \"2026-04-12T23:52:11.631639+05:30\"\n    }\n}"
+            },
+            {
+              "name": "existing user registers",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"{{name}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:22:34 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "92"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"9ab3275b-f5d6-4287-987c-21ef71a31474\",\n    \"status_code\": 409,\n    \"error\": \"already exist\"\n}"
+            },
+            {
+              "name": "empty inputs",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"\",\n    \"email\": \"\",\n    \"password\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:20:32 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "175"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"6f624933-be59-47e2-b29f-66a770d80e18\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"email\": \"is required\",\n        \"name\": \"is required\",\n        \"password\": \"is required\"\n    }\n}"
+            },
+            {
+              "name": "invalid email",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"{{name}}\",\n    \"email\": \"pawan@@gmail.com\",\n    \"password\": \"{{password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:21:27 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "128"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"e8f6377d-2b84-43d8-a278-625f82d5f808\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"email\": \"is invalid\"\n    }\n}"
+            },
+            {
+              "name": "invalid password",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"{{name}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"test1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:21:54 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "163"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"85502f00-dfc4-4f60-a59b-e51e5a2bbdbf\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"password\": \"must contain at least one uppercase letter\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "LOGIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "",
+                  "let token = response.data.token;",
+                  "let userID = response.data.user.id;",
+                  "",
+                  "pm.environment.set(\"auth_token\", `Bearer ${token}`);",
+                  "pm.environment.set(\"id\", userID);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:1337/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "existing user login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:23:58 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "515"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"aa5c158b-4007-424d-8b26-3c14a4aa67f0\",\n    \"status_code\": 200,\n    \"client_message\": \"login successful\",\n    \"data\": {\n        \"user\": {\n            \"id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n            \"name\": \"test\",\n            \"email\": \"test1@gmail.com\",\n            \"created_at\": \"2026-04-12T23:52:11.631639Z\"\n        },\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiI4MzBiMjdkMS1lNjI1LTQxYzMtYmI3MS00YWNkMmMxNzUyZDUiLCJVc2VyRW1haWwiOiJ0ZXN0MUBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNDYzOCwiaWF0IjoxNzc2MDE4MjM4fQ.Ir4mc3HGqlZfBNEwsVAyY-Wgst6xeS9GoaFWpWol79Y\"\n    }\n}"
+            },
+            {
+              "name": "non-existing user login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"{{password}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:24:27 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"99f5c4e7-0869-4018-8e1a-2fb55729a92f\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            },
+            {
+              "name": "incorrect password",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"xyz@123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:25:18 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"2635b8ce-7957-485c-8693-ee0a47ab6d5e\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "GET PROJECTS",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects?page=1&limit=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "owner or assignee projects",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"first project\",\n    \"description\": \"This is first project\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects?page=1&limit=10",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:34:39 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "660"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"2153d9a9-9200-4fa7-a77e-f9b11d946c78\",\n    \"status_code\": 200,\n    \"client_message\": \"projects fetched successfully\",\n    \"data\": {\n        \"projects\": [\n            {\n                \"id\": \"e1ca7242-e9bf-45e0-be7c-2653650d81bc\",\n                \"name\": \"first project\",\n                \"description\": \"\",\n                \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"created_at\": \"2026-04-13T00:02:16.823953Z\",\n                \"updated_at\": \"2026-04-13T00:02:16.823953Z\"\n            },\n            {\n                \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"name\": \"second project\",\n                \"description\": \"this is a good project\",\n                \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n                \"updated_at\": \"2026-04-13T00:00:38.092194Z\"\n            }\n        ],\n        \"pagination\": {\n            \"limit\": 10,\n            \"offset\": 0,\n            \"has_next\": false\n        }\n    }\n}"
+            },
+            {
+              "name": "without pagination (default limit: 20)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"first project\",\n    \"description\": \"This is first project\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:43:08 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "660"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"d76a0d7a-f2ee-4727-b27e-eca48bfc8961\",\n    \"status_code\": 200,\n    \"client_message\": \"projects fetched successfully\",\n    \"data\": {\n        \"projects\": [\n            {\n                \"id\": \"e1ca7242-e9bf-45e0-be7c-2653650d81bc\",\n                \"name\": \"first project\",\n                \"description\": \"\",\n                \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"created_at\": \"2026-04-13T00:02:16.823953Z\",\n                \"updated_at\": \"2026-04-13T00:02:16.823953Z\"\n            },\n            {\n                \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"name\": \"second project\",\n                \"description\": \"this is a good project\",\n                \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n                \"updated_at\": \"2026-04-13T00:00:38.092194Z\"\n            }\n        ],\n        \"pagination\": {\n            \"limit\": 20,\n            \"offset\": 0,\n            \"has_next\": false\n        }\n    }\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"first project\",\n    \"description\": \"This is first project\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects?page=1&limit=10",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:43:55 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"07694b87-c1eb-4c41-9270-a0f4fe04f22c\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            },
+            {
+              "name": "auth token expired",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiI4MzBiMjdkMS1lNjI1LTQxYzMtYmI3MS00YWNkMmMxNzUyZDUiLCJVc2VyRW1haWwiOiJ0ZXN0MUBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjAxODUzMSwiaWF0IjoxNzc2MDE4NTExfQ.th45YNGmD6aR1m8QTJiHf-PYlc0cLR4GHieQI2yqJg8",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"first project\",\n    \"description\": \"This is first project\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects?page=1&limit=10",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:44:26 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"799ba71f-decd-446c-9796-b13c7242e1e0\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "CREATE",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"final project\",\n    \"description\": \"testing project\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "create with name and description",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"second project\",\n    \"description\": \"this is a good project\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:30:38 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "365"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"240949c1-7b73-4e69-974e-56ab6614f09f\",\n    \"status_code\": 201,\n    \"client_message\": \"project created\",\n    \"data\": {\n        \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n        \"name\": \"second project\",\n        \"description\": \"this is a good project\",\n        \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"created_at\": \"2026-04-13T00:00:38.092194+05:30\",\n        \"updated_at\": \"2026-04-13T00:00:38.092194+05:30\"\n    }\n}"
+            },
+            {
+              "name": "create only with name",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"first project\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:32:16 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "342"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"66b0d0f3-e375-4c01-8a8c-2d6d3e0e1fdd\",\n    \"status_code\": 201,\n    \"client_message\": \"project created\",\n    \"data\": {\n        \"id\": \"e1ca7242-e9bf-45e0-be7c-2653650d81bc\",\n        \"name\": \"first project\",\n        \"description\": \"\",\n        \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"created_at\": \"2026-04-13T00:02:16.823953+05:30\",\n        \"updated_at\": \"2026-04-13T00:02:16.823953+05:30\"\n    }\n}"
+            },
+            {
+              "name": "create without name",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:32:38 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "128"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"e43cd655-efb9-4d95-aae0-15419eabd5f9\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"name\": \"is required\"\n    }\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"final project\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:33:12 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"bb4b9e7d-dd3f-45f6-b7c2-c3bac5d974e4\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            },
+            {
+              "name": "auth token expired",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"second project\",\n    \"description\": \"this is a good project\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:29:19 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"0df95681-4454-4a4a-8842-6fb322a31589\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "PROJECT AND TASKS BY ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127?page=1&limit=20",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects",
+                "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "project without task",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127?page=1&limit=20",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:48:16 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "444"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"7af60560-851f-4e50-bcac-afd777627169\",\n    \"status_code\": 200,\n    \"client_message\": \"project fetched\",\n    \"data\": {\n        \"project\": {\n            \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n            \"name\": \"second project\",\n            \"description\": \"this is a good project\",\n            \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n            \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n            \"updated_at\": \"2026-04-13T00:00:38.092194Z\"\n        },\n        \"tasks\": {\n            \"tasks\": null,\n            \"pagination\": {\n                \"limit\": 20,\n                \"offset\": 0,\n                \"has_next\": false\n            }\n        }\n    }\n}"
+            },
+            {
+              "name": "project with tasks",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127?page=1&limit=20",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:37:12 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1896"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"555da7d3-59c5-4ab0-b26f-7ef7634fd4cb\",\n    \"status_code\": 200,\n    \"client_message\": \"project fetched\",\n    \"data\": {\n        \"project\": {\n            \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n            \"name\": \"testing change\",\n            \"description\": \"project changed\",\n            \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n            \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n            \"updated_at\": \"2026-04-13T00:35:28.480222Z\"\n        },\n        \"tasks\": {\n            \"tasks\": [\n                {\n                    \"id\": \"48131b70-ee8a-41db-a833-d57da1b22013\",\n                    \"title\": \"new bug\",\n                    \"description\": \"this is a new bug\",\n                    \"status\": \"todo\",\n                    \"priority\": \"high\",\n                    \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                    \"assignee_id\": null,\n                    \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                    \"due_date\": \"2026-04-17T00:00:00Z\",\n                    \"created_at\": \"2026-04-13T01:03:18.483652Z\",\n                    \"updated_at\": \"2026-04-13T01:03:18.483652Z\"\n                },\n                {\n                    \"id\": \"3fb4dbbb-23b3-4604-b4aa-745d01623632\",\n                    \"title\": \"new bug\",\n                    \"description\": \"this is a new bug\",\n                    \"status\": \"todo\",\n                    \"priority\": \"high\",\n                    \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                    \"assignee_id\": null,\n                    \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                    \"due_date\": \"2026-04-15T00:00:00Z\",\n                    \"created_at\": \"2026-04-13T01:02:43.008809Z\",\n                    \"updated_at\": \"2026-04-13T01:02:43.008809Z\"\n                },\n                {\n                    \"id\": \"7c98ae5d-409f-4602-bf47-79f9350afd9a\",\n                    \"title\": \"new bug\",\n                    \"description\": \"this is a new bug\",\n                    \"status\": \"todo\",\n                    \"priority\": \"high\",\n                    \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                    \"assignee_id\": null,\n                    \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                    \"due_date\": null,\n                    \"created_at\": \"2026-04-13T00:55:58.66689Z\",\n                    \"updated_at\": \"2026-04-13T00:55:58.66689Z\"\n                },\n                {\n                    \"id\": \"ebbd7ae7-cc0d-4069-91bd-5da49facc503\",\n                    \"title\": \"new bug\",\n                    \"description\": \"this is a new bug\",\n                    \"status\": \"todo\",\n                    \"priority\": \"high\",\n                    \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                    \"assignee_id\": null,\n                    \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                    \"due_date\": null,\n                    \"created_at\": \"2026-04-13T00:55:48.419537Z\",\n                    \"updated_at\": \"2026-04-13T00:55:48.419537Z\"\n                }\n            ],\n            \"pagination\": {\n                \"limit\": 20,\n                \"offset\": 0,\n                \"has_next\": false\n            }\n        }\n    }\n}"
+            },
+            {
+              "name": "without pagination (default: 20)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:48:50 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "444"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"68e25770-989a-49ee-bff5-5eec7b4c3a96\",\n    \"status_code\": 200,\n    \"client_message\": \"project fetched\",\n    \"data\": {\n        \"project\": {\n            \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n            \"name\": \"second project\",\n            \"description\": \"this is a good project\",\n            \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n            \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n            \"updated_at\": \"2026-04-13T00:00:38.092194Z\"\n        },\n        \"tasks\": {\n            \"tasks\": null,\n            \"pagination\": {\n                \"limit\": 20,\n                \"offset\": 0,\n                \"has_next\": false\n            }\n        }\n    }\n}"
+            },
+            {
+              "name": "project does not exist",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128?page=1&limit=20",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:56:10 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"883304d3-9a19-4378-9bdf-21223de9842a\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "limit more than tasks count",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127?page=1&limit=2000",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "2000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:58:08 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "444"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"7dd22935-a842-423d-98a8-565ac9648c4b\",\n    \"status_code\": 200,\n    \"client_message\": \"project fetched\",\n    \"data\": {\n        \"project\": {\n            \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n            \"name\": \"second project\",\n            \"description\": \"this is a good project\",\n            \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n            \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n            \"updated_at\": \"2026-04-13T00:00:38.092194Z\"\n        },\n        \"tasks\": {\n            \"tasks\": null,\n            \"pagination\": {\n                \"limit\": 20,\n                \"offset\": 0,\n                \"has_next\": false\n            }\n        }\n    }\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127?page=1&limit=20",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:56:40 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"974039bb-9c14-453e-b91e-8db9536f3675\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "UPDATE",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"testing change\",\n    \"description\": \"project changed\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects",
+                "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "owner updates project",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"testing change\",\n    \"description\": \"project changed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:59:23 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "353"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"f56f2b22-8b34-4b9e-bd59-c061dbba27de\",\n    \"status_code\": 200,\n    \"client_message\": \"project updated\",\n    \"data\": {\n        \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n        \"name\": \"testing change\",\n        \"description\": \"project changed\",\n        \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n        \"updated_at\": \"2026-04-13T00:29:23.085625+05:30\"\n    }\n}"
+            },
+            {
+              "name": "update non-existing project",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"final project\",\n    \"description\": \"testing\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/01cd0839-4b95-458f-b5ac-3e9f7a1e7693",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "01cd0839-4b95-458f-b5ac-3e9f7a1e7693"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:57:42 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"552a0e9e-0939-4b14-bf85-93fda9f7f667\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "update name only",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"testing change some\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:03:28 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "358"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"04a667b9-b029-4fd0-9603-1003000af008\",\n    \"status_code\": 200,\n    \"client_message\": \"project updated\",\n    \"data\": {\n        \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n        \"name\": \"testing change some\",\n        \"description\": \"project changed\",\n        \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n        \"updated_at\": \"2026-04-13T00:33:28.861212+05:30\"\n    }\n}"
+            },
+            {
+              "name": "update description only",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"description\": \"some changes\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:03:50 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "355"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"c48eaea6-cf86-4828-b983-271d9e1f1929\",\n    \"status_code\": 200,\n    \"client_message\": \"project updated\",\n    \"data\": {\n        \"id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n        \"name\": \"testing change some\",\n        \"description\": \"some changes\",\n        \"owner_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"created_at\": \"2026-04-13T00:00:38.092194Z\",\n        \"updated_at\": \"2026-04-13T00:33:50.871477+05:30\"\n    }\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"testing change\",\n    \"description\": \"project changed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 18:59:58 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"c737ec2d-4867-44b7-ad23-5f371e00002d\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            },
+            {
+              "name": "non-owner updates project",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"testing change\",\n    \"description\": \"project changed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:01:45 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"dd31bd68-f887-4e77-ad32-fb9b51112d1e\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects",
+                "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "owner deleted project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:07:42 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "delete non-existing project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:05:43 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"1a79d21b-e300-4109-b295-0ae0a4e09bf9\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "non-owner deletes project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:07:09 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"d9f23ae9-2f90-4a78-abe9-cffc112912f7\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:06:01 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"28c0067f-f3b7-4ccc-bf4b-d0c3f06d0ab1\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Stats",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/stats",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects",
+                "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                "stats"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "existing project stats",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/stats",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "stats"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 20:00:27 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "288"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"b86913ad-dd96-4571-b422-7be63c3484f2\",\n    \"status_code\": 200,\n    \"client_message\": \"stats fetched\",\n    \"data\": {\n        \"total\": 4,\n        \"status_counts\": {\n            \"todo\": 3,\n            \"in_progress\": 1,\n            \"done\": 0\n        },\n        \"assignee_counts\": [\n            {\n                \"assignee_id\": null,\n                \"count\": 3\n            },\n            {\n                \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\",\n                \"count\": 1\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "fetch non-existing project stats",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e121/stats",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e121",
+                    "stats"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:08:55 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"0f707790-d8e8-4c7c-8830-ac36d861aaeb\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "unauthorised person fetch stats",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/stats",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "stats"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:10:21 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"0ca3207e-1467-4514-94e8-91a262ade008\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
+            },
+            {
+              "name": "authorized person fetch stats",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/stats",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "stats"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 20:02:09 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "288"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"2a5e2a2c-11e4-45d7-9f12-315ef79292a1\",\n    \"status_code\": 200,\n    \"client_message\": \"stats fetched\",\n    \"data\": {\n        \"total\": 4,\n        \"status_counts\": {\n            \"todo\": 3,\n            \"in_progress\": 1,\n            \"done\": 0\n        },\n        \"assignee_counts\": [\n            {\n                \"assignee_id\": null,\n                \"count\": 3\n            },\n            {\n                \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\",\n                \"count\": 1\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/stats",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "stats"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:09:22 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"d79a5c97-35cd-4032-9bb4-48d1125f19a3\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "CREATE TASK",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\", // optional\n    \"priority\": \"high\", // optional (high, low, medium)\n    \"due_date\": \"2026-04-17\" // optional (yyyy-mm-dd)\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects",
+                "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                "tasks"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "owner created task",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\", // optional\n    \"priority\": \"high\", // optional (high, low, medium)\n    \"due_date\": \"2026-04-17\" // optional\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:33:18 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "492"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"741e7113-f85d-4fa4-8eae-4c4a59ca7d08\",\n    \"status_code\": 201,\n    \"client_message\": \"task created\",\n    \"data\": {\n        \"id\": \"48131b70-ee8a-41db-a833-d57da1b22013\",\n        \"title\": \"new bug\",\n        \"description\": \"this is a new bug\",\n        \"status\": \"todo\",\n        \"priority\": \"high\",\n        \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n        \"assignee_id\": null,\n        \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"due_date\": \"2026-04-17T00:00:00Z\",\n        \"created_at\": \"2026-04-13T01:03:18.483652+05:30\",\n        \"updated_at\": \"2026-04-13T01:03:18.483652+05:30\"\n    }\n}"
+            },
+            {
+              "name": "create task without title",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"description\": \"this is a new bug\", // optional\n    \"priority\": \"high\", // optional (high, low, medium)\n    \"due_date\": \"2026-04-17\" // optional\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:36:09 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "129"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"2c5cf4fd-201a-439b-a247-7a42e20bc6bf\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"title\": \"is required\"\n    }\n}"
+            },
+            {
+              "name": "create task under non-existing project",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:12:05 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"4e245155-ffca-4acc-b400-81208d5ac2c1\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "create task with past due date",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\", // optional\n    \"priority\": \"high\", // optional (high, low, medium)\n    \"due_date\": \"2026-04-01\" // optional\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:32:50 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "131"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"ac643be7-5d76-4fff-92ee-26da4704c6e0\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"due_date\": \"is invalid\"\n    }\n}"
+            },
+            {
+              "name": "non-owner create task",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\", // optional\n    \"priority\": \"high\", // optional (high, low, medium)\n    \"due_date\": \"2026-04-17\" // optional\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:35:12 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"0b5c8459-0004-4cf3-9e2c-f21637568750\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
+            },
+            {
+              "name": "create task with invalid priority",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\", // optional\n    \"priority\": \"xyz\", // optional (high, low, medium)\n    \"due_date\": \"2026-04-17\" // optional\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:34:16 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "131"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"a7592b24-27b2-434d-9b0c-1860ee566e3d\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"priority\": \"is invalid\"\n    }\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:13:46 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"b8ce1f14-ec4b-436f-99dc-5866109e5b00\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET BY PROJECT ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks?page=1&limit=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "projects",
+                "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                "tasks"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "with pagination",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks?page=1&limit=10",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:39:41 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1636"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"3461d277-286a-43dc-b716-fc8a757f23bc\",\n    \"status_code\": 200,\n    \"client_message\": \"tasks fetched\",\n    \"data\": {\n        \"tasks\": [\n            {\n                \"id\": \"48131b70-ee8a-41db-a833-d57da1b22013\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": \"2026-04-17T00:00:00Z\",\n                \"created_at\": \"2026-04-13T01:03:18.483652Z\",\n                \"updated_at\": \"2026-04-13T01:03:18.483652Z\"\n            },\n            {\n                \"id\": \"3fb4dbbb-23b3-4604-b4aa-745d01623632\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": \"2026-04-15T00:00:00Z\",\n                \"created_at\": \"2026-04-13T01:02:43.008809Z\",\n                \"updated_at\": \"2026-04-13T01:02:43.008809Z\"\n            },\n            {\n                \"id\": \"7c98ae5d-409f-4602-bf47-79f9350afd9a\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": null,\n                \"created_at\": \"2026-04-13T00:55:58.66689Z\",\n                \"updated_at\": \"2026-04-13T00:55:58.66689Z\"\n            },\n            {\n                \"id\": \"ebbd7ae7-cc0d-4069-91bd-5da49facc503\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": null,\n                \"created_at\": \"2026-04-13T00:55:48.419537Z\",\n                \"updated_at\": \"2026-04-13T00:55:48.419537Z\"\n            }\n        ],\n        \"pagination\": {\n            \"limit\": 10,\n            \"offset\": 0,\n            \"has_next\": false\n        }\n    }\n}"
+            },
+            {
+              "name": "without pagination (default limit: 20)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:40:17 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1636"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"17e9eba1-00a8-4c4b-83e3-ad4d284e4eb1\",\n    \"status_code\": 200,\n    \"client_message\": \"tasks fetched\",\n    \"data\": {\n        \"tasks\": [\n            {\n                \"id\": \"48131b70-ee8a-41db-a833-d57da1b22013\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": \"2026-04-17T00:00:00Z\",\n                \"created_at\": \"2026-04-13T01:03:18.483652Z\",\n                \"updated_at\": \"2026-04-13T01:03:18.483652Z\"\n            },\n            {\n                \"id\": \"3fb4dbbb-23b3-4604-b4aa-745d01623632\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": \"2026-04-15T00:00:00Z\",\n                \"created_at\": \"2026-04-13T01:02:43.008809Z\",\n                \"updated_at\": \"2026-04-13T01:02:43.008809Z\"\n            },\n            {\n                \"id\": \"7c98ae5d-409f-4602-bf47-79f9350afd9a\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": null,\n                \"created_at\": \"2026-04-13T00:55:58.66689Z\",\n                \"updated_at\": \"2026-04-13T00:55:58.66689Z\"\n            },\n            {\n                \"id\": \"ebbd7ae7-cc0d-4069-91bd-5da49facc503\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": null,\n                \"created_at\": \"2026-04-13T00:55:48.419537Z\",\n                \"updated_at\": \"2026-04-13T00:55:48.419537Z\"\n            }\n        ],\n        \"pagination\": {\n            \"limit\": 10,\n            \"offset\": 0,\n            \"has_next\": false\n        }\n    }\n}"
+            },
+            {
+              "name": "task of non-existing project",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:38:35 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"943efa09-b7ab-4e3c-907a-8ac4592d52a8\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "unauthorized user fetch tasks",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks?page=1&limit=10",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:42:18 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"8373a459-5229-4bd2-88dc-254d4ae46c18\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
+            },
+            {
+              "name": "authorized user fetch tasks",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks?page=1&limit=10",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                    "tasks"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:58:53 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1676"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"0e000519-9e56-40ef-a007-aa2ea1078a75\",\n    \"status_code\": 200,\n    \"client_message\": \"tasks fetched\",\n    \"data\": {\n        \"tasks\": [\n            {\n                \"id\": \"48131b70-ee8a-41db-a833-d57da1b22013\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"in_progress\",\n                \"priority\": \"low\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\",\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": \"2026-04-20T00:00:00Z\",\n                \"created_at\": \"2026-04-13T01:03:18.483652Z\",\n                \"updated_at\": \"2026-04-13T01:25:03.284157Z\"\n            },\n            {\n                \"id\": \"3fb4dbbb-23b3-4604-b4aa-745d01623632\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": \"2026-04-15T00:00:00Z\",\n                \"created_at\": \"2026-04-13T01:02:43.008809Z\",\n                \"updated_at\": \"2026-04-13T01:02:43.008809Z\"\n            },\n            {\n                \"id\": \"7c98ae5d-409f-4602-bf47-79f9350afd9a\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": null,\n                \"created_at\": \"2026-04-13T00:55:58.66689Z\",\n                \"updated_at\": \"2026-04-13T00:55:58.66689Z\"\n            },\n            {\n                \"id\": \"ebbd7ae7-cc0d-4069-91bd-5da49facc503\",\n                \"title\": \"new bug\",\n                \"description\": \"this is a new bug\",\n                \"status\": \"todo\",\n                \"priority\": \"high\",\n                \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n                \"assignee_id\": null,\n                \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n                \"due_date\": null,\n                \"created_at\": \"2026-04-13T00:55:48.419537Z\",\n                \"updated_at\": \"2026-04-13T00:55:48.419537Z\"\n            }\n        ],\n        \"pagination\": {\n            \"limit\": 10,\n            \"offset\": 0,\n            \"has_next\": false\n        }\n    }\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"new bug\",\n    \"description\": \"this is a new bug\",\n    \"priority\": \"high\" // high, low, medium\n}\n"
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128/tasks",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128",
+                    "tasks"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:39:13 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"11c45e4e-af30-4982-b4de-7c88f49c49a1\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "UPDATE TASK",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\", // optional\n    \"due_date\": \"2026-04-20\", // optional yyyy-mm-dd\n    \"priority\": \"low\", // optional (high, medium, low)\n    \"status\": \"in_progress\" // optional (todo, in_progress, done)\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:1337/tasks/48131b70-ee8a-41db-a833-d57da1b22013",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "tasks",
+                "48131b70-ee8a-41db-a833-d57da1b22013"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "updated task successfully",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\",\n    \"due_date\": \"2026-04-20\", // optional yyyy-mm-dd\n    \"priority\": \"low\", // optional (high, medium, low)\n    \"status\": \"in_progress\" // optional (todo, in_progress, done)\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/48131b70-ee8a-41db-a833-d57da1b22013",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "48131b70-ee8a-41db-a833-d57da1b22013"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:55:03 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "527"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"17227f47-d598-4412-a4ee-fd72fbfd84ee\",\n    \"status_code\": 200,\n    \"client_message\": \"task updated\",\n    \"data\": {\n        \"id\": \"48131b70-ee8a-41db-a833-d57da1b22013\",\n        \"title\": \"new bug\",\n        \"description\": \"this is a new bug\",\n        \"status\": \"in_progress\",\n        \"priority\": \"low\",\n        \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n        \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\",\n        \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"due_date\": \"2026-04-20T00:00:00Z\",\n        \"created_at\": \"2026-04-13T01:03:18.483652Z\",\n        \"updated_at\": \"2026-04-13T01:25:03.284157+05:30\"\n    }\n}"
+            },
+            {
+              "name": "assignee update task",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"due_date\": \"2026-04-20\", // optional yyyy-mm-dd\n    \"priority\": \"low\", // optional (high, medium, low)\n    \"status\": \"in_progress\" // optional (todo, in_progress, done)\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/48131b70-ee8a-41db-a833-d57da1b22013",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "48131b70-ee8a-41db-a833-d57da1b22013"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:56:00 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "522"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"8408f058-3c54-4f47-a90c-68d15ac85b6c\",\n    \"status_code\": 200,\n    \"client_message\": \"task updated\",\n    \"data\": {\n        \"id\": \"48131b70-ee8a-41db-a833-d57da1b22013\",\n        \"title\": \"new bug\",\n        \"description\": \"this is a new bug\",\n        \"status\": \"in_progress\",\n        \"priority\": \"low\",\n        \"project_id\": \"7631888e-503a-42e2-aefc-a1a3c0b9e127\",\n        \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\",\n        \"creator_id\": \"830b27d1-e625-41c3-bb71-4acd2c1752d5\",\n        \"due_date\": \"2026-04-20T00:00:00Z\",\n        \"created_at\": \"2026-04-13T01:03:18.483652Z\",\n        \"updated_at\": \"2026-04-13T01:25:03.284157Z\"\n    }\n}"
+            },
+            {
+              "name": "assign task to non-existing user",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"assignee_id\": \"1c27b4c9-be8f-4fac-ba93-d6439e0e050d\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:45:25 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"133989ad-1b5c-474a-804b-00cc103560b2\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "invalid priority",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"priority\": \"xyz\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:46:15 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "131"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"94fd3724-776e-4c73-905e-76f2ee666a6e\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"priority\": \"is invalid\"\n    }\n}"
+            },
+            {
+              "name": "past due date",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"due_date\": \"2026-01-01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:48:14 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "131"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"1210f462-705e-4e90-9645-14f5e0c00265\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"due_date\": \"is invalid\"\n    }\n}"
+            },
+            {
+              "name": "invalid status",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\": \"xyz\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:48:31 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "129"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"473a4d80-7be1-41a8-84e9-5c81363b5484\",\n    \"status_code\": 400,\n    \"error\": \"validation failed\",\n    \"fields\": {\n        \"status\": \"is invalid\"\n    }\n}"
+            },
+            {
+              "name": "update non-existing task",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\",\n    \"due_date\": \"2026-04-20\", // optional yyyy-mm-dd\n    \"priority\": \"low\", // optional (high, medium, low)\n    \"status\": \"in_progress\" // optional (todo, in_progress, done)\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/48131b70-ee8a-41db-a833-d57da1b22012",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "48131b70-ee8a-41db-a833-d57da1b22012"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:54:33 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"4cc3fd36-3177-4776-a8f3-3a73976b09c3\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"assignee_id\": \"e7d1c061-15b0-45f2-9d73-6ab096794638\", // optional\n    \"due_date\": \"2026-04-20\", // optional yyyy-mm-dd\n    \"priority\": \"low\", // optional (high, medium, low)\n    \"status\": \"in_progress\" // optional (todo, in_progress, done)\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/48131b70-ee8a-41db-a833-d57da1b22013",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "48131b70-ee8a-41db-a833-d57da1b22013"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:57:06 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"b0585f40-8275-4855-8254-853e07e285e6\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:1337/tasks/7c98ae5d-409f-4602-bf47-79f9350afd9a",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1337",
+              "path": [
+                "tasks",
+                "7c98ae5d-409f-4602-bf47-79f9350afd9a"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "owner delete existing project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/7c98ae5d-409f-4602-bf47-79f9350afd9a",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "7c98ae5d-409f-4602-bf47-79f9350afd9a"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 20:06:23 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "delete non-existing project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/3539d613-0d1b-4a15-85f5-3a9faa5dc4ce",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "3539d613-0d1b-4a15-85f5-3a9faa5dc4ce"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 20:04:00 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"f583092a-e72a-49f8-89db-4f9584912680\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "non-owner user delete project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/7c98ae5d-409f-4602-bf47-79f9350afd9a",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "7c98ae5d-409f-4602-bf47-79f9350afd9a"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 20:05:42 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"6fdaac2f-c1aa-448a-b9f3-898486261db7\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/tasks/7c98ae5d-409f-4602-bf47-79f9350afd9a",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "tasks",
+                    "7c98ae5d-409f-4602-bf47-79f9350afd9a"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 20:04:46 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"b863b854-79cd-4481-a502-f585b629ea6b\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
