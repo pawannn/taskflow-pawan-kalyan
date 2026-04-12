@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 	config "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
@@ -19,7 +18,6 @@ import (
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
 	projectService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/project"
 	taskService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/task"
-	"golang.org/x/time/rate"
 )
 
 func main() {
@@ -38,7 +36,7 @@ func main() {
 
 	// Init HTTP Engine
 	engine := engine.NewHttpEngine(cfg, logger)
-	rateLimiter := middlewares.NewRateLimiter(rate.Every(100*time.Millisecond), 20)
+	rateLimiter := middlewares.NewRateLimiter(cfg.RateLimitIntervalMS, cfg.RateLimitBurst)
 	engine.Use(rateLimiter.Limit)
 
 	tokenService := auth.NewTokenService(cfg.AppName, cfg.JWTSecret, cfg.JWTExpiry)

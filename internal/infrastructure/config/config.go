@@ -10,26 +10,36 @@ import (
 
 // Config represents application configuration loaded from environment variables.
 type Config struct {
-	Env        string `mapstructure:"ENV"`
-	AppName    string `mapstructure:"APP_NAME"`
-	AppPort    uint16 `mapstructure:"APP_PORT"`
-	DBUrl      string `mapstructure:"DB_URL"`
-	JWTSecret  string `mapstructure:"JWT_SECRET"`
-	JWTExpiry  int    `mapstructure:"JWT_EXPIRY"`
-	BCryptCost int    `mapstructure:"BCRYPT_COST"`
+	Env                 string `mapstructure:"ENV"`
+	AppName             string `mapstructure:"APP_NAME"`
+	AppPort             uint16 `mapstructure:"APP_PORT"`
+	DBUrl               string `mapstructure:"DB_URL"`
+	JWTSecret           string `mapstructure:"JWT_SECRET"`
+	JWTExpiry           int    `mapstructure:"JWT_EXPIRY"`
+	BCryptCost          int    `mapstructure:"BCRYPT_COST"`
+	RateLimitIntervalMS int    `mapstructure:"RATE_LIMIT_INTERVAL_MS"`
+	RateLimitBurst      int    `mapstructure:"RATE_LIMIT_BURST"`
 }
 
 // Load reads configuration from environment and .env file, applies defaults, and validates required fields.
 func Load() (*Config, error) {
 	viper.SetConfigType("env")
 
+	// Defaults
 	viper.SetDefault("ENV", "PROD")
-	viper.SetDefault("APP_NAME", "")
-	viper.SetDefault("APP_PORT", 0)
-	viper.SetDefault("DB_URL", "")
-	viper.SetDefault("JWT_SECRET", "")
-	viper.SetDefault("JWT_EXPIRY", 0)
-	viper.SetDefault("BCRYPT_COST", 0)
+	viper.SetDefault("APP_NAME", "taskflow")
+	viper.SetDefault("APP_PORT", 1337)
+
+	viper.SetDefault("JWT_EXPIRY", 24)
+	viper.SetDefault("BCRYPT_COST", 12)
+
+	// General rate limit defaults
+	viper.SetDefault("RATE_LIMIT_INTERVAL_MS", 100) // ~10 RPS
+	viper.SetDefault("RATE_LIMIT_BURST", 20)
+
+	// Auth rate limit defaults (strict)
+	viper.SetDefault("LOGIN_RATE_LIMIT_INTERVAL_MS", 500) // ~2 RPS
+	viper.SetDefault("LOGIN_RATE_LIMIT_BURST", 5)
 
 	viper.SetConfigFile(".env")
 	_ = viper.ReadInConfig()
@@ -41,17 +51,6 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
-	// Defaults
-	if cfg.AppPort == 0 {
-		cfg.AppPort = 1337
-	}
-	if cfg.AppName == "" {
-		cfg.AppName = "taskflow"
-	}
-	if cfg.Env == "" {
-		cfg.Env = "PROD"
-	}
-
 	if cfg.JWTExpiry < 24 {
 		cfg.JWTExpiry = 24
 	}
@@ -60,7 +59,13 @@ func Load() (*Config, error) {
 		cfg.BCryptCost = 12
 	}
 
-	// Required fields
+	if cfg.RateLimitIntervalMS <= 0 {
+		cfg.RateLimitIntervalMS = 100
+	}
+	if cfg.RateLimitBurst <= 0 {
+		cfg.RateLimitBurst = 20
+	}
+
 	if cfg.DBUrl == "" {
 		return nil, fmt.Errorf("DB_URL is required")
 	}

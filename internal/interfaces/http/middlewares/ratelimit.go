@@ -22,10 +22,11 @@ type RateLimiter struct {
 	burst    int
 }
 
-func NewRateLimiter(r rate.Limit, burst int) *RateLimiter {
+func NewRateLimiter(interval int, burst int) *RateLimiter {
+	rateLimit := rate.Every(time.Duration(interval) * time.Millisecond)
 	rl := &RateLimiter{
 		limiters: make(map[string]*ipLimiter),
-		r:        r,
+		r:        rateLimit,
 		burst:    burst,
 	}
 	go rl.cleanup()
