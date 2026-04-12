@@ -1,49 +1,47 @@
 # TaskFlow
 
-A minimal task management API built in Go — users can register, log in, create projects, and manage tasks within those projects.
+A task management REST API built in Go. Users register, log in, create projects, and manage tasks within those projects.
 
 ---
 
 ## 1. Overview
 
-TaskFlow is a REST API implementing authentication, project management, and task tracking with role-based access control.
+**Tech stack**
 
-**Tech stack:**
-- **Language:** Go 1.21+
-- **Router:** chi v5
-- **Database:** PostgreSQL 16
-- **Auth:** JWT (golang-jwt/jwt v5) + bcrypt
-- **Config:** Viper (reads `.env` or environment variables)
-- **Logging:** `log/slog` (structured, per-concern log files + stdout)
-- **Migrations:** golang-migrate CLI (`migrate/migrate` Docker image)
+| | |
+|---|---|
+| Language | Go 1.26 |
+| Router | chi v5 |
+| Database | PostgreSQL 16 |
+| Auth | JWT + bcrypt (cost 12) |
+| Config | Viper |
+| Logging | `log/slog` |
+| Migrations | golang-migrate |
 
 ---
 
 ## 2. Architecture Decisions
 
-**Layered / hexagonal structure.** The project is split into four layers:
-- `domain/` — models and repository interfaces (no dependencies on infrastructure)
-- `infrastructure/` — PostgreSQL implementations, JWT, config, logger
-- `service/` — business logic; depends only on domain interfaces
-- `interfaces/http/` — chi handlers, middleware, routing; depends only on service types
+The code is split into four layers:
 
-This makes the business logic testable without a database (see integration tests, which inject mock repositories).
+- `domain/` — models and repository interfaces. No dependencies on anything external.
+- `infrastructure/` — PostgreSQL, JWT, config, logger.
+- `service/` — all business logic. Depends only on domain interfaces, not on database or HTTP.
+- `interfaces/http/` — chi handlers, middleware, routing.
 
-**What I left out and why:**
-- No ORM — SQL is written by hand for full control and visibility; the schema is simple enough that an ORM adds no value here.
-- No refresh tokens — the assignment specifies a 24-hour JWT; adding refresh logic would exceed scope.
-- No rate limiting — out of scope for this exercise but would be the first thing added before production exposure.
-- No WebSocket/SSE — backend-only submission.
+This separation means the service layer can be tested with in-memory mocks and no database running (which is exactly how the integration tests work).
 
-**Tradeoffs made:**
-- `logger.New()` always writes to `logs/` files on disk. In production this would be replaced with a structured sink (e.g. Loki, CloudWatch). For this exercise it's acceptable.
-- The `migrate/migrate` Docker image is used as a separate compose service rather than embedding the runner in the binary. This keeps the binary dependency-free and makes the migration step explicit and observable.
+**Choices worth noting**
+
+- No ORM. SQL is written by hand. The schema is simple enough that an ORM adds noise, not value.
+- Migrations run as a separate Docker Compose service (`migrate/migrate`) rather than being embedded in the binary. The binary stays small and dependency-free; the migration step is visible in compose logs.
+- No refresh tokens. The assignment specifies a 24-hour JWT. Adding refresh logic would be scope creep.
 
 ---
 
 ## 3. Running Locally
 
-Requires: Docker and Docker Compose (nothing else).
+You only need Docker.
 
 ```bash
 git clone https://github.com/pawannn/taskflow-pawan-kalyan
@@ -52,20 +50,18 @@ cp .env.example .env
 docker compose up
 ```
 
-The API will be available at **http://localhost:1337**.
+API is available at **http://localhost:1337**.
 
-What happens on `docker compose up`:
-1. PostgreSQL starts and passes its health check
-2. `migrate/migrate` runs all migrations (schema + seed data) and exits
-3. The Go API binary starts
+On `docker compose up`:
+1. PostgreSQL starts and passes a health check
+2. `migrate/migrate` runs all migrations including seed data, then exits
+3. The Go API starts
 
-To rebuild the API image after code changes:
 ```bash
+# Rebuild after code changes
 docker compose up --build
-```
 
-To stop and remove containers + volumes:
-```bash
+# Tear down completely
 docker compose down -v
 ```
 
@@ -73,17 +69,16 @@ docker compose down -v
 
 ## 4. Running Migrations
 
-Migrations run automatically on `docker compose up` via the `migrate` service.
+Migrations run automatically on startup. If you want to run them manually against a local database:
 
-To run migrations manually against a local PostgreSQL instance:
 ```bash
-# Install the CLI: https://github.com/golang-migrate/migrate/releases
 migrate -path db/migrations \
   -database "postgres://taskflow:taskflow@localhost:5432/taskflow?sslmode=disable" \
   up
 ```
 
 To roll back:
+
 ```bash
 migrate -path db/migrations \
   -database "postgres://taskflow:taskflow@localhost:5432/taskflow?sslmode=disable" \
@@ -94,15 +89,16 @@ migrate -path db/migrations \
 
 ## 5. Test Credentials
 
-The seed migration (`000002_seed_data.up.sql`) creates the following users:
+The seed file (`db/migrations/000002_seed_data.up.sql`) creates three users. All use the same password.
 
 | Name | Email | Password |
 |---|---|---|
-| Test User | `test@example.com` | `Test@Pass1!` |
-| Alice Johnson | `alice@example.com` | `Test@Pass1!` |
-| Bob Smith | `bob@example.com` | `Test@Pass1!` |
+| Test User | test@example.com | Test@Pass1! |
+| Alice Johnson | alice@example.com | Test@Pass1! |
+| Bob Smith | bob@example.com | Test@Pass1! |
 
-After `docker compose up`, log in with:
+Quick login:
+
 ```bash
 curl -s -X POST http://localhost:1337/auth/login \
   -H "Content-Type: application/json" \
@@ -115,16 +111,17 @@ curl -s -X POST http://localhost:1337/auth/login \
 
 All protected endpoints require `Authorization: Bearer <token>`.
 
-All responses follow this envelope:
+**Response envelope**
 ```json
 {
   "req_id": "uuid",
   "status_code": 200,
   "client_message": "...",
-  "data": { ... }
+  "data": {}
 }
 ```
-Error responses:
+
+**Error response**
 ```json
 {
   "req_id": "uuid",
@@ -134,55 +131,72 @@ Error responses:
 }
 ```
 
+**Status codes**
+
+| Code | Meaning |
+|---|---|
+| 200 | OK |
+| 201 | Created |
+| 204 | No content (deletes) |
+| 400 | Validation error — includes `fields` map |
+| 401 | Missing or invalid token |
+| 403 | Valid token, but you don't own this resource |
+| 404 | Not found |
+| 409 | Conflict (e.g. email already registered) |
+| 500 | Internal server error |
+
+---
+
 ### Auth
 
 #### POST `/auth/register`
 ```json
 // Request
-{ "name": "Jane Doe", "email": "jane@example.com", "password": "Test@Pass1!" }
+{ "name": "pawan", "email": "pawan@gmail.com", "password": "Test@Pass1!" }
 
-// 201 Created
-{ "data": { "id": "uuid", "name": "Jane Doe", "email": "jane@example.com", "created_at": "..." } }
+// 201
+{ "data": { "id": "uuid", "name": "pawan", "email": "pawan@example.com", "created_at": "..." } }
 ```
 
 #### POST `/auth/login`
 ```json
 // Request
-{ "email": "jane@example.com", "password": "Test@Pass1!" }
+{ "email": "pawan@gmail.com", "password": "Test@Pass1!" }
 
-// 200 OK
+// 200
 { "data": { "token": "<jwt>", "user": { "id": "...", "name": "...", "email": "..." } } }
 ```
+
+---
 
 ### Projects
 
 #### GET `/projects?page=1&limit=10`
-Returns projects the authenticated user owns or has tasks in.
+Lists projects the authenticated user owns or is assigned tasks in.
 
 #### POST `/projects`
 ```json
-{ "name": "My Project", "description": "Optional" }
-// 201 Created — returns project object
+// Request
+{ "name": "Website Redesign", "description": "Optional" }
+// 201 — returns created project
 ```
 
 #### GET `/projects/:id?page=1&limit=10`
-Returns project details + its tasks. Requires the caller to be owner or assignee.
+Returns the project and its paginated tasks. Must be owner or assignee to access.
 
 #### PATCH `/projects/:id`
+All fields optional. Owner only.
 ```json
-{ "name": "Updated Name", "description": "Updated" }
-// 200 OK — owner only
+{ "name": "New Name", "description": "New description" }
+// 200 — returns updated project
 ```
 
 #### DELETE `/projects/:id`
-```
-204 No Content — owner only, cascades to all tasks
-```
+Owner only. Cascades to all tasks. Returns `204`.
 
 #### GET `/projects/:id/stats`
-Returns task counts broken down by status and by assignee.
 ```json
-// 200 OK
+// 200
 {
   "data": {
     "total": 3,
@@ -195,51 +209,42 @@ Returns task counts broken down by status and by assignee.
 }
 ```
 
+---
+
 ### Tasks
 
 #### GET `/projects/:id/tasks?status=todo&assignee=uuid&page=1&limit=10`
-Filters: `status` (todo | in_progress | done), `assignee` (UUID).
+Supports filtering by `status` (todo | in_progress | done) and `assignee` (UUID).
 
 #### POST `/projects/:id/tasks`
+Project owner only.
 ```json
+// Request
 {
   "title": "Design homepage",
   "description": "Optional",
   "priority": "high",
-  "assignee_id": "uuid or null",
+  "assignee_id": "uuid",
   "due_date": "2026-05-01"
 }
-// 201 Created
+// 201 — returns created task
 ```
 
 #### PATCH `/tasks/:id`
-All fields optional. Caller must be project owner or task assignee.
+All fields optional. Project owner or task assignee only.
 ```json
 { "title": "Updated", "status": "done", "priority": "low", "due_date": "2026-06-01" }
-// 200 OK
+// 200 — returns updated task
 ```
 
 #### DELETE `/tasks/:id`
-Project owner or task assignee only. Returns `200 OK`.
-
-### HTTP Status Codes
-
-| Code | Meaning |
-|---|---|
-| 200 | Success |
-| 201 | Created |
-| 400 | Validation error (includes `fields` map) |
-| 401 | Missing or invalid JWT |
-| 403 | Valid JWT but insufficient permission |
-| 404 | Resource not found |
-| 409 | Conflict (e.g. email already registered) |
-| 500 | Internal server error |
+Project owner or task creator only. Returns `204`.
 
 ---
 
 ## 7. Running Tests
 
-Integration tests cover the auth endpoints using an in-memory mock repository (no database required):
+13 integration tests covering auth, project, and task endpoints. All tests use in-memory mock repositories — no database needed.
 
 ```bash
 go test ./tests/integration/... -v
@@ -249,16 +254,10 @@ go test ./tests/integration/... -v
 
 ## 8. What I'd Do With More Time
 
-**Shortcuts taken:**
-- The `logs/` directory is always written to disk. A proper production setup would use structured log sinks (Loki, CloudWatch) configured per environment.
-- `DELETE /tasks/:id` returns `200` with a body instead of `204 No Content` — the assignment says 204 but the existing error/response helpers assume a body. Easy to fix.
-- No request-level timeout middleware — individual repository calls have 10-second timeouts but the overall request doesn't.
-
-**What I'd add:**
-- Refresh token flow (short-lived access tokens + long-lived refresh tokens stored in DB)
-- Rate limiting on auth endpoints (login brute-force protection)
-- `GET /users` or `GET /projects/:id/members` to support assignee lookup in a real UI
-- Database-backed integration tests using testcontainers to cover the full stack
-- OpenAPI/Swagger spec generated from route definitions
-- Proper CI pipeline (lint, test, build, Docker push)
-- Soft deletes on tasks/projects with `deleted_at` column
+- **Refresh tokens** — short-lived access tokens paired with long-lived refresh tokens stored in the database
+- **`GET /projects/:id/members`** — needed for any real UI that lets you pick an assignee
+- **Database-backed integration tests** using testcontainers — the current tests use mocks which are fast but don't catch SQL issues
+- **OpenAPI spec** — generate it from route definitions rather than maintaining docs by hand
+- **CI pipeline** — lint, test, build, push image
+- **Soft deletes** — `deleted_at` on tasks and projects instead of hard deletes
+- **Request-level timeout middleware** — individual DB calls have 10-second timeouts but the overall request has none
