@@ -12,7 +12,7 @@ import (
 )
 
 func (r *taskRepository) GetByID(ctx context.Context, id string) (*models.Task, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	query := `
@@ -51,7 +51,7 @@ func (r *taskRepository) GetByID(ctx context.Context, id string) (*models.Task, 
 }
 
 func (r *taskRepository) GetByProjectID(ctx context.Context, projectID string, filter *domainRepo.TaskFilter, pagination *domainRepo.Pagination) ([]*models.Task, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `
@@ -65,13 +65,13 @@ func (r *taskRepository) GetByProjectID(ctx context.Context, projectID string, f
 	args := []interface{}{projectID}
 	argIndex := 2
 
-	if filter.Status != nil {
+	if filter != nil && filter.Status != nil {
 		query += " AND status = $" + fmt.Sprint(argIndex)
 		args = append(args, *filter.Status)
 		argIndex++
 	}
 
-	if filter.Status != nil {
+	if filter != nil && filter.Status != nil {
 		query += " AND assignee_id = $" + fmt.Sprint(argIndex)
 		args = append(args, *filter.Status)
 		argIndex++

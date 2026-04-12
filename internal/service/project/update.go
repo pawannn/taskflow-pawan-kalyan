@@ -15,23 +15,23 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, upd
 
 	project, err := pS.projectRepo.GetByID(ctx, updatedProject.ID)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	if project == nil {
-		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
+		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
 	if project.OwnerID != ownerID {
 		return nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
 	}
 
-	if project.Name != updatedProject.Name {
+	if updatedProject.Name != "" && project.Name != updatedProject.Name {
 		project.Name = updatedProject.Name
 		needToUpdate = true
 	}
 
-	if *project.Description != *updatedProject.Description {
+	if *updatedProject.Description != "" && *project.Description != *updatedProject.Description {
 		project.Description = updatedProject.Description
 		needToUpdate = true
 	}
@@ -42,7 +42,7 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, upd
 
 	project.UpdatedAt = time.Now()
 	if err := pS.projectRepo.Update(ctx, project); err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrUpdateProject, err)
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return project, TaskFlowErr.NoErr

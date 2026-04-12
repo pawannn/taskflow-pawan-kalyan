@@ -13,9 +13,11 @@ import (
 	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	authHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/auth"
 	projectHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/project"
+	taskHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/task"
 	middlewares "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/middlewares"
 	authservice "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"
 	projectService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/project"
+	taskService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/task"
 )
 
 func main() {
@@ -45,14 +47,17 @@ func main() {
 	// init services
 	authService := authservice.NewAuthService(cfg.BCryptCost, userRepository, tokenService)
 	projectService := projectService.NewProjectRepository(projectRepository, taskRepository)
+	taskService := taskService.NewTaskService(taskRepository, projectRepository)
 
 	// init handlers
 	authHandler := authHandler.NewAuthHandler(engine, authService)
 	projectHandler := projectHandler.NewProjectHandler(engine, projectService, middlewares)
+	taskHandler := taskHandler.NewTaskHandler(engine, middlewares, taskService)
 
 	// Add routes
 	authHandler.AddRoutes()
 	projectHandler.AddRoutes()
+	taskHandler.AddRoutes()
 
 	engine.Start()
 }

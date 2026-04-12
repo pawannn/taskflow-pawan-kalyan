@@ -7,7 +7,7 @@ import (
 )
 
 type TaskFilter struct {
-	Status     *string
+	Status     *models.TaskStatus
 	AssigneeID *string
 }
 

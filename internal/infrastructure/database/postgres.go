@@ -10,7 +10,7 @@ import (
 )
 
 func NewPostgresDB(dbURL string) (*pgxpool.Pool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	cfg, err := pgxpool.ParseConfig(dbURL)

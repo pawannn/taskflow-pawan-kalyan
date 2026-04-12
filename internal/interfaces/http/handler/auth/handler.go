@@ -30,7 +30,7 @@ func (e *authHandler) AddRoutes() {
 		{
 			Method:      http.MethodPost,
 			Endpoint:    "/auth/login",
-			Description: "Authenticates a user using email and password, and returns a JWT access token on success.",
+			Description: "Returns a JWT access token",
 			Controller:  e.Login,
 		},
 	})

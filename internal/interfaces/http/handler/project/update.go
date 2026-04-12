@@ -3,11 +3,11 @@ package projectHandler
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
 func (pH *projectHandler) update(w http.ResponseWriter, r *http.Request) {
@@ -15,10 +15,10 @@ func (pH *projectHandler) update(w http.ResponseWriter, r *http.Request) {
 	meta := pH.engine.ParseContext(ctx)
 
 	projectID := chi.URLParam(r, "id")
-	if strings.TrimSpace(projectID) == "" {
+	if !utils.IsValidUUID(projectID) {
 		pH.engine.Log.Warn(ctx, "validation failed", "fields", "id")
 		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]string{
-			"id": "is required",
+			"id": "is invalid",
 		})
 		return
 	}

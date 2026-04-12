@@ -40,7 +40,7 @@ func (pR *projectRepository) GetByID(ctx context.Context, id string) (*models.Pr
 }
 
 func (pR *projectRepository) GetByUserID(ctx context.Context, userID string, pagination domainRepo.Pagination) ([]*models.Project, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	query := `
@@ -82,4 +82,34 @@ func (pR *projectRepository) GetByUserID(ctx context.Context, userID string, pag
 	}
 
 	return projects, nil
+}
+
+func (r *projectRepository) IsPartOfProject(ctx context.Context, projectID, userID string) (bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT EXISTS (
+			SELECT 1
+			FROM projects p
+			WHERE p.id = $1
+			AND (
+				p.owner_id = $2
+				OR EXISTS (
+					SELECT 1 FROM tasks t
+					WHERE t.project_id = p.id
+					AND t.assignee_id = $2
+				)
+			)
+		)
+	`
+
+	var isAuthorized bool
+
+	err := r.db.QueryRow(ctx, query, projectID, userID).Scan(&isAuthorized)
+	if err != nil {
+		return false, err
+	}
+
+	return isAuthorized, nil
 }

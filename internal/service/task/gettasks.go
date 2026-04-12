@@ -13,9 +13,14 @@ import (
 func (s *TaskService) GetTasks(
 	ctx context.Context,
 	projectID string,
-	status *string,
+	status *models.TaskStatus,
 	assigneeID *string,
+	userID string,
 ) ([]*models.Task, Error.Err) {
+	isauthorization, err := s.projectRepo.IsPartOfProject(ctx, projectID, userID)
+	if !isauthorization {
+		return nil, Error.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+	}
 
 	taskFilter := &domainRepo.TaskFilter{
 		Status:     status,
@@ -24,7 +29,7 @@ func (s *TaskService) GetTasks(
 
 	tasks, err := s.taskRepo.GetByProjectID(ctx, projectID, taskFilter, nil)
 	if err != nil {
-		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrFetchTask, err)
+		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return tasks, Error.NoErr

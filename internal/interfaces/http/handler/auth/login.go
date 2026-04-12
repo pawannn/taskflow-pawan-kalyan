@@ -29,7 +29,7 @@ func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	aH.engine.Log.Info(ctx, "login attempt", "email", req.Email)
+	aH.engine.Log.Auth(ctx, "login attempt", "email", req.Email)
 
 	token, user, err := aH.authService.Login(ctx, req.Email, req.Password)
 	if !err.IsEmpty() {
@@ -41,7 +41,7 @@ func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	aH.engine.Log.Info(ctx, "user logged in", "user_id", user.ID, "email", user.Email)
+	aH.engine.Log.Auth(ctx, "user logged in", "user_id", user.ID, "email", user.Email)
 
 	response := AuthResponse{
 		User: UserResponse{

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
@@ -14,12 +15,11 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	meta := tH.engine.ParseContext(ctx)
 
-	query := r.URL.Query()
-	projectID := query.Get("id")
-	if projectID == "" {
+	projectID := chi.URLParam(r, "id")
+	if !utils.IsValidUUID(projectID) {
 		tH.engine.Log.Warn(ctx, "validation failed", "fields", "id")
 		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]string{
-			"id": "is required",
+			"id": "is invalid",
 		})
 		return
 	}
@@ -31,7 +31,20 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fields := utils.ValidateRequired(map[string]string{
+		"title": req.Title,
+	})
+
 	priority := models.TaskPriority(req.Priority)
+	if !priority.IsValid() {
+		fields["priority"] = "is invalid"
+	}
+
+	if len(fields) > 0 {
+		tH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
+		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", fields)
+		return
+	}
 
 	task := models.Task{
 		Title:       req.Title,

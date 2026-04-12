@@ -18,10 +18,11 @@ func (pS *ProjectService) Create(ctx context.Context, name, description, ownerID
 		Description: &description,
 		OwnerID:     ownerID,
 		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
 	if err := pS.projectRepo.Create(ctx, project); err != nil {
-		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrCreateProject, err)
+		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return project, Error.NoErr

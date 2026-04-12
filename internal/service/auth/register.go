@@ -15,16 +15,16 @@ import (
 func (aS *AuthService) Register(ctx context.Context, name, email, password string) (*models.User, TaskFlowErr.Err) {
 	existing, err := aS.userRepo.GetByEmail(ctx, email)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrRegister, nil)
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, nil)
 	}
 
 	if existing != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusConflict, domain.ErrUserAlreadyExists, err)
+		return nil, TaskFlowErr.NewErr(http.StatusConflict, domain.ErrConflict, err)
 	}
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), int(aS.bCryptCost))
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrRegister, err)
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	timestamp := time.Now()
@@ -39,7 +39,7 @@ func (aS *AuthService) Register(ctx context.Context, name, email, password strin
 	}
 
 	if err := aS.userRepo.Create(ctx, user); err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrRegister, err)
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return user, TaskFlowErr.NoErr

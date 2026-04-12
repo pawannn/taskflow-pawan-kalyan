@@ -40,7 +40,7 @@ func (aH *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	aH.engine.Log.Info(ctx, "user registered", "user_id", user.ID, "email", user.Email)
+	aH.engine.Log.Auth(ctx, "user registered", "user_id", user.ID, "email", user.Email)
 
 	response := UserResponse{
 		ID:        user.ID,

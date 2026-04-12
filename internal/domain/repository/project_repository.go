@@ -17,4 +17,5 @@ type ProjectRepository interface {
 	GetByUserID(ctx context.Context, userID string, pagination Pagination) ([]*models.Project, error)
 	Update(ctx context.Context, project *models.Project) error
 	Delete(ctx context.Context, id string) error
+	IsPartOfProject(ctx context.Context, projectID, userID string) (bool, error)
 }

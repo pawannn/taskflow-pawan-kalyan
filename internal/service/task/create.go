@@ -16,17 +16,9 @@ func (tS *TaskService) CreateTask(
 	task *models.Task,
 	userID string,
 ) Error.Err {
-	if task.Title == "" {
-		return Error.NewErr(http.StatusBadRequest, domain.ErrRequiredTaskTitle, nil)
-	}
-
-	if !task.Priority.IsValid() {
-		return Error.NewErr(http.StatusBadRequest, domain.ErrInvalidTaskPriority, nil)
-	}
-
 	project, err := tS.projectRepo.GetByID(ctx, task.ProjectID)
 	if err != nil {
-		return Error.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, nil)
+		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, nil)
 	}
 
 	if project == nil {
@@ -34,7 +26,7 @@ func (tS *TaskService) CreateTask(
 	}
 
 	if project.OwnerID != userID {
-		return Error.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return Error.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
 	}
 
 	task.ID = utils.GenerateUUID()
@@ -45,7 +37,7 @@ func (tS *TaskService) CreateTask(
 	task.UpdatedAt = timeStamp
 
 	if err := tS.taskRepo.Create(ctx, task); err != nil {
-		return Error.NewErr(http.StatusInternalServerError, domain.ErrCreateTask, nil)
+		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, nil)
 	}
 
 	return Error.NoErr

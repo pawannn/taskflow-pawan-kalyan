@@ -29,9 +29,18 @@ func NewTaskHandler(
 func (tH *taskHandler) AddRoutes() {
 	tH.engine.AddRoutes([]engine.Route{
 		{
-			Method:      http.MethodPost,
-			Endpoint:    "/projects/:id/tasks",
+			Method:      http.MethodGet,
+			Endpoint:    "/projects/{id}/tasks",
 			Description: "Create a task",
+			Controller:  tH.getByProject,
+			Middleware: []engine.Middleware{
+				tH.middleware.ValidateAuthToken,
+			},
+		},
+		{
+			Method:      http.MethodPost,
+			Endpoint:    "/projects/{id}/tasks",
+			Description: "List tasks — support `?status=` and `?assignee=` filters",
 			Controller:  tH.create,
 			Middleware: []engine.Middleware{
 				tH.middleware.ValidateAuthToken,

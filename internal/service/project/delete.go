@@ -11,11 +11,11 @@ import (
 func (s *ProjectService) DeleteProject(ctx context.Context, projectID, userID string) TaskFlowErr.Err {
 	project, err := s.projectRepo.GetByID(ctx, projectID)
 	if err != nil {
-		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
+		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	if project == nil {
-		return TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
+		return TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
 	if project.OwnerID != userID {
@@ -24,7 +24,7 @@ func (s *ProjectService) DeleteProject(ctx context.Context, projectID, userID st
 
 	err = s.projectRepo.Delete(ctx, projectID)
 	if err != nil {
-		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrDeleteProject, err)
+		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return TaskFlowErr.NoErr

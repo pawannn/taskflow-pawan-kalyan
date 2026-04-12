@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 )
@@ -26,29 +27,29 @@ func (m *MiddlewareHandler) ValidateAuthToken(next http.Handler) http.Handler {
 
 		authHeader := r.Header.Get("Authorization")
 		if strings.TrimSpace(authHeader) == "" {
-			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "missing authorization token", nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
 			return
 		}
 
 		bearer, token, ok := strings.Cut(authHeader, " ")
 		if !ok || bearer != "Bearer" || token == "" {
-			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid authorization format", nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
 			return
 		}
 
 		claims, err := m.tokenService.Validate(token)
 		if err != nil {
-			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid or expired token", nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
 			return
 		}
 
 		if strings.TrimSpace(claims.UserID) == "" {
-			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid token: missing user_id", nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
 			return
 		}
 
 		if strings.TrimSpace(claims.UserEmail) == "" {
-			m.engine.SendResponse(w, meta.ReqID, http.StatusUnauthorized, "invalid token: missing user_email", nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
 			return
 		}
 

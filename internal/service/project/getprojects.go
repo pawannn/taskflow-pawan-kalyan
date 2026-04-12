@@ -19,25 +19,30 @@ func (pS *ProjectService) GetProjects(ctx context.Context, userID string, page i
 
 	projects, err := pS.projectRepo.GetByUserID(ctx, userID, pagination)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
+		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return projects, TaskFlowErr.NoErr
 }
 
-func (s *ProjectService) GetProjectByID(ctx context.Context, projectID string) (*models.Project, []*models.Task, TaskFlowErr.Err) {
-	project, err := s.projectRepo.GetByID(ctx, projectID)
+func (pS *ProjectService) GetProjectByID(ctx context.Context, projectID string, userID string) (*models.Project, []*models.Task, TaskFlowErr.Err) {
+	isAuthorized, err := pS.projectRepo.IsPartOfProject(ctx, projectID, userID)
+	if !isAuthorized {
+		return nil, nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+	}
+
+	project, err := pS.projectRepo.GetByID(ctx, projectID)
 	if err != nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
+		return nil, nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	if project == nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrProjectNotFound, nil)
+		return nil, nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
 	}
 
-	tasks, err := s.taskRepo.GetByProjectID(ctx, projectID, nil, nil)
+	tasks, err := pS.taskRepo.GetByProjectID(ctx, projectID, nil, nil)
 	if err != nil {
-		return nil, nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrFetchProject, err)
+		return nil, nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return project, tasks, TaskFlowErr.NoErr

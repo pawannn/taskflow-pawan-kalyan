@@ -15,7 +15,7 @@ func (pH *projectHandler) create(w http.ResponseWriter, r *http.Request) {
 	var req CreateProjectRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		pH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
+		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrInvalidReqBody, nil)
 		return
 	}
 
@@ -25,7 +25,7 @@ func (pH *projectHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	if len(fields) > 0 {
 		pH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", fields)
+		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
 		return
 	}
 

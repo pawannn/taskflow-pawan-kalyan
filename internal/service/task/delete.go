@@ -11,7 +11,7 @@ import (
 func (tS *TaskService) DeleteTask(ctx context.Context, taskID, userID string) Error.Err {
 	task, err := tS.taskRepo.GetByID(ctx, taskID)
 	if err != nil {
-		return Error.NewErr(http.StatusInternalServerError, domain.ErrFetchTask, err)
+		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	if task == nil {
@@ -20,7 +20,7 @@ func (tS *TaskService) DeleteTask(ctx context.Context, taskID, userID string) Er
 
 	project, err := tS.projectRepo.GetByID(ctx, task.ProjectID)
 	if err != nil {
-		return Error.NewErr(http.StatusNotFound, domain.ErrNotFound, err)
+		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	if project.OwnerID != userID {
@@ -29,7 +29,7 @@ func (tS *TaskService) DeleteTask(ctx context.Context, taskID, userID string) Er
 
 	err = tS.taskRepo.Delete(ctx, taskID)
 	if err != nil {
-		return Error.NewErr(http.StatusInternalServerError, domain.ErrDeleteTask, err)
+		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 
 	return Error.NoErr

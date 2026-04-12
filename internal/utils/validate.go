@@ -4,6 +4,8 @@ import (
 	"net/mail"
 	"regexp"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -12,6 +14,11 @@ var (
 	numberRegex  = regexp.MustCompile(`[0-9]`)
 	specialRegex = regexp.MustCompile(`[!@#$%^&*(),.?":{}|<>]`)
 )
+
+func IsValidUUID(u string) bool {
+	_, err := uuid.Parse(u)
+	return err == nil
+}
 
 func ValidateRequired(fields map[string]string) map[string]string {
 	errors := map[string]string{}
