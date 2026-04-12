@@ -24,10 +24,10 @@ The system is designed with a clean, layered architecture to ensure separation o
 
 The project follows a layered architecture to keep responsibilities clearly separated and the codebase maintainable as it grows.
 
-- `domain/` — Contains core models and repository interfaces. This layer has no external dependencies, making it stable and easy to reason about.
-- `infrastructure/` — Implements external concerns such as PostgreSQL, JWT, configuration, and logging. This layer satisfies the interfaces defined in the domain.
-- `service/` — Holds all business logic. It depends only on the domain layer, not on HTTP or database implementations. This makes it easy to unit test using mocks.
-- `interfaces/http/` — Handles HTTP transport (routing, middleware, request/response handling). It translates HTTP requests into service calls and formats responses.
+- `domain/` - Contains core models and repository interfaces. This layer has no external dependencies, making it stable and easy to reason about.
+- `infrastructure/` - Implements external concerns such as PostgreSQL, JWT, configuration, and logging. This layer satisfies the interfaces defined in the domain.
+- `service/` - Holds all business logic. It depends only on the domain layer, not on HTTP or database implementations. This makes it easy to unit test using mocks.
+- `interfaces/http/` - Handles HTTP transport (routing, middleware, request/response handling). It translates HTTP requests into service calls and formats responses.
 
 **Why this structure?**
 - Keeps business logic independent of frameworks and databases
@@ -52,6 +52,14 @@ The project follows a layered architecture to keep responsibilities clearly sepa
 ##### **4. Layered architecture over simplicity:**
 - Even though this is a small project, structured layering was used.
 - **Tradeoff**: Slight initial overhead, but better long-term maintainability.
+
+##### **5. Rate Limiting**
+
+Basic rate limiting is implemented to protect the API from excessive requests.
+- **Interval:** 100ms (~10 requests per second)
+- **Burst:** 20 requests
+
+This allows short bursts of traffic while maintaining a controlled average request rate. The values can be easily tuned via environment variables if needed.
 
 ---
 
@@ -291,17 +299,20 @@ This implementation focuses on delivering a complete, clean, and working system 
 - **Refresh token mechanism**:
   Introduce short-lived access tokens with long-lived refresh tokens for better session management.
 
-- **Database-backed integration tests**:
-  Use tools like Testcontainers to run tests against a real PostgreSQL instance and catch query-level issues.
+- **Better pagination strategy**:
+  Move from page-based pagination to cursor-based pagination for scalability.
 
 - **Project members & roles (RBAC)**:
   Add a proper members system with roles (owner, contributor) instead of relying only on ownership and task assignment.
 
+- **Database-backed integration tests**:
+  Use tools like Testcontainers to run tests against a real PostgreSQL instance and catch query-level issues.
+
+- **Bulk operations**  
+  Add endpoints for bulk task updates (e.g., update status of multiple tasks).
+
 - **OpenAPI / Swagger documentation**:
   Auto-generate API documentation to improve developer experience and reduce manual maintenance.
-
-- **Observability**
-  Add metrics (Prometheus) and tracing (OpenTelemetry) for better monitoring and debugging.
 
 - **Soft deletes**
   Replace hard deletes with `deleted_at` fields for recoverability and auditing.
