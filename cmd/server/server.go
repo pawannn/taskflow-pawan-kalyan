@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
@@ -26,8 +25,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
-	fmt.Printf("%+v\n\n", cfg)
 
 	logger := logger.New(cfg.Env)
 
