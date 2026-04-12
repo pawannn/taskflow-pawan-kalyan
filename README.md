@@ -303,9 +303,6 @@ This implementation focuses on delivering a complete, clean, and working system 
 - **Observability**
   Add metrics (Prometheus) and tracing (OpenTelemetry) for better monitoring and debugging.
 
-- **CI/CD pipeline**
-  Automate linting, testing, and Docker builds on every PR.
-
 - **Soft deletes**
   Replace hard deletes with `deleted_at` fields for recoverability and auditing.
 ---
