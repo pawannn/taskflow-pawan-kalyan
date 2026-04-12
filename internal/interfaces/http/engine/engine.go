@@ -30,6 +30,11 @@ func NewHttpEngine(cfg *config.Config, logger *logger.Logger) *HttpEngine {
 	}
 }
 
+// Handler returns the underlying http.Handler — used in tests.
+func (e *HttpEngine) Handler() http.Handler {
+	return e.router
+}
+
 func (e *HttpEngine) Start() error {
 	port := fmt.Sprintf(":%d", e.cfg.AppPort)
 

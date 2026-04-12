@@ -73,5 +73,14 @@ func (pH *projectHandler) AddRoutes() {
 				pH.middleware.ValidateAuthToken,
 			},
 		},
+		{
+			Method:      http.MethodGet,
+			Endpoint:    "/projects/{id}/stats",
+			Description: "Get task counts by status and by assignee",
+			Controller:  pH.stats,
+			Middleware: []engine.Middleware{
+				pH.middleware.ValidateAuthToken,
+			},
+		},
 	})
 }

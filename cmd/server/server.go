@@ -46,7 +46,7 @@ func main() {
 
 	// init services
 	authService := authservice.NewAuthService(cfg.BCryptCost, userRepository, tokenService)
-	projectService := projectService.NewProjectRepository(projectRepository, taskRepository)
+	projectService := projectService.NewProjectService(projectRepository, taskRepository)
 	taskService := taskService.NewTaskService(taskRepository, projectRepository, userRepository)
 
 	// init handlers

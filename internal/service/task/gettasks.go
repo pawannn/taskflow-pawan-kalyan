@@ -25,7 +25,7 @@ func (s *TaskService) GetByProjectID(
 
 	isAuthorized, err := s.projectRepo.IsPartOfProject(ctx, projectID, userID)
 	if !isAuthorized {
-		return nil, false, Error.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+		return nil, false, Error.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
 	}
 
 	taskFilter := &domainRepo.TaskFilter{

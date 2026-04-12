@@ -23,7 +23,7 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, upd
 	}
 
 	if project.OwnerID != ownerID {
-		return nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+		return nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
 	}
 
 	if updatedProject.Name != "" && project.Name != updatedProject.Name {

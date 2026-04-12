@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-taskflow}
+      POSTGRES_USER: ${POSTGRES_USER:-taskflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-taskflow}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-taskflow} -d ${POSTGRES_DB:-taskflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./db/migrations:/migrations
+    command:
+      [
+        "-path=/migrations",
+        "-database=postgres://${POSTGRES_USER:-taskflow}:${POSTGRES_PASSWORD:-taskflow}@db:5432/${POSTGRES_DB:-taskflow}?sslmode=disable",
+        "up",
+      ]
+
+  api:
+    build: .
+    ports:
+      - "${APP_PORT:-1337}:${APP_PORT:-1337}"
+    environment:
+      - ENV=production
+      - APP_NAME=${APP_NAME:-taskflow}
+      - APP_PORT=${APP_PORT:-1337}
+      - DB_URL=postgres://${POSTGRES_USER:-taskflow}:${POSTGRES_PASSWORD:-taskflow}@db:5432/${POSTGRES_DB:-taskflow}?sslmode=disable
+      - JWT_SECRET=${JWT_SECRET:-changeme-use-a-long-random-secret-in-production}
+      - JWT_EXPIRY=${JWT_EXPIRY:-24}
+      - BCRYPT_COST=${BCRYPT_COST:-12}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: on-failure
+
+volumes:
+  postgres_data:

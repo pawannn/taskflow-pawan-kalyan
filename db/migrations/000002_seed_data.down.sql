@@ -6,8 +6,7 @@ DELETE FROM tasks WHERE id IN (
 
 DELETE FROM projects WHERE id IN (
     '7970a8a7-eda7-4a26-91e3-6f5609a4de74',
-    '022bfb02-9c31-4f6b-892a-6dc6a4c3b6f4',
-    '01cd0839-4b95-458f-b5ac-3e9f7a1e7693'
+    '022bfb02-9c31-4f6b-892a-6dc6a4c3b6f4'
 );
 
 DELETE FROM users WHERE id IN (

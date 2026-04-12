@@ -26,7 +26,7 @@ func (tS *TaskService) CreateTask(
 	}
 
 	if project.OwnerID != userID {
-		return Error.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+		return Error.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
 	}
 
 	task.ID = utils.GenerateUUID()

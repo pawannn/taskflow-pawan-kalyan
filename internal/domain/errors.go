@@ -22,7 +22,7 @@ const (
 	ErrUpdateTask          = "unable to update task at the moment"
 	ErrDeleteTask          = "unable to delete task at the moment"
 
-	ErrForbidded        = "unauthorized action"
+	ErrForbidden        = "forbidden"
 	ErrUnAuthorized     = "unauthenticated"
 	ErrNotFound         = "not found"
 	ErrValidationFailed = "validation failed"

@@ -28,7 +28,7 @@ func (s *TaskService) UpdateTask(
 		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
 	}
 	if !canUpdate {
-		return nil, Error.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+		return nil, Error.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
 	}
 
 	isUpdated := false

@@ -24,7 +24,7 @@ func (tS *TaskService) DeleteTask(ctx context.Context, taskID, userID string) Er
 	}
 
 	if project.OwnerID != userID {
-		return Error.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+		return Error.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
 	}
 
 	err = tS.taskRepo.Delete(ctx, taskID)

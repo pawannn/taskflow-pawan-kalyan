@@ -19,7 +19,7 @@ func (s *ProjectService) DeleteProject(ctx context.Context, projectID, userID st
 	}
 
 	if project.OwnerID != userID {
-		return TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidded, nil)
+		return TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
 	}
 
 	err = s.projectRepo.Delete(ctx, projectID)

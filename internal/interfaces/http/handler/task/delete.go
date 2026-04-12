@@ -32,5 +32,5 @@ func (tH *taskHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "task deleted", nil)
+	tH.engine.SendNoContent(w)
 }

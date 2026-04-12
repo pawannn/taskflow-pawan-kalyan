@@ -7,7 +7,7 @@ type ProjectService struct {
 	taskRepo    domainRepo.TaskRepository
 }
 
-func NewProjectRepository(
+func NewProjectService(
 	projectRepository domainRepo.ProjectRepository,
 	taskRepo domainRepo.TaskRepository,
 ) *ProjectService {

@@ -21,7 +21,7 @@ type ErrorResponse struct {
 type Response struct {
 	ReqID         string      `json:"req_id"`
 	StatusCode    int         `json:"status_code"`
-	ClientMessage string      `json:"client_message"`
+	ClientMessage string      `json:"client_message,omitempty"`
 	Data          interface{} `json:"data"`
 }
 
@@ -37,6 +37,10 @@ func (e *HttpEngine) SendResponse(w http.ResponseWriter, reqID string, statusCod
 	}
 
 	json.NewEncoder(w).Encode(response)
+}
+
+func (e *HttpEngine) SendNoContent(w http.ResponseWriter) {
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (e *HttpEngine) SendErrorResponse(w http.ResponseWriter, reqID string, statusCode int, errorMessage string, fields map[string]string) {
