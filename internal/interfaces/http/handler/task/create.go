@@ -17,8 +17,8 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	projectID := chi.URLParam(r, "id")
 	if !utils.IsValidUUID(projectID) {
-		tH.engine.Log.Warn(ctx, "validation failed", "fields", "id")
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]string{
+		tH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", "id")
+		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, map[string]string{
 			"id": "is invalid",
 		})
 		return
@@ -41,8 +41,8 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(fields) > 0 {
-		tH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", fields)
+		tH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", fields)
+		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
 		return
 	}
 

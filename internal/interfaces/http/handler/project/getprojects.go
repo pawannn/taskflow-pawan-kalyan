@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
@@ -14,8 +15,8 @@ func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 
 	projectID := chi.URLParam(r, "id")
 	if !utils.IsValidUUID(projectID) {
-		pH.engine.Log.Warn(ctx, "validation failed", "fields", "id")
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "validation failed", map[string]string{
+		pH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", "id")
+		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, map[string]string{
 			"id": "is invalid",
 		})
 		return

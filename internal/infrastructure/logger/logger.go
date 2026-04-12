@@ -23,11 +23,15 @@ func newFileLogger(filename string) *slog.Logger {
 		panic(err)
 	}
 
-	handler := slog.NewJSONHandler(file, &slog.HandlerOptions{
+	fileHandler := slog.NewJSONHandler(file, &slog.HandlerOptions{
 		Level: slog.LevelDebug,
 	})
 
-	return slog.New(handler)
+	consoleHandler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	})
+
+	return slog.New(slog.NewMultiHandler(fileHandler, consoleHandler))
 }
 
 func New() *Logger {
@@ -92,7 +96,7 @@ func (l *Logger) Debug(ctx context.Context, msg string, args ...any) {
 }
 
 func (l *Logger) Warn(ctx context.Context, msg string, args ...any) {
-	l.withContext(ctx, l.event).Warn(msg, args...)
+	l.withContext(ctx, l.error).Warn(msg, args...)
 }
 
 func (l *Logger) Info(ctx context.Context, msg string, args ...any) {

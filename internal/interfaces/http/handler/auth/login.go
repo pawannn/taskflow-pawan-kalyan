@@ -24,7 +24,7 @@ func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(fields) > 0 {
-		aH.engine.Log.Warn(ctx, "validation failed", "fields", fields)
+		aH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", fields)
 		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
 		return
 	}
