@@ -36,7 +36,7 @@ services:
     ports:
       - "${APP_PORT:-1337}:${APP_PORT:-1337}"
     environment:
-      - ENV=production
+      - ENV=PROD
       - APP_NAME=${APP_NAME:-taskflow}
       - APP_PORT=${APP_PORT:-1337}
       - DB_URL=postgres://${POSTGRES_USER:-taskflow}:${POSTGRES_PASSWORD:-taskflow}@db:5432/${POSTGRES_DB:-taskflow}?sslmode=disable

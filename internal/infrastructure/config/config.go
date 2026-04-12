@@ -23,7 +23,7 @@ type Config struct {
 func Load() (*Config, error) {
 	viper.SetConfigType("env")
 
-	viper.SetDefault("ENV", "")
+	viper.SetDefault("ENV", "PROD")
 	viper.SetDefault("APP_NAME", "")
 	viper.SetDefault("APP_PORT", 0)
 	viper.SetDefault("DB_URL", "")
