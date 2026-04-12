@@ -4,28 +4,27 @@ import (
 	"context"
 	"net/http"
 
-	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
-	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 )
 
-func (s *ProjectService) DeleteProject(ctx context.Context, projectID, userID string) TaskFlowErr.Err {
+func (s *ProjectService) DeleteProject(ctx context.Context, projectID, userID string) apperr.Err {
 	project, err := s.projectRepo.GetByID(ctx, projectID)
 	if err != nil {
-		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 
 	if project == nil {
-		return TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return apperr.NewErr(http.StatusNotFound, apperr.ErrNotFound, nil)
 	}
 
 	if project.OwnerID != userID {
-		return TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
+		return apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
 	}
 
 	err = s.projectRepo.Delete(ctx, projectID)
 	if err != nil {
-		return TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 
-	return TaskFlowErr.NoErr
+	return apperr.NoErr
 }

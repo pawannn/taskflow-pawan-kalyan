@@ -36,12 +36,13 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
+	// Init HTTP Engine
 	engine := engine.NewHttpEngine(cfg, logger)
 	rateLimiter := middlewares.NewRateLimiter(rate.Every(100*time.Millisecond), 20)
 	engine.Use(rateLimiter.Limit)
 
 	tokenService := auth.NewTokenService(cfg.AppName, cfg.JWTSecret, cfg.JWTExpiry)
-	middlwareHandler := middlewares.NewMiddlewareHadler(engine, *tokenService)
+	middlwareHandler := middlewares.NewMiddlewareHandler(engine, *tokenService)
 
 	// init repositories
 	userRepository := userRepository.NewUserRepository(db)

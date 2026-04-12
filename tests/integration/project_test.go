@@ -41,7 +41,7 @@ func newProjectTestEnv(t *testing.T) *projectTestEnv {
 	eng := engine.NewHttpEngine(cfg, log)
 
 	tokenService := auth.NewTokenService(cfg.AppName, cfg.JWTSecret, cfg.JWTExpiry)
-	mw := middlewares.NewMiddlewareHadler(eng, *tokenService)
+	mw := middlewares.NewMiddlewareHandler(eng, *tokenService)
 
 	userRepo := newMockUserRepo()
 	projectRepo := newMockProjectRepo()

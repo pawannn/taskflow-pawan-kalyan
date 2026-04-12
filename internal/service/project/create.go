@@ -5,13 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	Error "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (pS *ProjectService) Create(ctx context.Context, name, description, ownerID string) (*models.Project, Error.Err) {
+func (pS *ProjectService) Create(ctx context.Context, name, description, ownerID string) (*models.Project, apperr.Err) {
 	project := &models.Project{
 		ID:          utils.GenerateUUID(),
 		Name:        name,
@@ -22,8 +21,8 @@ func (pS *ProjectService) Create(ctx context.Context, name, description, ownerID
 	}
 
 	if err := pS.projectRepo.Create(ctx, project); err != nil {
-		return nil, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 
-	return project, Error.NoErr
+	return project, apperr.NoErr
 }

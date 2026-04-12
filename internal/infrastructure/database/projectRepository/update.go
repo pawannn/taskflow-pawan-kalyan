@@ -7,7 +7,7 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
-func (pR *projectRepository) Update(ctx context.Context, project *models.Project) error {
+func (r *projectRepository) Update(ctx context.Context, project *models.Project) error {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
@@ -15,7 +15,7 @@ func (pR *projectRepository) Update(ctx context.Context, project *models.Project
 
 	query := `UPDATE projects SET name = $1, description = $2, updated_at = $3 WHERE id = $4`
 
-	_, err := pR.db.Exec(ctx, query,
+	_, err := r.db.Exec(ctx, query,
 		project.Name,
 		project.Description,
 		project.UpdatedAt,

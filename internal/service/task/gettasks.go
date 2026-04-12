@@ -4,10 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	domainRepo "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/repository"
-	Error "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 )
 
 func (s *TaskService) GetByProjectID(
@@ -17,7 +16,7 @@ func (s *TaskService) GetByProjectID(
 	assigneeID *string,
 	userID string,
 	limit, offset int,
-) ([]*models.Task, bool, Error.Err) {
+) ([]*models.Task, bool, apperr.Err) {
 	pagination := domainRepo.Pagination{
 		Offset: offset,
 		Limit:  limit,
@@ -25,7 +24,7 @@ func (s *TaskService) GetByProjectID(
 
 	isAuthorized, err := s.projectRepo.IsPartOfProject(ctx, projectID, userID)
 	if !isAuthorized {
-		return nil, false, Error.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
+		return nil, false, apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
 	}
 
 	taskFilter := &domainRepo.TaskFilter{
@@ -35,8 +34,8 @@ func (s *TaskService) GetByProjectID(
 
 	tasks, hasNext, err := s.taskRepo.GetByProjectID(ctx, projectID, taskFilter, &pagination)
 	if err != nil {
-		return nil, false, Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, false, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 
-	return tasks, hasNext, Error.NoErr
+	return tasks, hasNext, apperr.NoErr
 }

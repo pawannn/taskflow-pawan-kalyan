@@ -3,29 +3,31 @@ package engine
 import (
 	"context"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/requestContext"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
+	requestcontext "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/requestContext"
+	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (e *HttpEngine) SetContext(ctx context.Context, reqContext *requestContext.ReqContext) context.Context {
+// SetContext attaches request metadata (ReqContext) to the given context.
+func (e *HttpEngine) SetContext(ctx context.Context, reqContext *requestcontext.ReqContext) context.Context {
 	if reqContext == nil {
-		reqContext = &requestContext.ReqContext{
+		reqContext = &requestcontext.ReqContext{
 			ReqID: utils.GenerateUUID(),
 		}
 	}
 
-	return context.WithValue(ctx, requestContext.RequestKey, reqContext)
+	return context.WithValue(ctx, requestcontext.RequestKey, reqContext)
 }
 
-func (e *HttpEngine) ParseContext(ctx context.Context) *requestContext.ReqContext {
-	val := ctx.Value(requestContext.RequestKey)
+// ParseContext extracts request metadata (ReqContext) from the given context.
+func (e *HttpEngine) ParseContext(ctx context.Context) *requestcontext.ReqContext {
+	val := ctx.Value(requestcontext.RequestKey)
 	if val == nil {
-		return &requestContext.ReqContext{}
+		return &requestcontext.ReqContext{}
 	}
 
-	meta, ok := val.(*requestContext.ReqContext)
+	meta, ok := val.(*requestcontext.ReqContext)
 	if !ok {
-		return &requestContext.ReqContext{}
+		return &requestcontext.ReqContext{}
 	}
 
 	return meta

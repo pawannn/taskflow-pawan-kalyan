@@ -4,32 +4,31 @@ import (
 	"context"
 	"net/http"
 
-	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 )
 
-func (pS *ProjectService) GetProjectStats(ctx context.Context, projectID, userID string) (*models.ProjectStats, TaskFlowErr.Err) {
+func (pS *ProjectService) GetProjectStats(ctx context.Context, projectID, userID string) (*models.ProjectStats, apperr.Err) {
 	isAuthorized, err := pS.projectRepo.IsPartOfProject(ctx, projectID, userID)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 	if !isAuthorized {
-		return nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
+		return nil, apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
 	}
 
 	project, err := pS.projectRepo.GetByID(ctx, projectID)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 	if project == nil {
-		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return nil, apperr.NewErr(http.StatusNotFound, apperr.ErrNotFound, nil)
 	}
 
 	stats, err := pS.taskRepo.GetProjectStats(ctx, projectID)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 
-	return stats, TaskFlowErr.NoErr
+	return stats, apperr.NoErr
 }

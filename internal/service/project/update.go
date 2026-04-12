@@ -5,25 +5,24 @@ import (
 	"net/http"
 	"time"
 
-	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	TaskFlowErr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 )
 
-func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, updatedProject models.Project) (*models.Project, TaskFlowErr.Err) {
+func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, updatedProject models.Project) (*models.Project, apperr.Err) {
 	needToUpdate := false
 
 	project, err := pS.projectRepo.GetByID(ctx, updatedProject.ID)
 	if err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 
 	if project == nil {
-		return nil, TaskFlowErr.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return nil, apperr.NewErr(http.StatusNotFound, apperr.ErrNotFound, nil)
 	}
 
 	if project.OwnerID != ownerID {
-		return nil, TaskFlowErr.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
+		return nil, apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
 	}
 
 	if updatedProject.Name != "" && project.Name != updatedProject.Name {
@@ -37,13 +36,13 @@ func (pS *ProjectService) UpdateProject(ctx context.Context, ownerID string, upd
 	}
 
 	if !needToUpdate {
-		return project, TaskFlowErr.NoErr
+		return project, apperr.NoErr
 	}
 
 	project.UpdatedAt = time.Now()
 	if err := pS.projectRepo.Update(ctx, project); err != nil {
-		return nil, TaskFlowErr.NewErr(http.StatusInternalServerError, domain.ErrInternalError, err)
+		return nil, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
 	}
 
-	return project, TaskFlowErr.NoErr
+	return project, apperr.NoErr
 }

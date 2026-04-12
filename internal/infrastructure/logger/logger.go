@@ -6,16 +6,16 @@ import (
 	"os"
 	"strings"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/requestContext"
+	requestcontext "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/requestContext"
 )
 
 // noopHandler discards all log records.
 type noopHandler struct{}
 
 func (noopHandler) Enabled(_ context.Context, _ slog.Level) bool  { return false }
-func (noopHandler) Handle(_ context.Context, _ slog.Record) error  { return nil }
-func (h noopHandler) WithAttrs(_ []slog.Attr) slog.Handler         { return h }
-func (h noopHandler) WithGroup(_ string) slog.Handler              { return h }
+func (noopHandler) Handle(_ context.Context, _ slog.Record) error { return nil }
+func (h noopHandler) WithAttrs(_ []slog.Attr) slog.Handler        { return h }
+func (h noopHandler) WithGroup(_ string) slog.Handler             { return h }
 
 type Logger struct {
 	http  *slog.Logger
@@ -71,7 +71,7 @@ func (l *Logger) withContext(ctx context.Context, logger *slog.Logger) *slog.Log
 		return logger
 	}
 
-	rc, ok := ctx.Value(requestContext.RequestKey).(*requestContext.ReqContext)
+	rc, ok := ctx.Value(requestcontext.RequestKey).(*requestcontext.ReqContext)
 	if !ok {
 		return logger
 	}

@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
+	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (aH *authHandler) Register(w http.ResponseWriter, r *http.Request) {
+func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	meta := aH.engine.ParseContext(ctx)
+	meta := h.engine.ParseContext(ctx)
 
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		aH.engine.Log.Warn(ctx, "invalid request body", "error", err)
-		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid register details", nil)
+		h.engine.Log.Warn(ctx, "invalid request body", "error", err)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid register details", nil)
 		return
 	}
 
@@ -26,22 +26,22 @@ func (aH *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(fields) > 0 {
-		aH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", fields)
-		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
+		h.engine.Log.Warn(ctx, apperr.ErrValidationFailed, "fields", fields)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, fields)
 		return
 	}
 
-	user, err := aH.authService.Register(ctx, req.Name, req.Email, req.Password)
+	user, err := h.authService.Register(ctx, req.Name, req.Email, req.Password)
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			aH.engine.Log.Error(ctx, "register failed", "error", err.Data)
+			h.engine.Log.Error(ctx, "register failed", "error", err.Data)
 		}
 
-		aH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		h.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
-	aH.engine.Log.Auth(ctx, "user registered", "user_id", user.ID, "email", user.Email)
+	h.engine.Log.Auth(ctx, "user registered", "user_id", user.ID, "email", user.Email)
 
 	response := UserResponse{
 		ID:        user.ID,
@@ -50,5 +50,5 @@ func (aH *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		CreatedAt: user.CreatedAt,
 	}
 
-	aH.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "user registered successfully", response)
+	h.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "user registered successfully", response)
 }

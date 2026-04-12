@@ -4,9 +4,10 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
+// Generate creates and signs a JWT token for the given user.
 func (s *TokenService) Generate(user *models.User) (string, error) {
 	claims := &UserClaims{
 		UserID:    user.ID,

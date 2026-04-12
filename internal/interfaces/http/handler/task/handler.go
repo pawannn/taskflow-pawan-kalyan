@@ -3,8 +3,8 @@ package taskHandler
 import (
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/middlewares"
+	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+	middlewares "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/middlewares"
 	taskService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/task"
 )
 
@@ -26,42 +26,42 @@ func NewTaskHandler(
 	}
 }
 
-func (tH *taskHandler) AddRoutes() {
-	tH.engine.AddRoutes([]engine.Route{
+func (h *taskHandler) AddRoutes() {
+	h.engine.AddRoutes([]engine.Route{
 		{
 			Method:      http.MethodGet,
 			Endpoint:    "/projects/{id}/tasks",
 			Description: "List tasks — support `?status=` and `?assignee=` filters",
-			Controller:  tH.getByProject,
+			Controller:  h.getByProject,
 			Middleware: []engine.Middleware{
-				tH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodPost,
 			Endpoint:    "/projects/{id}/tasks",
 			Description: "Create a task",
-			Controller:  tH.create,
+			Controller:  h.create,
 			Middleware: []engine.Middleware{
-				tH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodPatch,
 			Endpoint:    "/tasks/{id}",
 			Description: "Update title, description, status, priority, assignee, due_date",
-			Controller:  tH.Update,
+			Controller:  h.Update,
 			Middleware: []engine.Middleware{
-				tH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodDelete,
 			Endpoint:    "/tasks/{id}",
 			Description: "Delete task (project owner or task creator only)",
-			Controller:  tH.Delete,
+			Controller:  h.Delete,
 			Middleware: []engine.Middleware{
-				tH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 	})

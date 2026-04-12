@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Delete removes a task record from the database by its ID.
 func (r *taskRepository) Delete(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()

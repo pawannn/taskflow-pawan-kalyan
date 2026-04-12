@@ -5,20 +5,20 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
+	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
+func (h *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	meta := tH.engine.ParseContext(ctx)
+	meta := h.engine.ParseContext(ctx)
 
 	projectID := chi.URLParam(r, "id")
 	if !utils.IsValidUUID(projectID) {
-		tH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", "id")
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, map[string]string{
+		h.engine.Log.Warn(ctx, apperr.ErrValidationFailed, "fields", "id")
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, map[string]string{
 			"id": "is invalid",
 		})
 		return
@@ -26,8 +26,8 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	var req CreateTaskRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		tH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
+		h.engine.Log.Warn(ctx, apperr.ErrInvalidReqBody, "error", err)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, "invalid request body", nil)
 		return
 	}
 
@@ -46,8 +46,8 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(fields) > 0 {
-		tH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", fields)
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
+		h.engine.Log.Warn(ctx, apperr.ErrValidationFailed, "fields", fields)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, fields)
 		return
 	}
 
@@ -60,18 +60,18 @@ func (tH *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 		DueDate:     utils.ParseDate(req.DueDate),
 	}
 
-	err := tH.taskService.CreateTask(ctx, &task, meta.UserID)
+	err := h.taskService.CreateTask(ctx, &task, meta.UserID)
 
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			tH.engine.Log.Error(ctx, "create task failed", "error", err.Data)
+			h.engine.Log.Error(ctx, "create task failed", "error", err.Data)
 		}
 
-		tH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		h.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
-	tH.engine.Log.Info(ctx, "task created", "task_id", task.ID, "project_id", projectID)
+	h.engine.Log.Info(ctx, "task created", "task_id", task.ID, "project_id", projectID)
 
-	tH.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "task created", task)
+	h.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "task created", task)
 }

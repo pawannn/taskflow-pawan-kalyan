@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	meta := aH.engine.ParseContext(ctx)
+	meta := h.engine.ParseContext(ctx)
 
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		aH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
-		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrInvalidReqBody, nil)
+		h.engine.Log.Warn(ctx, apperr.ErrInvalidReqBody, "error", err)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrInvalidReqBody, nil)
 		return
 	}
 
@@ -24,24 +24,24 @@ func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(fields) > 0 {
-		aH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", fields)
-		aH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
+		h.engine.Log.Warn(ctx, apperr.ErrValidationFailed, "fields", fields)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, fields)
 		return
 	}
 
-	aH.engine.Log.Auth(ctx, "login attempt", "email", req.Email)
+	h.engine.Log.Auth(ctx, "login attempt", "email", req.Email)
 
-	token, user, err := aH.authService.Login(ctx, req.Email, req.Password)
+	token, user, err := h.authService.Login(ctx, req.Email, req.Password)
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			aH.engine.Log.Error(ctx, "login failed", "email", req.Email, "error", err.Data)
+			h.engine.Log.Error(ctx, "login failed", "email", req.Email, "error", err.Data)
 		}
 
-		aH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		h.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
-	aH.engine.Log.Auth(ctx, "user logged in", "user_id", user.ID, "email", user.Email)
+	h.engine.Log.Auth(ctx, "user logged in", "user_id", user.ID, "email", user.Email)
 
 	response := AuthResponse{
 		User: UserResponse{
@@ -53,5 +53,5 @@ func (aH *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 		Token: token,
 	}
 
-	aH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "login successful", response)
+	h.engine.SendResponse(w, meta.ReqID, http.StatusOK, "login successful", response)
 }

@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	Error "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
@@ -15,18 +14,18 @@ func (tS *TaskService) CreateTask(
 	ctx context.Context,
 	task *models.Task,
 	userID string,
-) Error.Err {
+) apperr.Err {
 	project, err := tS.projectRepo.GetByID(ctx, task.ProjectID)
 	if err != nil {
-		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, nil)
+		return apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, nil)
 	}
 
 	if project == nil {
-		return Error.NewErr(http.StatusNotFound, domain.ErrNotFound, nil)
+		return apperr.NewErr(http.StatusNotFound, apperr.ErrNotFound, nil)
 	}
 
 	if project.OwnerID != userID {
-		return Error.NewErr(http.StatusForbidden, domain.ErrForbidden, nil)
+		return apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
 	}
 
 	task.ID = utils.GenerateUUID()
@@ -38,8 +37,8 @@ func (tS *TaskService) CreateTask(
 	task.UpdatedAt = timeStamp
 
 	if err := tS.taskRepo.Create(ctx, task); err != nil {
-		return Error.NewErr(http.StatusInternalServerError, domain.ErrInternalError, nil)
+		return apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, nil)
 	}
 
-	return Error.NoErr
+	return apperr.NoErr
 }

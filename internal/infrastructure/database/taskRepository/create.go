@@ -4,9 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
+// Create inserts a new task record into the database.
 func (r *taskRepository) Create(ctx context.Context, task *models.Task) error {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()

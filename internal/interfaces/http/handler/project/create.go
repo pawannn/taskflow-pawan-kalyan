@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (pH *projectHandler) create(w http.ResponseWriter, r *http.Request) {
+func (h *projectHandler) create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	meta := pH.engine.ParseContext(ctx)
+	meta := h.engine.ParseContext(ctx)
 
 	var req CreateProjectRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		pH.engine.Log.Warn(ctx, domain.ErrInvalidReqBody, "error", err)
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrInvalidReqBody, nil)
+		h.engine.Log.Warn(ctx, apperr.ErrInvalidReqBody, "error", err)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrInvalidReqBody, nil)
 		return
 	}
 
@@ -24,21 +24,21 @@ func (pH *projectHandler) create(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if len(fields) > 0 {
-		pH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", fields)
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
+		h.engine.Log.Warn(ctx, apperr.ErrValidationFailed, "fields", fields)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, fields)
 		return
 	}
 
-	project, err := pH.projectService.Create(ctx, req.Name, req.Description, meta.UserID)
+	project, err := h.projectService.Create(ctx, req.Name, req.Description, meta.UserID)
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			pH.engine.Log.Error(ctx, "create project", "error", err.Data)
+			h.engine.Log.Error(ctx, "create project", "error", err.Data)
 		}
-		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		h.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
-	pH.engine.Log.Info(ctx, "project created", "project_id", project.ID)
+	h.engine.Log.Info(ctx, "project created", "project_id", project.ID)
 
-	pH.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "project created", project)
+	h.engine.SendResponse(w, meta.ReqID, http.StatusCreated, "project created", project)
 }

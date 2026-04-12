@@ -10,8 +10,8 @@ import (
 
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
+	config "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
+	logger "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
 	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	authHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/auth"
 	authService "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/service/auth"

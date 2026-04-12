@@ -6,17 +6,18 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	domainRepo "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/repository"
 )
 
-func (pR *projectRepository) GetByID(ctx context.Context, id string) (*models.Project, error) {
+// GetByID retrieves a project by its ID or returns nil if not found.
+func (r *projectRepository) GetByID(ctx context.Context, id string) (*models.Project, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	query := `SELECT id, name, description, owner_id, created_at, updated_at FROM projects WHERE id = $1`
 
-	row := pR.db.QueryRow(ctx, query, id)
+	row := r.db.QueryRow(ctx, query, id)
 
 	var project models.Project
 
@@ -39,7 +40,8 @@ func (pR *projectRepository) GetByID(ctx context.Context, id string) (*models.Pr
 	return &project, nil
 }
 
-func (pR *projectRepository) GetByUserID(
+// GetByUserID retrieves projects accessible to a user with pagination and indicates if more results exist.
+func (r *projectRepository) GetByUserID(
 	ctx context.Context,
 	userID string,
 	pagination domainRepo.Pagination,
@@ -64,7 +66,7 @@ func (pR *projectRepository) GetByUserID(
 	limit := pagination.Limit
 	offset := pagination.Offset
 
-	rows, err := pR.db.Query(ctx, query, userID, limit+1, offset)
+	rows, err := r.db.Query(ctx, query, userID, limit+1, offset)
 	if err != nil {
 		return nil, false, err
 	}
@@ -98,6 +100,7 @@ func (pR *projectRepository) GetByUserID(
 	return projects, hasNext, nil
 }
 
+// IsPartOfProject checks whether a user is associated with a project as owner or assignee.
 func (r *projectRepository) IsPartOfProject(
 	ctx context.Context,
 	projectID, userID string,

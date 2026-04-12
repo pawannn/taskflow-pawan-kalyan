@@ -6,11 +6,13 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
+// TaskFilter represents filtering options for querying tasks.
 type TaskFilter struct {
 	Status     *models.TaskStatus
 	AssigneeID *string
 }
 
+// TaskRepository defines data access methods for task persistence and queries.
 type TaskRepository interface {
 	Create(ctx context.Context, task *models.Task) error
 	GetByID(ctx context.Context, id string) (*models.Task, error)

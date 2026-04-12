@@ -1,3 +1,4 @@
+// Package domainRepo contains repository contracts used by the domain layer.
 package domainRepo
 
 import (
@@ -6,11 +7,13 @@ import (
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
+// Pagination represents limit and offset values for paginated queries.
 type Pagination struct {
 	Limit  int
 	Offset int
 }
 
+// ProjectRepository defines data access methods for project persistence and retrieval.
 type ProjectRepository interface {
 	Create(ctx context.Context, project *models.Project) error
 	GetByID(ctx context.Context, id string) (*models.Project, error)

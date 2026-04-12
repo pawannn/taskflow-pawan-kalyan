@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
+	config "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/config"
+	logger "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/logger"
 )
 
 type HttpEngine struct {

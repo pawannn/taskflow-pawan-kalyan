@@ -4,7 +4,24 @@ import (
 	"strconv"
 )
 
-func ParseIntDefault(value string, defaultValue int) int {
+// ParsePagination calculates limit and offset from page and limit strings with defaults and bounds.
+func ParsePagination(pageStr string, limitStr string) (int, int) {
+	page := parseIntDefault(pageStr, 1)
+	limit := parseIntDefault(limitStr, 20)
+
+	limit = min(20, limit)
+
+	if page < 1 {
+		page = 1
+	}
+
+	offset := (page - 1) * limit
+
+	return limit, offset
+}
+
+// ParseIntDefault parses a string to int or returns a default value if invalid or non-positive.
+func parseIntDefault(value string, defaultValue int) int {
 	if value == "" {
 		return defaultValue
 	}
@@ -19,19 +36,4 @@ func ParseIntDefault(value string, defaultValue int) int {
 	}
 
 	return parsed
-}
-
-func ParsePagination(pageStr string, limitStr string) (int, int) {
-	page := ParseIntDefault(pageStr, 1)
-	limit := ParseIntDefault(limitStr, 20)
-
-	limit = min(20, limit)
-
-	if page < 1 {
-		page = 1
-	}
-
-	offset := (page - 1) * limit
-
-	return limit, offset
 }

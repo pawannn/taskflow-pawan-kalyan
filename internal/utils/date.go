@@ -2,6 +2,7 @@ package utils
 
 import "time"
 
+// ParseDate converts a date string (YYYY-MM-DD) to time.Time or returns nil if invalid.
 func ParseDate(dateStr *string) *time.Time {
 	if dateStr == nil {
 		return nil

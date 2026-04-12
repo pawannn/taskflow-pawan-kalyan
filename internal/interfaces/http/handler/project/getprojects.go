@@ -4,21 +4,21 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 	taskHandler "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/handler/task"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
+func (h *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	meta := pH.engine.ParseContext(r.Context())
+	meta := h.engine.ParseContext(r.Context())
 
 	projectID := chi.URLParam(r, "id")
 	if !utils.IsValidUUID(projectID) {
-		pH.engine.Log.Warn(ctx, domain.ErrValidationFailed, "fields", "id")
-		pH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, map[string]string{
+		h.engine.Log.Warn(ctx, apperr.ErrValidationFailed, "fields", "id")
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, map[string]string{
 			"id": "is invalid",
 		})
 		return
@@ -30,13 +30,13 @@ func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 
 	limit, offset := utils.ParsePagination(pageStr, limitStr)
 
-	project, tasks, hasNext, err := pH.projectService.GetProjectByID(ctx, projectID, meta.UserID, limit, offset)
+	project, tasks, hasNext, err := h.projectService.GetProjectByID(ctx, projectID, meta.UserID, limit, offset)
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			pH.engine.Log.Error(ctx, "fetch project", "error", err.Data)
+			h.engine.Log.Error(ctx, "fetch project", "error", err.Data)
 		}
 
-		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		h.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
@@ -52,13 +52,13 @@ func (pH *projectHandler) projectByID(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	pH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "project fetched", resp)
+	h.engine.SendResponse(w, meta.ReqID, http.StatusOK, "project fetched", resp)
 }
 
-func (pH *projectHandler) userProjects(w http.ResponseWriter, r *http.Request) {
+func (h *projectHandler) userProjects(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	meta := pH.engine.ParseContext(ctx)
+	meta := h.engine.ParseContext(ctx)
 
 	query := r.URL.Query()
 	pageStr := query.Get("page")
@@ -66,13 +66,13 @@ func (pH *projectHandler) userProjects(w http.ResponseWriter, r *http.Request) {
 
 	limit, offset := utils.ParsePagination(pageStr, limitStr)
 
-	projects, hasNext, err := pH.projectService.GetProjects(ctx, meta.UserID, limit, offset)
+	projects, hasNext, err := h.projectService.GetProjects(ctx, meta.UserID, limit, offset)
 	if !err.IsEmpty() {
 		if err.Data != nil {
-			pH.engine.Log.Error(ctx, "fetch user project", "error", err.Data)
+			h.engine.Log.Error(ctx, "fetch user project", "error", err.Data)
 		}
 
-		pH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
+		h.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
@@ -85,5 +85,5 @@ func (pH *projectHandler) userProjects(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	pH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "projects fetched successfully", response)
+	h.engine.SendResponse(w, meta.ReqID, http.StatusOK, "projects fetched successfully", response)
 }

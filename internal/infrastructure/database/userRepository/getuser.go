@@ -6,10 +6,11 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
-func (uR *userRepository) GetByID(ctx context.Context, id string) (*models.User, error) {
+// GetByID retrieves a user by ID or returns nil if not found.
+func (r *userRepository) GetByID(ctx context.Context, id string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
@@ -19,7 +20,7 @@ func (uR *userRepository) GetByID(ctx context.Context, id string) (*models.User,
 		WHERE id = $1
 	`
 
-	row := uR.db.QueryRow(ctx, query, id)
+	row := r.db.QueryRow(ctx, query, id)
 
 	var user models.User
 
@@ -41,6 +42,7 @@ func (uR *userRepository) GetByID(ctx context.Context, id string) (*models.User,
 	return &user, nil
 }
 
+// GetByEmail retrieves a user by email or returns nil if not found.
 func (uR *userRepository) GetByEmail(ctx context.Context, email string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()

@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// TaskStatus represents the status of a task.
 type TaskStatus string
 
 const (
@@ -10,6 +11,7 @@ const (
 	StatusDone       TaskStatus = "done"
 )
 
+// IsValid checks if the task status is valid.
 func (s TaskStatus) IsValid() bool {
 	switch s {
 	case StatusTodo, StatusInProgress, StatusDone:
@@ -19,6 +21,7 @@ func (s TaskStatus) IsValid() bool {
 	}
 }
 
+// TaskPriority represents the priority level of a task.
 type TaskPriority string
 
 const (
@@ -27,6 +30,7 @@ const (
 	PriorityHigh   TaskPriority = "high"
 )
 
+// IsValid checks if the task priority is valid.
 func (p TaskPriority) IsValid() bool {
 	switch p {
 	case PriorityLow, PriorityMedium, PriorityHigh:
@@ -36,6 +40,7 @@ func (p TaskPriority) IsValid() bool {
 	}
 }
 
+// Task represents a task with its metadata and relationships.
 type Task struct {
 	ID          string        `json:"id"`
 	Title       string        `json:"title"`

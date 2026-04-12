@@ -4,19 +4,20 @@ import (
 	"context"
 	"time"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 )
 
+// GetProjectStats retrieves aggregated task statistics for a given project.
 func (r *taskRepository) GetProjectStats(ctx context.Context, projectID string) (*models.ProjectStats, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	statusQuery := `
 		SELECT
-			COUNT(*) FILTER (WHERE status = 'todo')        AS todo,
+			COUNT(*) FILTER (WHERE status = 'todo') AS todo,
 			COUNT(*) FILTER (WHERE status = 'in_progress') AS in_progress,
-			COUNT(*) FILTER (WHERE status = 'done')        AS done,
-			COUNT(*)                                        AS total
+			COUNT(*) FILTER (WHERE status = 'done') AS done,
+			COUNT(*) AS total
 		FROM tasks
 		WHERE project_id = $1
 	`

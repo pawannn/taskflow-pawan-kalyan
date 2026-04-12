@@ -3,7 +3,7 @@ package integration_test
 import (
 	"context"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	domainRepo "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/repository"
 )
 

@@ -4,8 +4,6 @@ import (
 	"net/mail"
 	"regexp"
 	"strings"
-
-	"github.com/google/uuid"
 )
 
 var (
@@ -15,11 +13,7 @@ var (
 	specialRegex = regexp.MustCompile(`[!@#$%^&*(),.?":{}|<>]`)
 )
 
-func IsValidUUID(u string) bool {
-	_, err := uuid.Parse(u)
-	return err == nil
-}
-
+// ValidateRequired validates required fields and returns field-specific errors.
 func ValidateRequired(fields map[string]string) map[string]string {
 	errors := map[string]string{}
 
@@ -46,6 +40,7 @@ func ValidateRequired(fields map[string]string) map[string]string {
 	return errors
 }
 
+// isValidEmail checks if the given email is valid.
 func isValidEmail(email string) bool {
 	email = strings.TrimSpace(email)
 
@@ -57,6 +52,7 @@ func isValidEmail(email string) bool {
 	return err == nil
 }
 
+// validatePassword validates password strength and returns an error message if invalid.
 func validatePassword(password string) string {
 	if len(password) < 8 {
 		return "must be at least 8 characters"

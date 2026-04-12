@@ -7,10 +7,11 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
 	domainRepo "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/repository"
 )
 
+// GetByID retrieves a task by its ID or returns nil if not found.
 func (r *taskRepository) GetByID(ctx context.Context, id string) (*models.Task, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
@@ -51,6 +52,7 @@ func (r *taskRepository) GetByID(ctx context.Context, id string) (*models.Task, 
 	return &t, nil
 }
 
+// GetByProjectID retrieves tasks for a project with optional filtering, pagination, and next-page indication.
 func (r *taskRepository) GetByProjectID(
 	ctx context.Context,
 	projectID string,
@@ -143,6 +145,7 @@ func (r *taskRepository) GetByProjectID(
 	return tasks, hasNext, nil
 }
 
+// CanUpdateTask checks whether a user is allowed to update a task based on ownership or assignment.
 func (r *taskRepository) CanUpdateTask(ctx context.Context, taskID, userID string) (bool, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()

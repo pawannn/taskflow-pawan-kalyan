@@ -1,3 +1,4 @@
+// Package config handles application configuration loading and defaults.
 package config
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config represents application configuration loaded from environment variables.
 type Config struct {
 	Env        string `mapstructure:"ENV"`
 	AppName    string `mapstructure:"APP_NAME"`
@@ -17,6 +19,7 @@ type Config struct {
 	BCryptCost int    `mapstructure:"BCRYPT_COST"`
 }
 
+// Load reads configuration from environment and .env file, applies defaults, and validates required fields.
 func Load() (*Config, error) {
 	viper.SetConfigType("env")
 

@@ -6,19 +6,18 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
-	domain "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	Error "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/taskflowErr"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 	utils "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/utils"
 )
 
-func (tH *taskHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *taskHandler) Update(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	meta := tH.engine.ParseContext(ctx)
+	meta := h.engine.ParseContext(ctx)
 
 	taskID := chi.URLParam(r, "id")
 	if !utils.IsValidUUID(taskID) {
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, map[string]string{
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, map[string]string{
 			"id": "is invalid",
 		})
 		return
@@ -26,7 +25,7 @@ func (tH *taskHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	var req UpdateTaskRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrBadRequest, nil)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrBadRequest, nil)
 		return
 	}
 
@@ -87,19 +86,19 @@ func (tH *taskHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(fields) > 0 {
-		tH.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, domain.ErrValidationFailed, fields)
+		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, fields)
 		return
 	}
 
 	updatedTask.ID = taskID
 
-	task, err := tH.taskService.UpdateTask(ctx, &updatedTask, meta.UserID)
-	if err != Error.NoErr {
-		tH.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
+	task, err := h.taskService.UpdateTask(ctx, &updatedTask, meta.UserID)
+	if err != apperr.NoErr {
+		h.engine.SendErrorResponse(w, meta.ReqID, err.Code, err.Message, nil)
 		return
 	}
 
-	tH.engine.Log.Info(ctx, "task updated", "task_id", taskID, "project_id", task.ProjectID)
+	h.engine.Log.Info(ctx, "task updated", "task_id", taskID, "project_id", task.ProjectID)
 
-	tH.engine.SendResponse(w, meta.ReqID, http.StatusOK, "task updated", task)
+	h.engine.SendResponse(w, meta.ReqID, http.StatusOK, "task updated", task)
 }

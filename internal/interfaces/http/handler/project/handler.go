@@ -26,60 +26,60 @@ func NewProjectHandler(
 	}
 }
 
-func (pH *projectHandler) AddRoutes() {
-	pH.engine.AddRoutes([]engine.Route{
+func (h *projectHandler) AddRoutes() {
+	h.engine.AddRoutes([]engine.Route{
 		{
 			Method:      http.MethodGet,
 			Endpoint:    "/projects",
 			Description: "List projects the current user owns or has tasks in",
-			Controller:  pH.userProjects,
+			Controller:  h.userProjects,
 			Middleware: []engine.Middleware{
-				pH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodPost,
 			Endpoint:    "/projects",
 			Description: "Create a project (owner = current user)",
-			Controller:  pH.create,
+			Controller:  h.create,
 			Middleware: []engine.Middleware{
-				pH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodGet,
 			Endpoint:    "/projects/{id}",
 			Description: "Get project details + its tasks",
-			Controller:  pH.projectByID,
+			Controller:  h.projectByID,
 			Middleware: []engine.Middleware{
-				pH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodPatch,
 			Endpoint:    "/projects/{id}",
 			Description: "Update name/description (owner only)",
-			Controller:  pH.update,
+			Controller:  h.update,
 			Middleware: []engine.Middleware{
-				pH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodDelete,
 			Endpoint:    "/projects/{id}",
 			Description: "Delete project and all its tasks (owner only)",
-			Controller:  pH.delete,
+			Controller:  h.delete,
 			Middleware: []engine.Middleware{
-				pH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 		{
 			Method:      http.MethodGet,
 			Endpoint:    "/projects/{id}/stats",
 			Description: "Get task counts by status and by assignee",
-			Controller:  pH.stats,
+			Controller:  h.stats,
 			Middleware: []engine.Middleware{
-				pH.middleware.ValidateAuthToken,
+				h.middleware.ValidateAuthToken,
 			},
 		},
 	})

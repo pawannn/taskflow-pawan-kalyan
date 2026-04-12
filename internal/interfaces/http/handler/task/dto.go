@@ -1,8 +1,8 @@
 package taskHandler
 
 import (
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
+	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
 )
 
 type CreateTaskRequest struct {

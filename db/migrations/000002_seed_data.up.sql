@@ -5,7 +5,7 @@ INSERT INTO users (id, name, email, password, created_at, updated_at)
 VALUES
 (
     'df6fbabd-96a5-4988-a8e6-161f44d5160e',
-    'Test User',
+    'test',
     'test@example.com',
     '$2a$12$HAz3392t0FUw11PsGSBIueuDcrTdZCdw2/Fox3ECmxADiCJKslD7W',
     NOW(),
@@ -13,16 +13,16 @@ VALUES
 ),
 (
     '9daa73c5-3853-414e-b02e-e1500d62b5b3',
-    'Alice Johnson',
-    'alice@example.com',
+    'pawan kalyan',
+    'pawan@gmail.com',
     '$2a$12$HAz3392t0FUw11PsGSBIueuDcrTdZCdw2/Fox3ECmxADiCJKslD7W',
     NOW(),
     NOW()
 ),
 (
     '1c27b4c9-be8f-4fac-ba93-d6439e0e050d',
-    'Bob Smith',
-    'bob@example.com',
+    'jhon',
+    'jhon@gmail.com',
     '$2a$12$HAz3392t0FUw11PsGSBIueuDcrTdZCdw2/Fox3ECmxADiCJKslD7W',
     NOW(),
     NOW()

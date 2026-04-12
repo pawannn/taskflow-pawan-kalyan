@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// User represents an application user with authentication and profile details.
 type User struct {
 	ID        string    `json:"id"`
 	Name      string    `json:"name"`

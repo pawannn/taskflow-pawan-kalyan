@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain"
 	auth "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/infrastructure/auth/jwt"
 	engine "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/interfaces/http/engine"
+	apperr "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/pkg/apperror"
 )
 
 type MiddlewareHandler struct {
@@ -14,7 +14,7 @@ type MiddlewareHandler struct {
 	tokenService auth.TokenService
 }
 
-func NewMiddlewareHadler(engine *engine.HttpEngine, tokenService auth.TokenService) *MiddlewareHandler {
+func NewMiddlewareHandler(engine *engine.HttpEngine, tokenService auth.TokenService) *MiddlewareHandler {
 	return &MiddlewareHandler{
 		engine:       engine,
 		tokenService: tokenService,
@@ -27,37 +27,36 @@ func (m *MiddlewareHandler) ValidateAuthToken(next http.Handler) http.Handler {
 
 		authHeader := r.Header.Get("Authorization")
 		if strings.TrimSpace(authHeader) == "" {
-			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, apperr.ErrUnAuthorized, nil)
 			return
 		}
 
 		bearer, token, ok := strings.Cut(authHeader, " ")
 		if !ok || bearer != "Bearer" || token == "" {
-			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, apperr.ErrUnAuthorized, nil)
 			return
 		}
 
 		claims, err := m.tokenService.Validate(token)
 		if err != nil {
-			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, apperr.ErrUnAuthorized, nil)
 			return
 		}
 
 		if strings.TrimSpace(claims.UserID) == "" {
-			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, apperr.ErrUnAuthorized, nil)
 			return
 		}
 
 		if strings.TrimSpace(claims.UserEmail) == "" {
-			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, domain.ErrUnAuthorized, nil)
+			m.engine.SendErrorResponse(w, meta.ReqID, http.StatusUnauthorized, apperr.ErrUnAuthorized, nil)
 			return
 		}
 
 		meta.UserID = claims.UserID
 		meta.UserEmail = claims.UserEmail
 
-		m.engine.SetContext(r.Context(), meta)
-
-		next.ServeHTTP(w, r)
+		ctx := m.engine.SetContext(r.Context(), meta)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
