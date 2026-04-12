@@ -15,6 +15,10 @@ func ParsePagination(pageStr string, limitStr string) (int, int) {
 		page = 1
 	}
 
+	if limit < 1 {
+		limit = 20
+	}
+
 	offset := (page - 1) * limit
 
 	return limit, offset
