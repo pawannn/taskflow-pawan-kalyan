@@ -33,14 +33,6 @@ func (pS *ProjectService) GetProjectByID(
 		Limit:  limit,
 		Offset: offset,
 	}
-	isAuthorized, err := pS.projectRepo.IsPartOfProject(ctx, projectID, userID)
-	if err != nil {
-		return nil, nil, false, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
-	}
-	if !isAuthorized {
-		return nil, nil, false, apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
-	}
-
 	project, err := pS.projectRepo.GetByID(ctx, projectID)
 	if err != nil {
 		return nil, nil, false, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
@@ -48,6 +40,15 @@ func (pS *ProjectService) GetProjectByID(
 
 	if project == nil {
 		return nil, nil, false, apperr.NewErr(http.StatusNotFound, apperr.ErrNotFound, nil)
+	}
+
+	isAuthorized, err := pS.projectRepo.IsPartOfProject(ctx, projectID, userID)
+	if err != nil {
+		return nil, nil, false, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
+	}
+
+	if !isAuthorized {
+		return nil, nil, false, apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
 	}
 
 	tasks, hasNext, err := pS.taskRepo.GetByProjectID(ctx, projectID, nil, &pagination)

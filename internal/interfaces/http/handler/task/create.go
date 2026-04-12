@@ -3,6 +3,7 @@ package taskHandler
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
@@ -45,6 +46,16 @@ func (h *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	var dueDate *time.Time
+	if req.DueDate != nil {
+		parsedDate := utils.ParseDate(req.DueDate)
+		if parsedDate != nil && parsedDate.After(time.Now()) {
+			dueDate = parsedDate
+		} else {
+			fields["due_date"] = "is invalid"
+		}
+	}
+
 	if len(fields) > 0 {
 		h.engine.Log.Warn(ctx, apperr.ErrValidationFailed, "fields", fields)
 		h.engine.SendErrorResponse(w, meta.ReqID, http.StatusBadRequest, apperr.ErrValidationFailed, fields)
@@ -56,8 +67,7 @@ func (h *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 		Description: &req.Description,
 		Priority:    priority,
 		ProjectID:   projectID,
-		AssigneeID:  req.AssigneeID,
-		DueDate:     utils.ParseDate(req.DueDate),
+		DueDate:     dueDate,
 	}
 
 	err := h.taskService.CreateTask(ctx, &task, meta.UserID)

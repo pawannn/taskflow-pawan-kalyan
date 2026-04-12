@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	models "github.com/pawannn/taskflow-pawan-kalyan/backend/internal/domain/models"
@@ -69,11 +70,11 @@ func (h *taskHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.DueDate != nil {
-		if strings.TrimSpace(*req.DueDate) == "" {
-			fields["due_date"] = "is invalid"
+		parsedDate := utils.ParseDate(req.DueDate)
+		if parsedDate != nil && parsedDate.After(time.Now()) {
+			updatedTask.DueDate = parsedDate
 		} else {
-			d := utils.ParseDate(req.DueDate)
-			updatedTask.DueDate = d
+			fields["due_date"] = "is invalid"
 		}
 	}
 

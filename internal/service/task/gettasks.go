@@ -22,6 +22,15 @@ func (s *TaskService) GetByProjectID(
 		Limit:  limit,
 	}
 
+	project, err := s.projectRepo.GetByID(ctx, projectID)
+	if err != nil {
+		return nil, false, apperr.NewErr(http.StatusInternalServerError, apperr.ErrInternalError, err)
+	}
+
+	if project == nil {
+		return nil, false, apperr.NewErr(http.StatusNotFound, apperr.ErrNotFound, nil)
+	}
+
 	isAuthorized, err := s.projectRepo.IsPartOfProject(ctx, projectID, userID)
 	if !isAuthorized {
 		return nil, false, apperr.NewErr(http.StatusForbidden, apperr.ErrForbidden, nil)
