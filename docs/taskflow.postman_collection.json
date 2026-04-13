@@ -20,7 +20,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"{{name}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+              "raw": "{\n    \"name\": \"someuser\",\n    \"email\": \"someuser@gmail.com\",\n    \"password\": \"Test@Pass1!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -28,12 +28,10 @@
               }
             },
             "url": {
-              "raw": "http://localhost:1337/auth/register",
-              "protocol": "http",
+              "raw": "{{base_url}}/auth/register",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "auth",
                 "register"
@@ -309,12 +307,10 @@
               }
             },
             "url": {
-              "raw": "http://localhost:1337/auth/login",
-              "protocol": "http",
+              "raw": "{{base_url}}/auth/login",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "auth",
                 "login"
@@ -492,12 +488,10 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:1337/projects?page=1&limit=10",
-              "protocol": "http",
+              "raw": "{{base_url}}/projects?page=1&limit=10",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "projects"
               ],
@@ -760,12 +754,10 @@
               }
             },
             "url": {
-              "raw": "http://localhost:1337/projects",
-              "protocol": "http",
+              "raw": "{{base_url}}/projects",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "projects"
               ]
@@ -1057,15 +1049,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127?page=1&limit=20",
-              "protocol": "http",
+              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74?page=1&limit=20",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "projects",
-                "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                "7970a8a7-eda7-4a26-91e3-6f5609a4de74"
               ],
               "query": [
                 {
@@ -1445,15 +1435,13 @@
               }
             },
             "url": {
-              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127",
-              "protocol": "http",
+              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "projects",
-                "7631888e-503a-42e2-aefc-a1a3c0b9e127"
+                "7970a8a7-eda7-4a26-91e3-6f5609a4de74"
               ]
             }
           },
@@ -1780,225 +1768,6 @@
           ]
         },
         {
-          "name": "DELETE",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "{{auth_token}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "1337",
-              "path": [
-                "projects",
-                "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
-              ]
-            }
-          },
-          "response": [
-            {
-              "name": "owner deleted project",
-              "originalRequest": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "{{auth_token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": ""
-                },
-                "url": {
-                  "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "1337",
-                  "path": [
-                    "projects",
-                    "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": null,
-              "header": [
-                {
-                  "key": "Date",
-                  "value": "Sun, 12 Apr 2026 19:07:42 GMT"
-                }
-              ],
-              "cookie": [],
-              "body": null
-            },
-            {
-              "name": "delete non-existing project",
-              "originalRequest": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "{{auth_token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": ""
-                },
-                "url": {
-                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "1337",
-                  "path": [
-                    "projects",
-                    "7631888e-503a-42e2-aefc-a1a3c0b9e128"
-                  ]
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "_postman_previewlanguage": null,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                },
-                {
-                  "key": "Date",
-                  "value": "Sun, 12 Apr 2026 19:05:43 GMT"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "88"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"req_id\": \"1a79d21b-e300-4109-b295-0ae0a4e09bf9\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
-            },
-            {
-              "name": "non-owner deletes project",
-              "originalRequest": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": ""
-                },
-                "url": {
-                  "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "1337",
-                  "path": [
-                    "projects",
-                    "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
-                  ]
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "_postman_previewlanguage": null,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                },
-                {
-                  "key": "Date",
-                  "value": "Sun, 12 Apr 2026 19:07:09 GMT"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "88"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"req_id\": \"d9f23ae9-2f90-4a78-abe9-cffc112912f7\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
-            },
-            {
-              "name": "auth token not provided",
-              "originalRequest": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "{{auth_token}}",
-                    "type": "text",
-                    "disabled": true
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": ""
-                },
-                "url": {
-                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "1337",
-                  "path": [
-                    "projects",
-                    "7631888e-503a-42e2-aefc-a1a3c0b9e128"
-                  ]
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "_postman_previewlanguage": null,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                },
-                {
-                  "key": "Date",
-                  "value": "Sun, 12 Apr 2026 19:06:01 GMT"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "94"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"req_id\": \"28c0067f-f3b7-4ccc-bf4b-d0c3f06d0ab1\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
-            }
-          ]
-        },
-        {
           "name": "Stats",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
@@ -2020,15 +1789,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/stats",
-              "protocol": "http",
+              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74/stats",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "projects",
-                "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                "7970a8a7-eda7-4a26-91e3-6f5609a4de74",
                 "stats"
               ]
             }
@@ -2281,6 +2048,223 @@
               "body": "{\n    \"req_id\": \"d79a5c97-35cd-4032-9bb4-48d1125f19a3\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
             }
           ]
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "7970a8a7-eda7-4a26-91e3-6f5609a4de74"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "owner deleted project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:07:42 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "delete non-existing project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:05:43 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"1a79d21b-e300-4109-b295-0ae0a4e09bf9\",\n    \"status_code\": 404,\n    \"error\": \"not found\"\n}"
+            },
+            {
+              "name": "non-owner deletes project",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJlN2QxYzA2MS0xNWIwLTQ1ZjItOWQ3My02YWIwOTY3OTQ2MzgiLCJVc2VyRW1haWwiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpc3MiOiJ0YXNrZmxvdyIsImV4cCI6MTc3NjEwNjg2MSwiaWF0IjoxNzc2MDIwNDYxfQ.UdPbw6fkIA1WPGYNdIX6wspojfShQrfuy_kY2rEJkxg",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/e1ca7242-e9bf-45e0-be7c-2653650d81bc",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "e1ca7242-e9bf-45e0-be7c-2653650d81bc"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:07:09 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"d9f23ae9-2f90-4a78-abe9-cffc112912f7\",\n    \"status_code\": 403,\n    \"error\": \"forbidden\"\n}"
+            },
+            {
+              "name": "auth token not provided",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{auth_token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e128",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "1337",
+                  "path": [
+                    "projects",
+                    "7631888e-503a-42e2-aefc-a1a3c0b9e128"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 12 Apr 2026 19:06:01 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"req_id\": \"28c0067f-f3b7-4ccc-bf4b-d0c3f06d0ab1\",\n    \"status_code\": 401,\n    \"error\": \"unauthenticated\"\n}"
+            }
+          ]
         }
       ]
     },
@@ -2311,15 +2295,13 @@
               }
             },
             "url": {
-              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks",
-              "protocol": "http",
+              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74/tasks",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "projects",
-                "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                "7970a8a7-eda7-4a26-91e3-6f5609a4de74",
                 "tasks"
               ]
             }
@@ -2728,15 +2710,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:1337/projects/7631888e-503a-42e2-aefc-a1a3c0b9e127/tasks?page=1&limit=10",
-              "protocol": "http",
+              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74/tasks?page=1&limit=10",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "projects",
-                "7631888e-503a-42e2-aefc-a1a3c0b9e127",
+                "7970a8a7-eda7-4a26-91e3-6f5609a4de74",
                 "tasks"
               ],
               "query": [
@@ -3103,15 +3083,13 @@
               }
             },
             "url": {
-              "raw": "http://localhost:1337/tasks/48131b70-ee8a-41db-a833-d57da1b22013",
-              "protocol": "http",
+              "raw": "{{base_url}}/tasks/84a38fb2-8992-4c1e-a287-83c6abcdffe9",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "tasks",
-                "48131b70-ee8a-41db-a833-d57da1b22013"
+                "84a38fb2-8992-4c1e-a287-83c6abcdffe9"
               ]
             }
           },
@@ -3562,15 +3540,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:1337/tasks/7c98ae5d-409f-4602-bf47-79f9350afd9a",
-              "protocol": "http",
+              "raw": "{{base_url}}/tasks/84a38fb2-8992-4c1e-a287-83c6abcdffe9",
               "host": [
-                "localhost"
+                "{{base_url}}"
               ],
-              "port": "1337",
               "path": [
                 "tasks",
-                "7c98ae5d-409f-4602-bf47-79f9350afd9a"
+                "84a38fb2-8992-4c1e-a287-83c6abcdffe9"
               ]
             }
           },

@@ -125,7 +125,10 @@ curl -s -X POST http://localhost:1337/auth/login \
 
 ## 6. API Reference
 
-A Postman collection covering all endpoints is available here: [docs/taskflow.postman_collection.json](docs/taskflow.postman_collection.json). Import it into Postman and set the `base_url` and `token` variables to get started quickly.
+A Postman collection covering all endpoints is available here: 
+
+- **Collection**: [docs/taskflow.postman_collection.json](docs/taskflow.postman_collection.json).
+- **Environment**: [docs/taskflow.postman_collection.json](docs/taskflow.postman_environment.json).
 
 The full endpoint list is also documented below.
 
