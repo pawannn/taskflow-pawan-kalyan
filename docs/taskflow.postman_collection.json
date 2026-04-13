@@ -2710,7 +2710,7 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74/tasks?page=1&limit=10",
+              "raw": "{{base_url}}/projects/7970a8a7-eda7-4a26-91e3-6f5609a4de74/tasks?page=1&limit=10&status=todo",
               "host": [
                 "{{base_url}}"
               ],
@@ -2727,6 +2727,10 @@
                 {
                   "key": "limit",
                   "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "todo"
                 }
               ]
             }
