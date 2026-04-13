@@ -2,13 +2,13 @@
 
 ## 1. Overview
 
-TaskFlow is a task management REST API that allows users to register, authenticate, create projects, and manage tasks within those projects. It supports assigning tasks, tracking their status and priority, and organizing work efficiently across multiple projects.
+TaskFlow is a task management system that allows users to register, authenticate, create projects, and manage tasks within those projects. It supports assigning tasks, tracking their status and priority, and organizing work efficiently across multiple projects.
 
 **Tech stack used:**
 
 | | |
 |---|---|
-| Language | Go 1.24 |
+| Language | Go 1.26 |
 | Router | chi v5 |
 | Database | PostgreSQL 16 |
 | Auth | JWT + bcrypt (cost 12) |
